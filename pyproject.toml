@@ -28,6 +28,8 @@ dependencies = [
 [project.optional-dependencies]
 live = [
     "kiteconnect>=4.2.0",
+    "smartapi-python>=1.4.0",
+    "pyotp>=2.9.0",
 ]
 dev = [
     "pytest>=7.4.0",

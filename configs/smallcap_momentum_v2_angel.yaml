@@ -1,0 +1,40 @@
+# Strategy: Indian Smallcap Monthly Momentum v2 — ANGELONE (top 10)
+#
+# Same signal as v2 (12-1 momentum, no trend filter) but top 10 positions
+# for a separate allocation on AngelOne. Sits between the live top-5 (Kite)
+# and the paper top-15.
+
+name: smallcap_momentum_v2_angel
+
+data:
+  start: "2010-01-01"
+  end: null
+
+universe:
+  mode: nse500_ex_nifty50
+
+signal:
+  type: momentum_n_m
+  lookback_months: 12
+  skip_months: 1
+
+trend_filter:
+  enabled: false
+  benchmark_for_filter: "^NSEI"
+  sma_window: 200
+
+portfolio:
+  top_n: 10
+  rebalance_freq: "ME"
+  weighting: equal
+
+benchmark:
+  symbol: "^NSEI"
+  name: "Nifty 50"
+
+costs:
+  slippage_per_side: 0.003
+
+risk_free_rate: 0.06
+
+initial_capital: 1.0

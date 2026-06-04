@@ -31,12 +31,20 @@ class Secrets:
 
     kite_api_key: str = ""
     kite_api_secret: str = ""
+    angel_api_key: str = ""
+    angel_client_id: str = ""
+    angel_password: str = ""
+    angel_totp_secret: str = ""
 
     @classmethod
     def from_env(cls) -> "Secrets":
         return cls(
             kite_api_key=os.getenv("KITE_API_KEY", ""),
             kite_api_secret=os.getenv("KITE_API_SECRET", ""),
+            angel_api_key=os.getenv("ANGEL_API_KEY", ""),
+            angel_client_id=os.getenv("ANGEL_CLIENT_ID", ""),
+            angel_password=os.getenv("ANGEL_PASSWORD", ""),
+            angel_totp_secret=os.getenv("ANGEL_TOTP_SECRET", ""),
         )
 
     def __repr__(self) -> str:
@@ -46,7 +54,10 @@ class Secrets:
                 return "<empty>"
             return f"{s[:4]}...{s[-2:]}" if len(s) > 6 else "***"
 
-        return f"Secrets(kite_api_key={redact(self.kite_api_key)}, kite_api_secret=<redacted>)"
+        return (
+            f"Secrets(kite_api_key={redact(self.kite_api_key)}, "
+            f"angel_client_id={redact(self.angel_client_id)})"
+        )
 
 
 def get_env() -> str:
