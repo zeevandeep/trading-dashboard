@@ -600,33 +600,37 @@ with col_left:
     )
     try:
         mr = monthly_returns_table(returns) * 100
-        fig_hm = go.Figure(
-            data=go.Heatmap(
+        years = [str(y) for y in mr.index.tolist()]
+        months = mr.columns.tolist()
+
+        fig_hm = go.Figure()
+        fig_hm.add_trace(
+            go.Heatmap(
                 z=mr.values,
-                x=mr.columns.tolist(),
-                y=[str(y) for y in mr.index.tolist()],
-                colorscale=[
-                    [0, C["red"]],
-                    [0.4, "#1e1e1e"],
-                    [0.5, "#1e1e1e"],
-                    [0.6, "#1e1e1e"],
-                    [1, C["green"]],
-                ],
+                x=months,
+                y=years,
+                colorscale=[[0, C["red"]], [0.45, "#1e1e1e"], [0.55, "#1e1e1e"], [1, C["green"]]],
                 zmid=0,
-                text=mr.round(1).values,
-                texttemplate="%{text}",
-                textfont=dict(size=10, color=C["text"]),
+                showscale=False,
                 hovertemplate="%{y} %{x}: %{z:.1f}%<extra></extra>",
-                colorbar=dict(
-                    title="%",
-                    tickfont=dict(color=C["muted"]),
-                    titlefont=dict(color=C["muted"]),
-                ),
             )
         )
+
+        # Add value annotations on each cell
+        for i, year in enumerate(years):
+            for j, month in enumerate(months):
+                val = mr.values[i][j]
+                if pd.notna(val):
+                    fig_hm.add_annotation(
+                        x=month, y=year,
+                        text=f"{val:.1f}",
+                        showarrow=False,
+                        font=dict(size=9, color=C["text"]),
+                    )
+
         fig_hm.update_layout(
             **PL,
-            height=max(300, len(mr) * 25),
+            height=max(350, len(mr) * 26),
             xaxis=dict(side="top", dtick=1, gridcolor="rgba(0,0,0,0)"),
             yaxis=dict(autorange="reversed", dtick=1, gridcolor="rgba(0,0,0,0)"),
         )
