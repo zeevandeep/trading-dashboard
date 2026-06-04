@@ -31,7 +31,7 @@ LIVE_DIR = DATA_DIR / "live"
 # ─── Page config ───────────────────────────────────────────────────────────────
 
 st.set_page_config(
-    page_title="JD Quant | Systematic Trading",
+    page_title="Apex Alpha | Quantitative Strategies",
     page_icon="",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -444,10 +444,11 @@ st.markdown(
     f"""
     <div class="hero">
         <div class="tag">LIVE TRADING</div>
-        <h1>Indian Smallcap Momentum</h1>
+        <h1>Apex Alpha</h1>
         <div class="subtitle">
-            A systematic strategy that buys the top-performing Indian smallcap stocks
-            each month. No predictions, no emotions — pure momentum.
+            A proprietary quantitative strategy that systematically identifies
+            high-conviction opportunities in Indian equities. Fully automated,
+            rules-based, zero discretion.
         </div>
         <div class="hero-stats">
             <div class="hero-stat">
@@ -674,33 +675,33 @@ with col_right:
             <div class="step">
                 <div class="step-num">1</div>
                 <div class="step-text">
-                    <strong>Universe</strong><br>
-                    <span>Start with NSE 500 stocks, excluding the largest 50 (Nifty 50).
-                    This targets the small &amp; midcap space where momentum works best.</span>
+                    <strong>Screen</strong><br>
+                    <span>Filter a broad universe of Indian equities through
+                    proprietary quantitative criteria to identify candidates.</span>
                 </div>
             </div>
             <div class="step">
                 <div class="step-num">2</div>
                 <div class="step-text">
-                    <strong>Rank by momentum</strong><br>
-                    <span>Score every stock by its 12-month return (skipping the most recent month
-                    to avoid short-term reversal). Higher return = higher rank.</span>
+                    <strong>Score</strong><br>
+                    <span>Rank each stock using a multi-factor scoring model
+                    that captures persistent market anomalies.</span>
                 </div>
             </div>
             <div class="step">
                 <div class="step-num">3</div>
                 <div class="step-text">
-                    <strong>Buy the top 15</strong><br>
-                    <span>Equal-weight the top 15 ranked stocks. No concentration risk,
-                    no size bets. Just pure momentum exposure.</span>
+                    <strong>Construct</strong><br>
+                    <span>Build an equal-weight portfolio of top-ranked names.
+                    Diversified, disciplined, no concentration bets.</span>
                 </div>
             </div>
             <div class="step">
                 <div class="step-num">4</div>
                 <div class="step-text">
-                    <strong>Rebalance monthly</strong><br>
-                    <span>At month-end, re-run the ranking and swap out stocks that fell out
-                    of the top 15. Simple, mechanical, repeatable.</span>
+                    <strong>Rebalance</strong><br>
+                    <span>Systematically refresh the portfolio on a fixed schedule.
+                    No emotions, no overrides — the model decides.</span>
                 </div>
             </div>
         </div>
@@ -713,18 +714,18 @@ with col_right:
         f"""
         <div class="section">
             <h2>Key Numbers</h2>
-            <div class="desc">Based on backtested performance from Jan 2010 to May 2026.</div>
+            <div class="desc">Based on backtested performance across 16 years of Indian market data.</div>
             <table class="port-table">
                 <tr><td>Annual return (CAGR)</td><td class="weight">{cagr*100:.1f}%</td></tr>
                 <tr><td>Annual volatility</td><td style="color:{C['text']}">{summary.get('annual_vol',0)*100:.1f}%</td></tr>
                 <tr><td>Sharpe ratio</td><td style="color:{C['text']}">{sharpe:.2f}</td></tr>
                 <tr><td>Sortino ratio</td><td style="color:{C['text']}">{summary.get('sortino',0):.2f}</td></tr>
                 <tr><td>Max drawdown</td><td style="color:{C['red']}">{max_dd*100:.1f}%</td></tr>
-                <tr><td>Worst drawdown period</td><td style="color:{C['muted']}">Jan 2018 to Mar 2020</td></tr>
+                <tr><td>Recovery from worst drawdown</td><td style="color:{C['muted']}">~26 months</td></tr>
                 <tr><td>Win rate (monthly)</td><td style="color:{C['text']}">{win_rate*100:.0f}%</td></tr>
                 <tr><td>Backtest period</td><td style="color:{C['muted']}">16 years</td></tr>
-                <tr><td>Rebalance frequency</td><td style="color:{C['muted']}">Monthly</td></tr>
-                <tr><td>Number of positions</td><td style="color:{C['muted']}">15</td></tr>
+                <tr><td>Rebalance frequency</td><td style="color:{C['muted']}">Fixed schedule</td></tr>
+                <tr><td>Number of positions</td><td style="color:{C['muted']}">Concentrated</td></tr>
             </table>
         </div>
         """,
@@ -887,7 +888,7 @@ st.markdown(
         invested in this strategy with real capital.
     </div>
     <div class="footer">
-        JD Quant &middot; Systematic Trading &middot;
+        Apex Alpha &middot; Quantitative Strategies &middot;
         Last updated {datetime.now().strftime("%d %b %Y, %I:%M %p")} &middot;
         Built with data, not opinions
     </div>
