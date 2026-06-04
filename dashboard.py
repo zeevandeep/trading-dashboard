@@ -600,10 +600,39 @@ with col_left:
     )
     try:
         mr = monthly_returns_table(returns) * 100
-        styled = mr.style.format("{:.1f}").background_gradient(cmap="RdYlGn", axis=None)
-        st.dataframe(styled, use_container_width=True, height=400)
-    except Exception:
-        st.dataframe(mr.round(1), use_container_width=True)
+        fig_hm = go.Figure(
+            data=go.Heatmap(
+                z=mr.values,
+                x=mr.columns.tolist(),
+                y=[str(y) for y in mr.index.tolist()],
+                colorscale=[
+                    [0, C["red"]],
+                    [0.4, "#1e1e1e"],
+                    [0.5, "#1e1e1e"],
+                    [0.6, "#1e1e1e"],
+                    [1, C["green"]],
+                ],
+                zmid=0,
+                text=mr.round(1).values,
+                texttemplate="%{text}",
+                textfont=dict(size=10, color=C["text"]),
+                hovertemplate="%{y} %{x}: %{z:.1f}%<extra></extra>",
+                colorbar=dict(
+                    title="%",
+                    tickfont=dict(color=C["muted"]),
+                    titlefont=dict(color=C["muted"]),
+                ),
+            )
+        )
+        fig_hm.update_layout(
+            **PL,
+            height=max(300, len(mr) * 25),
+            xaxis=dict(side="top", dtick=1, gridcolor="rgba(0,0,0,0)"),
+            yaxis=dict(autorange="reversed", dtick=1, gridcolor="rgba(0,0,0,0)"),
+        )
+        st.plotly_chart(fig_hm, use_container_width=True)
+    except Exception as e:
+        st.warning(f"Could not render heatmap: {e}")
 
 
 # ── RIGHT COLUMN ───────────────────────────────────────────────────────────────
