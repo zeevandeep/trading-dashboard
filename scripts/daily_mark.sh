@@ -16,4 +16,15 @@ echo "=== Daily mark started at $(date) ===" >> "$LOG_FILE"
 
 .venv/bin/python scripts/daily_mark.py 2>&1 >> "$LOG_FILE"
 
+# Push updated data to GitHub so jdquant.in stays fresh
+echo "Pushing to GitHub..." >> "$LOG_FILE"
+git add data/paper/ data/live/ 2>&1 >> "$LOG_FILE"
+if git diff --cached --quiet; then
+    echo "No data changes to push." >> "$LOG_FILE"
+else
+    git commit -m "Daily mark-to-market $(date +%Y-%m-%d)" 2>&1 >> "$LOG_FILE"
+    git push 2>&1 >> "$LOG_FILE"
+    echo "Pushed to GitHub." >> "$LOG_FILE"
+fi
+
 echo "=== Daily mark finished at $(date) ===" >> "$LOG_FILE"
