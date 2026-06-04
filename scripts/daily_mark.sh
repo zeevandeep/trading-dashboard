@@ -14,7 +14,11 @@ cd "$PROJECT_DIR"
 
 echo "=== Daily mark started at $(date) ===" >> "$LOG_FILE"
 
+# Paper trading mark-to-market
 .venv/bin/python scripts/daily_mark.py 2>&1 >> "$LOG_FILE"
+
+# Live trading mark-to-market
+.venv/bin/python scripts/daily_live_mark.py 2>&1 >> "$LOG_FILE"
 
 # Push updated data to GitHub so jdquant.in stays fresh
 echo "Pushing to GitHub..." >> "$LOG_FILE"

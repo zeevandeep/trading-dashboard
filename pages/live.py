@@ -178,46 +178,128 @@ if orders_df.empty:
 placed = orders_df[orders_df["status"] == "placed"]
 failed = orders_df[orders_df["status"].str.startswith("failed")] if "status" in orders_df.columns else pd.DataFrame()
 
-# ─── Metrics ──────────────────────────────────────────────────────────────────
+# ─── Live P&L (from equity.csv) ──────────────────────────────────────────────
 
-total_invested = placed["estimated_value"].sum() if not placed.empty else 0
-n_stocks = len(placed)
-n_failed = len(failed)
+equity_path = live_dir / "equity.csv"
+positions_path = live_dir / "positions.csv"
+
+has_equity = equity_path.exists()
+if has_equity:
+    eq_df = pd.read_csv(equity_path)
+    latest = eq_df.iloc[-1] if not eq_df.empty else None
+else:
+    latest = None
+
+total_invested = latest["invested"] if latest is not None else (placed["estimated_value"].sum() if not placed.empty else 0)
+mkt_value = latest["market_value"] if latest is not None else total_invested
+pnl = latest["pnl"] if latest is not None else 0
+pnl_pct = latest["pnl_pct"] if latest is not None else 0
+n_stocks = int(latest["n_positions"]) if latest is not None else len(placed)
 trade_date = placed["timestamp"].iloc[0][:10] if not placed.empty and "timestamp" in placed.columns else "—"
+last_mark = latest["date"] if latest is not None else "—"
 
-m1, m2, m3, m4 = st.columns(4)
+m1, m2, m3, m4, m5 = st.columns(5)
 m1.metric("Invested", f"Rs. {total_invested:,.0f}")
-m2.metric("Stocks", str(n_stocks))
-m3.metric("Failed Orders", str(n_failed))
-m4.metric("Last Trade", trade_date)
+m2.metric("Market Value", f"Rs. {mkt_value:,.0f}")
+pnl_str = f"Rs. {pnl:+,.0f}" if pnl != 0 else "Rs. 0"
+m3.metric("P&L", pnl_str)
+m4.metric("Return", f"{pnl_pct:+.2f}%")
+m5.metric("Last Marked", str(last_mark))
 
-# ─── Current Holdings ────────────────────────────────────────────────────────
+# ─── Position Details (from positions.csv) ───────────────────────────────────
 
-if not placed.empty:
+if positions_path.exists():
+    pos_df = pd.read_csv(positions_path)
+    latest_date = pos_df["date"].max()
+    latest_pos = pos_df[pos_df["date"] == latest_date].sort_values("pnl_pct", ascending=False)
+
     st.markdown("")
-    holdings_html = '<div class="card"><h3>Current Holdings</h3>'
+    rows_html = ""
+    for _, row in latest_pos.iterrows():
+        sym = row["symbol"]
+        qty = int(row["quantity"])
+        cost = row["cost_basis"]
+        price = row["price"]
+        mval = row["market_value"]
+        rpnl = row["pnl"]
+        rpct = row["pnl_pct"]
+        color = C["green"] if rpnl >= 0 else C["red"]
+        sign = "+" if rpnl >= 0 else ""
+        rows_html += (
+            f'<div class="order-row">'
+            f'<span style="font-weight:700;color:{C["text"]};min-width:100px">{sym}</span>'
+            f'<span style="color:{C["muted"]}">{qty} @ Rs.{price:,.1f}</span>'
+            f'<span style="color:{C["muted"]}">Cost: Rs.{cost:,.0f}</span>'
+            f'<span style="color:{C["blue"]};font-weight:600">Rs.{mval:,.0f}</span>'
+            f'<span style="color:{color};font-weight:600;min-width:100px;text-align:right">{sign}Rs.{rpnl:,.0f} ({sign}{rpct:.1f}%)</span>'
+            f'</div>'
+        )
+
+    total_mval = latest_pos["market_value"].sum()
+    total_pnl = latest_pos["pnl"].sum()
+    total_color = C["green"] if total_pnl >= 0 else C["red"]
+    total_sign = "+" if total_pnl >= 0 else ""
+
+    st.markdown(
+        f"""
+        <div class="card">
+            <h3>Positions (as of {latest_date})</h3>
+            {rows_html}
+            <div style="display:flex;justify-content:space-between;padding:0.8rem 0 0;
+            border-top:1px solid {C["border"]};margin-top:0.4rem;font-size:0.95rem;">
+                <span style="font-weight:700;color:{C["text"]}">Total</span>
+                <span style="font-weight:700;color:{total_color}">{total_sign}Rs. {total_pnl:,.0f} | Mkt: Rs. {total_mval:,.0f}</span>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+elif not placed.empty:
+    st.markdown("")
+    holdings_html = '<div class="card"><h3>Current Holdings (cost basis)</h3>'
     for _, row in placed.iterrows():
         symbol = row["symbol"]
         qty = row["quantity"]
         value = row["estimated_value"]
-        limit = row.get("limit_price", "—")
         holdings_html += (
             f'<div class="order-row">'
             f'<span style="font-weight:700;color:{C["text"]};min-width:120px">{symbol}</span>'
             f'<span style="color:{C["muted"]}">{qty} shares</span>'
-            f'<span style="color:{C["muted"]}">Limit: Rs. {limit}</span>'
             f'<span style="color:{C["blue"]};font-weight:600">Rs. {value:,.0f}</span>'
             f'</div>'
         )
-    holdings_html += (
-        f'<div style="display:flex;justify-content:space-between;padding:0.8rem 0 0;'
-        f'border-top:1px solid {C["border"]};margin-top:0.4rem;font-size:0.95rem;">'
-        f'<span style="font-weight:700;color:{C["text"]}">Total Invested</span>'
-        f'<span style="font-weight:700;color:{C["green"]}">Rs. {total_invested:,.0f}</span>'
-        f'</div>'
-    )
     holdings_html += '</div>'
     st.markdown(holdings_html, unsafe_allow_html=True)
+
+# ─── Equity Curve ────────────────────────────────────────────────────────────
+
+if has_equity and len(eq_df) > 1:
+    st.markdown("")
+    st.markdown(f'<div class="card"><h3>Portfolio Value Over Time</h3></div>', unsafe_allow_html=True)
+
+    eq_df["date"] = pd.to_datetime(eq_df["date"])
+    fig_eq = go.Figure()
+    fig_eq.add_trace(go.Scatter(
+        x=eq_df["date"], y=eq_df["market_value"],
+        mode="lines+markers", name="Market Value",
+        line=dict(color=C["blue"], width=2), marker=dict(size=5),
+        hovertemplate="%{x|%Y-%m-%d}: Rs. %{y:,.0f}<extra></extra>",
+    ))
+    fig_eq.add_trace(go.Scatter(
+        x=eq_df["date"], y=eq_df["invested"],
+        mode="lines", name="Cost Basis",
+        line=dict(color=C["muted"], width=1, dash="dash"),
+        hovertemplate="%{x|%Y-%m-%d}: Rs. %{y:,.0f}<extra></extra>",
+    ))
+    fig_eq.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(color=C["text"], size=12), margin=dict(l=40, r=20, t=20, b=40),
+        height=280, legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0),
+    )
+    fig_eq.update_xaxes(gridcolor=C["border"], linecolor=C["border"], zeroline=False)
+    fig_eq.update_yaxes(gridcolor=C["border"], linecolor=C["border"], zeroline=False, tickprefix="Rs. ")
+    st.plotly_chart(fig_eq, use_container_width=True)
 
 # ─── Paper Trading Comparison ────────────────────────────────────────────────
 
