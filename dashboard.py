@@ -637,23 +637,16 @@ with col_left:
                     )
 
         fig_hm.update_layout(
-            template="plotly_dark",
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
             font=dict(family="Inter, system-ui, sans-serif", color=C["text"], size=12),
             margin=dict(l=50, r=20, t=40, b=20),
             height=max(450, len(mr) * 30),
-            xaxis=dict(
-                side="top", dtick=1, tickfont=dict(size=11),
-                gridcolor="rgba(0,0,0,0)", linecolor="rgba(0,0,0,0)",
-                zeroline=False,
-            ),
-            yaxis=dict(
-                autorange="reversed", dtick=1, tickfont=dict(size=11),
-                gridcolor="rgba(0,0,0,0)", linecolor="rgba(0,0,0,0)",
-                zeroline=False,
-            ),
         )
+        fig_hm.update_xaxes(side="top", dtick=1, tickfont=dict(size=11),
+                            gridcolor="rgba(0,0,0,0)", linecolor="rgba(0,0,0,0)", zeroline=False)
+        fig_hm.update_yaxes(autorange="reversed", dtick=1, tickfont=dict(size=11),
+                            gridcolor="rgba(0,0,0,0)", linecolor="rgba(0,0,0,0)", zeroline=False)
         st.plotly_chart(fig_hm, use_container_width=True)
     except Exception as e:
         st.warning(f"Could not render heatmap: {e}")
