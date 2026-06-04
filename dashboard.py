@@ -1,8 +1,7 @@
-"""Professional trading dashboard for sharing strategy performance.
+"""Public-facing trading dashboard for followers.
 
-Loads backtest runs from outputs/, paper/live trading state from data/,
-and renders an interactive, public-facing dashboard with Plotly charts,
-professional styling, and a follower-friendly signal board.
+Clean, intuitive layout designed for people who want to follow the strategy.
+Shows what to buy, how it's performing, and when the next rebalance happens.
 
 Run with:
     pip install -e '.[dashboard]'
@@ -13,7 +12,8 @@ from __future__ import annotations
 
 import json
 import sys
-from datetime import datetime
+from calendar import monthrange
+from datetime import datetime, date
 from pathlib import Path
 
 import pandas as pd
@@ -31,17 +31,18 @@ LIVE_DIR = DATA_DIR / "live"
 # ─── Page config ───────────────────────────────────────────────────────────────
 
 st.set_page_config(
-    page_title="Jeevandeep | Systematic Trading",
+    page_title="JD Quant | Systematic Trading",
     page_icon="",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
 
-# ─── Theme / CSS ───────────────────────────────────────────────────────────────
+# ─── Colors ────────────────────────────────────────────────────────────────────
 
-COLORS = {
+C = {
     "bg": "#0e1117",
     "card": "#161b22",
+    "card2": "#1c2333",
     "border": "#21262d",
     "text": "#e6edf3",
     "muted": "#8b949e",
@@ -50,224 +51,304 @@ COLORS = {
     "blue": "#58a6ff",
     "purple": "#bc8cff",
     "orange": "#d29922",
-    "accent": "#58a6ff",
+    "yellow": "#e3b341",
 }
+
+# ─── CSS ───────────────────────────────────────────────────────────────────────
 
 st.markdown(
     f"""
     <style>
-    /* ── Global ────────────────────────────────── */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
     .stApp {{
-        background-color: {COLORS["bg"]};
+        background: {C["bg"]};
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
     }}
 
-    /* ── Header bar ────────────────────────────── */
-    .dash-header {{
-        background: linear-gradient(135deg, #161b22 0%, #1a1f2e 100%);
-        border-bottom: 1px solid {COLORS["border"]};
-        padding: 1.2rem 2rem;
-        margin: -1rem -1rem 1.5rem -1rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+    /* ── Hero ──────────────────────────────── */
+    .hero {{
+        background: linear-gradient(135deg, #1a1f35 0%, #161b22 50%, #1a2332 100%);
+        border: 1px solid {C["border"]};
+        border-radius: 16px;
+        padding: 2.5rem 3rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        overflow: hidden;
     }}
-    .dash-header h1 {{
-        margin: 0;
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: {COLORS["text"]};
-        letter-spacing: -0.02em;
+    .hero::before {{
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, {C["blue"]}08 0%, transparent 70%);
+        pointer-events: none;
     }}
-    .dash-header .subtitle {{
-        color: {COLORS["muted"]};
-        font-size: 0.85rem;
-        margin-top: 0.2rem;
-    }}
-    .dash-header .badge {{
-        background: {COLORS["green"]}22;
-        color: {COLORS["green"]};
-        padding: 0.25rem 0.75rem;
+    .hero .tag {{
+        display: inline-block;
+        background: {C["green"]}18;
+        color: {C["green"]};
+        padding: 0.3rem 0.8rem;
         border-radius: 20px;
         font-size: 0.75rem;
         font-weight: 600;
-        border: 1px solid {COLORS["green"]}44;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.8rem;
+        border: 1px solid {C["green"]}33;
     }}
-
-    /* ── Metric cards ──────────────────────────── */
-    .metric-card {{
-        background: {COLORS["card"]};
-        border: 1px solid {COLORS["border"]};
-        border-radius: 12px;
-        padding: 1.2rem 1.4rem;
-        text-align: center;
+    .hero h1 {{
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: {C["text"]};
+        margin: 0 0 0.4rem 0;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
     }}
-    .metric-card .label {{
-        color: {COLORS["muted"]};
-        font-size: 0.72rem;
+    .hero .subtitle {{
+        color: {C["muted"]};
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+    }}
+    .hero-stats {{
+        display: flex;
+        gap: 2.5rem;
+        flex-wrap: wrap;
+    }}
+    .hero-stat {{
+        text-align: left;
+    }}
+    .hero-stat .num {{
+        font-size: 1.8rem;
+        font-weight: 800;
+        line-height: 1.1;
+    }}
+    .hero-stat .num.green {{ color: {C["green"]}; }}
+    .hero-stat .num.blue {{ color: {C["blue"]}; }}
+    .hero-stat .num.purple {{ color: {C["purple"]}; }}
+    .hero-stat .num.orange {{ color: {C["orange"]}; }}
+    .hero-stat .lbl {{
+        color: {C["muted"]};
+        font-size: 0.7rem;
         text-transform: uppercase;
         letter-spacing: 0.08em;
         font-weight: 600;
-        margin-bottom: 0.4rem;
+        margin-top: 0.2rem;
     }}
-    .metric-card .value {{
-        font-size: 1.6rem;
-        font-weight: 700;
-        color: {COLORS["text"]};
-        line-height: 1.2;
-    }}
-    .metric-card .value.positive {{ color: {COLORS["green"]}; }}
-    .metric-card .value.negative {{ color: {COLORS["red"]}; }}
 
-    /* ── Section headers ───────────────────────── */
-    .section-title {{
-        color: {COLORS["text"]};
+    /* ── Section ───────────────────────────── */
+    .section {{
+        background: {C["card"]};
+        border: 1px solid {C["border"]};
+        border-radius: 14px;
+        padding: 1.5rem 1.8rem;
+        margin-bottom: 1.2rem;
+    }}
+    .section h2 {{
         font-size: 1.1rem;
-        font-weight: 600;
-        margin: 1.5rem 0 0.8rem 0;
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid {COLORS["border"]};
+        font-weight: 700;
+        color: {C["text"]};
+        margin: 0 0 0.3rem 0;
+        letter-spacing: -0.01em;
     }}
-
-    /* ── Position table ────────────────────────── */
-    .position-row {{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.6rem 1rem;
-        border-bottom: 1px solid {COLORS["border"]};
-        font-size: 0.9rem;
-    }}
-    .position-row:hover {{
-        background: {COLORS["border"]}44;
-    }}
-    .position-row .ticker {{
-        font-weight: 600;
-        color: {COLORS["text"]};
-        min-width: 100px;
-    }}
-    .position-row .weight {{
-        color: {COLORS["blue"]};
-        font-weight: 600;
-    }}
-
-    /* ── Status indicator ──────────────────────── */
-    .status-dot {{
-        display: inline-block;
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        margin-right: 6px;
-        animation: pulse 2s infinite;
-    }}
-    .status-dot.live {{ background: {COLORS["green"]}; }}
-    .status-dot.paper {{ background: {COLORS["orange"]}; }}
-
-    @keyframes pulse {{
-        0%, 100% {{ opacity: 1; }}
-        50% {{ opacity: 0.4; }}
-    }}
-
-    /* ── Info banner ───────────────────────────── */
-    .info-banner {{
-        background: {COLORS["blue"]}11;
-        border: 1px solid {COLORS["blue"]}33;
-        border-radius: 8px;
-        padding: 0.8rem 1.2rem;
-        color: {COLORS["blue"]};
-        font-size: 0.85rem;
+    .section .desc {{
+        color: {C["muted"]};
+        font-size: 0.8rem;
         margin-bottom: 1rem;
     }}
 
-    /* ── Tab styling ───────────────────────────── */
+    /* ── Portfolio table ───────────────────── */
+    .port-table {{
+        width: 100%;
+        border-collapse: collapse;
+    }}
+    .port-table th {{
+        text-align: left;
+        color: {C["muted"]};
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 600;
+        padding: 0.5rem 0.8rem;
+        border-bottom: 1px solid {C["border"]};
+    }}
+    .port-table td {{
+        padding: 0.7rem 0.8rem;
+        border-bottom: 1px solid {C["border"]}88;
+        font-size: 0.9rem;
+        color: {C["text"]};
+    }}
+    .port-table tr:last-child td {{
+        border-bottom: none;
+    }}
+    .port-table .ticker {{
+        font-weight: 700;
+        color: {C["text"]};
+    }}
+    .port-table .weight {{
+        color: {C["blue"]};
+        font-weight: 600;
+    }}
+    .port-table .rank {{
+        color: {C["muted"]};
+        font-size: 0.8rem;
+    }}
+
+    /* ── Live P&L card ─────────────────────── */
+    .pnl-card {{
+        background: {C["card2"]};
+        border: 1px solid {C["border"]};
+        border-radius: 12px;
+        padding: 1.2rem 1.5rem;
+        text-align: center;
+    }}
+    .pnl-card .amount {{
+        font-size: 2rem;
+        font-weight: 800;
+    }}
+    .pnl-card .amount.up {{ color: {C["green"]}; }}
+    .pnl-card .amount.down {{ color: {C["red"]}; }}
+    .pnl-card .label {{
+        color: {C["muted"]};
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 600;
+        margin-top: 0.3rem;
+    }}
+
+    /* ── How it works ──────────────────────── */
+    .step {{
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }}
+    .step-num {{
+        background: {C["blue"]}18;
+        color: {C["blue"]};
+        min-width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+        border: 1px solid {C["blue"]}33;
+    }}
+    .step-text {{
+        color: {C["text"]};
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }}
+    .step-text strong {{
+        color: {C["text"]};
+    }}
+    .step-text span {{
+        color: {C["muted"]};
+    }}
+
+    /* ── Countdown ─────────────────────────── */
+    .countdown {{
+        background: linear-gradient(135deg, {C["purple"]}12 0%, {C["blue"]}08 100%);
+        border: 1px solid {C["purple"]}33;
+        border-radius: 12px;
+        padding: 1.2rem 1.5rem;
+        text-align: center;
+    }}
+    .countdown .days {{
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: {C["purple"]};
+        line-height: 1;
+    }}
+    .countdown .label {{
+        color: {C["muted"]};
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 600;
+        margin-top: 0.3rem;
+    }}
+
+    /* ── Disclaimer ────────────────────────── */
+    .disclaimer {{
+        background: {C["orange"]}08;
+        border: 1px solid {C["orange"]}22;
+        border-radius: 8px;
+        padding: 0.8rem 1.2rem;
+        color: {C["orange"]};
+        font-size: 0.75rem;
+        line-height: 1.5;
+        margin-top: 1.5rem;
+    }}
+
+    /* ── Footer ────────────────────────────── */
+    .footer {{
+        text-align: center;
+        color: {C["muted"]};
+        font-size: 0.7rem;
+        padding: 2rem 0 1rem 0;
+        border-top: 1px solid {C["border"]};
+        margin-top: 2rem;
+    }}
+
+    /* ── Streamlit overrides ───────────────── */
+    [data-testid="stSidebar"] {{ display: none; }}
+    div[data-testid="stMetric"] {{
+        background: {C["card2"]};
+        border: 1px solid {C["border"]};
+        border-radius: 12px;
+        padding: 0.8rem 1rem;
+    }}
+    div[data-testid="stMetric"] label {{
+        color: {C["muted"]} !important;
+        font-size: 0.7rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }}
+    div[data-testid="stMetric"] [data-testid="stMetricValue"] {{
+        font-size: 1.3rem !important;
+        font-weight: 700 !important;
+    }}
     .stTabs [data-baseweb="tab-list"] {{
         gap: 0;
-        background: {COLORS["card"]};
+        background: {C["card"]};
         border-radius: 10px;
         padding: 4px;
-        border: 1px solid {COLORS["border"]};
+        border: 1px solid {C["border"]};
     }}
     .stTabs [data-baseweb="tab"] {{
         border-radius: 8px;
         padding: 0.5rem 1.2rem;
         font-weight: 500;
         font-size: 0.85rem;
-        color: {COLORS["muted"]};
+        color: {C["muted"]};
     }}
     .stTabs [aria-selected="true"] {{
-        background: {COLORS["accent"]}22 !important;
-        color: {COLORS["accent"]} !important;
-    }}
-
-    /* ── Footer ────────────────────────────────── */
-    .dash-footer {{
-        margin-top: 3rem;
-        padding: 1.5rem 0;
-        border-top: 1px solid {COLORS["border"]};
-        text-align: center;
-        color: {COLORS["muted"]};
-        font-size: 0.75rem;
-    }}
-
-    /* ── Streamlit overrides ───────────────────── */
-    [data-testid="stSidebar"] {{
-        background: {COLORS["card"]};
-        border-right: 1px solid {COLORS["border"]};
-    }}
-    .stSelectbox label, .stMultiSelect label {{
-        color: {COLORS["muted"]} !important;
-        font-size: 0.8rem !important;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-    }}
-    div[data-testid="stMetric"] {{
-        background: {COLORS["card"]};
-        border: 1px solid {COLORS["border"]};
-        border-radius: 12px;
-        padding: 1rem 1.2rem;
-    }}
-    div[data-testid="stMetric"] label {{
-        color: {COLORS["muted"]} !important;
-        font-size: 0.72rem !important;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-    }}
-    div[data-testid="stMetric"] [data-testid="stMetricValue"] {{
-        font-size: 1.5rem !important;
-        font-weight: 700 !important;
+        background: {C["blue"]}18 !important;
+        color: {C["blue"]} !important;
     }}
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-# ─── Plotly layout template ────────────────────────────────────────────────────
+# ─── Plotly theme ──────────────────────────────────────────────────────────────
 
-PLOTLY_LAYOUT = dict(
+PL = dict(
     template="plotly_dark",
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",
-    font=dict(family="Inter, system-ui, sans-serif", color=COLORS["text"], size=12),
-    margin=dict(l=40, r=20, t=40, b=40),
-    xaxis=dict(
-        gridcolor=COLORS["border"],
-        linecolor=COLORS["border"],
-        zeroline=False,
-    ),
-    yaxis=dict(
-        gridcolor=COLORS["border"],
-        linecolor=COLORS["border"],
-        zeroline=False,
-    ),
-    hoverlabel=dict(bgcolor=COLORS["card"], font_size=12, bordercolor=COLORS["border"]),
+    font=dict(family="Inter, system-ui, sans-serif", color=C["text"], size=12),
+    margin=dict(l=40, r=20, t=30, b=40),
+    xaxis=dict(gridcolor=C["border"], linecolor=C["border"], zeroline=False),
+    yaxis=dict(gridcolor=C["border"], linecolor=C["border"], zeroline=False),
+    hoverlabel=dict(bgcolor=C["card"], font_size=12, bordercolor=C["border"]),
 )
-
-
-def make_fig(**kwargs) -> go.Figure:
-    """Create a Figure pre-configured with the dashboard theme."""
-    fig = go.Figure()
-    layout = {**PLOTLY_LAYOUT, **kwargs}
-    fig.update_layout(**layout)
-    return fig
 
 
 # ─── Helpers ───────────────────────────────────────────────────────────────────
@@ -297,35 +378,12 @@ def load_frame(run_dir: str, name: str) -> pd.DataFrame:
     return pd.read_csv(Path(run_dir) / name, index_col=0, parse_dates=True)
 
 
-def fmt_pct(x: float | None) -> str:
-    if x is None or pd.isna(x):
-        return "--"
-    return f"{x * 100:.2f}%"
-
-
-def fmt_num(x: float | None, digits: int = 2) -> str:
-    if x is None or pd.isna(x):
-        return "--"
-    return f"{x:.{digits}f}"
-
-
-def value_color(val: float | None, invert: bool = False) -> str:
-    """Return 'positive', 'negative', or '' CSS class."""
-    if val is None or pd.isna(val):
-        return ""
-    positive = val > 0
-    if invert:
-        positive = not positive
-    return "positive" if positive else "negative"
-
-
-def metric_card(label: str, value: str, css_class: str = "") -> str:
-    return f"""
-    <div class="metric-card">
-        <div class="label">{label}</div>
-        <div class="value {css_class}">{value}</div>
-    </div>
-    """
+def days_until_next_rebalance() -> int:
+    today = date.today()
+    _, last_day = monthrange(today.year, today.month)
+    eom = date(today.year, today.month, last_day)
+    delta = (eom - today).days
+    return max(0, delta)
 
 
 def monthly_returns_table(daily_returns: pd.Series) -> pd.DataFrame:
@@ -338,729 +396,500 @@ def monthly_returns_table(daily_returns: pd.Series) -> pd.DataFrame:
     return pivot
 
 
-# ─── Header ───────────────────────────────────────────────────────────────────
+# ─── Load data ─────────────────────────────────────────────────────────────────
 
 runs = list_runs()
 
-# Determine overall status
-has_paper = PAPER_DIR.exists() and any(
-    p.is_dir() and (p / "state.json").exists() for p in PAPER_DIR.iterdir()
-) if PAPER_DIR.exists() else False
+# Find the best backtest run (smallcap_momentum_v2, latest)
+primary_run = None
+for r in runs:
+    if "smallcap_momentum_v2" in r.name and "smoke" not in r.name:
+        primary_run = r
+        break
+if primary_run is None and runs:
+    primary_run = runs[0]
 
-has_live = LIVE_DIR.exists() and any(
-    p.is_dir() and (p / "orders.csv").exists() for p in LIVE_DIR.iterdir()
-) if LIVE_DIR.exists() else False
+if primary_run is None:
+    st.error("No backtest data found.")
+    st.stop()
 
-if has_live:
-    status_html = '<span class="status-dot live"></span> Live'
-elif has_paper:
-    status_html = '<span class="status-dot paper"></span> Paper Trading'
-else:
-    status_html = '<span class="badge">Research</span>'
+summary = load_summary(str(primary_run))
+equity = load_series(str(primary_run), "equity_curve.csv")
+returns = load_series(str(primary_run), "returns.csv")
+
+# Paper state
+paper_state = None
+paper_dir = PAPER_DIR / "smallcap_momentum_v2"
+if (paper_dir / "state.json").exists():
+    with open(paper_dir / "state.json") as f:
+        paper_state = json.load(f)
+
+# Live orders
+live_orders = None
+live_dir = LIVE_DIR / "smallcap_momentum_v2_live"
+if (live_dir / "orders.csv").exists():
+    live_orders = pd.read_csv(live_dir / "orders.csv")
+
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  HERO BANNER                                                               ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+cagr = summary.get("cagr", 0)
+sharpe = summary.get("sharpe", 0)
+max_dd = summary.get("max_drawdown", 0)
+final_eq = summary.get("final_equity", 1)
+win_rate = summary.get("win_rate_monthly", 0)
 
 st.markdown(
     f"""
-    <div class="dash-header">
-        <div>
-            <h1>Systematic Trading</h1>
-            <div class="subtitle">Quantitative strategies &middot; Indian equities</div>
+    <div class="hero">
+        <div class="tag">LIVE TRADING</div>
+        <h1>Indian Smallcap Momentum</h1>
+        <div class="subtitle">
+            A systematic strategy that buys the top-performing Indian smallcap stocks
+            each month. No predictions, no emotions — pure momentum.
         </div>
-        <div>{status_html}</div>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="num green">{cagr*100:.1f}%</div>
+                <div class="lbl">Annual Return (CAGR)</div>
+            </div>
+            <div class="hero-stat">
+                <div class="num blue">{sharpe:.2f}</div>
+                <div class="lbl">Sharpe Ratio</div>
+            </div>
+            <div class="hero-stat">
+                <div class="num orange">{final_eq:.0f}x</div>
+                <div class="lbl">Growth of Rs. 1 since 2010</div>
+            </div>
+            <div class="hero-stat">
+                <div class="num purple">{win_rate*100:.0f}%</div>
+                <div class="lbl">Profitable Months</div>
+            </div>
+        </div>
     </div>
     """,
     unsafe_allow_html=True,
 )
 
-# ─── No runs guard ────────────────────────────────────────────────────────────
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  MAIN CONTENT — two columns                                               ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
 
-if not runs:
+col_left, col_right = st.columns([3, 2], gap="medium")
+
+# ── LEFT COLUMN ────────────────────────────────────────────────────────────────
+
+with col_left:
+
+    # ── Current Portfolio ──────────────────────────────────────────────────────
     st.markdown(
-        """
-        <div class="info-banner">
-            No backtest runs found. Run a backtest first, then refresh this page.
-        </div>
-        """,
+        '<div class="section"><h2>Current Portfolio</h2>'
+        '<div class="desc">These are the stocks the strategy currently holds. '
+        'Updated at each monthly rebalance.</div>',
         unsafe_allow_html=True,
     )
-    st.code("python main.py backtest --config configs/smallcap_momentum_v1.yaml", language="bash")
-    st.stop()
 
-# ─── Run selector (top bar, not sidebar) ───────────────────────────────────────
+    # Determine which holdings to show
+    if paper_state and paper_state.get("holdings"):
+        holdings = paper_state["holdings"]
+        last_rebal = paper_state.get("last_rebalance", "—")
+        n_positions = len(holdings)
 
-run_names = [p.name for p in runs]
-col_sel, col_info = st.columns([3, 1])
-with col_sel:
-    selected = st.selectbox(
-        "Strategy run",
-        run_names,
-        index=0,
-        label_visibility="collapsed",
-    )
-with col_info:
-    st.caption(f"{len(runs)} run(s) available")
+        sorted_holdings = sorted(holdings.items(), key=lambda x: -x[1])
 
-run_dir = OUTPUTS_DIR / selected
-summary = load_summary(str(run_dir))
-equity = load_series(str(run_dir), "equity_curve.csv")
-returns = load_series(str(run_dir), "returns.csv")
+        table_html = '<table class="port-table"><thead><tr>'
+        table_html += '<th>#</th><th>Stock</th><th>Weight</th>'
+        table_html += '</tr></thead><tbody>'
 
-# ─── Tabs ──────────────────────────────────────────────────────────────────────
+        for i, (ticker, weight) in enumerate(sorted_holdings, 1):
+            pct = f"{weight * 100:.1f}%"
+            table_html += f"""
+            <tr>
+                <td class="rank">{i}</td>
+                <td class="ticker">{ticker}</td>
+                <td class="weight">{pct}</td>
+            </tr>
+            """
+        table_html += '</tbody></table>'
 
-tab_signal, tab_overview, tab_perf, tab_port, tab_compare, tab_paper, tab_live = st.tabs(
-    ["Signal Board", "Overview", "Performance", "Portfolio", "Compare", "Paper", "Live"]
-)
+        st.markdown(table_html, unsafe_allow_html=True)
+        st.caption(f"Last rebalanced: {last_rebal}  |  {n_positions} positions  |  Equal weight")
+    else:
+        st.info("No active positions yet.")
 
-# ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║  SIGNAL BOARD — public-facing tab for followers                            ║
-# ╚══════════════════════════════════════════════════════════════════════════════╝
-with tab_signal:
-    st.markdown('<div class="section-title">Current Signals</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    # Headline metrics
-    cagr_val = summary.get("cagr")
-    sharpe_val = summary.get("sharpe")
-    dd_val = summary.get("max_drawdown")
-
-    m1, m2, m3, m4 = st.columns(4)
-    m1.metric("CAGR", fmt_pct(cagr_val))
-    m2.metric("Sharpe Ratio", fmt_num(sharpe_val))
-    m3.metric("Max Drawdown", fmt_pct(dd_val))
-    m4.metric("Win Rate (Monthly)", fmt_pct(summary.get("win_rate_monthly")))
-
-    st.markdown("")  # spacer
-
-    # Current positions from the latest run
-    weights_path = run_dir / "weights.csv"
-    signal_left, signal_right = st.columns([2, 3])
-
-    with signal_left:
-        st.markdown('<div class="section-title">Active Positions</div>', unsafe_allow_html=True)
-
-        if weights_path.exists():
-            weights = load_frame(str(run_dir), "weights.csv")
-            latest_date = weights.index.max()
-            latest = weights.loc[latest_date]
-            latest = latest[latest > 0].sort_values(ascending=False)
-
-            st.caption(f"As of {latest_date.date()}  |  {len(latest)} positions")
-
-            pos_html = ""
-            for ticker, w in latest.items():
-                pct = f"{w * 100:.1f}%"
-                pos_html += f"""
-                <div class="position-row">
-                    <span class="ticker">{ticker}</span>
-                    <span class="weight">{pct}</span>
-                </div>
-                """
-            st.markdown(pos_html, unsafe_allow_html=True)
-        else:
-            st.info("No position data available for this run.")
-
-    with signal_right:
-        st.markdown('<div class="section-title">Equity Curve</div>', unsafe_allow_html=True)
-
-        fig = make_fig(height=380)
-        fig.add_trace(
-            go.Scatter(
-                x=equity.index,
-                y=equity.values,
-                mode="lines",
-                line=dict(color=COLORS["blue"], width=2),
-                fill="tozeroy",
-                fillcolor="rgba(88,166,255,0.07)",
-                hovertemplate="Date: %{x|%Y-%m-%d}<br>Equity: %{y:.4f}<extra></extra>",
-            )
-        )
-        fig.update_layout(
-            xaxis_title="",
-            yaxis_title="Equity (normalized)",
-            showlegend=False,
-        )
-        st.plotly_chart(fig, use_container_width=True)
-
-    # Performance summary at bottom
-    st.markdown('<div class="section-title">Strategy Summary</div>', unsafe_allow_html=True)
-    date_range = f"{equity.index.min().date()} to {equity.index.max().date()}"
-    days = len(equity)
-
-    s1, s2, s3, s4 = st.columns(4)
-    s1.metric("Period", date_range)
-    s2.metric("Trading Days", f"{days:,}")
-    s3.metric("Annual Vol", fmt_pct(summary.get("annual_vol")))
-    s4.metric("Calmar Ratio", fmt_num(summary.get("calmar")))
-
-    # Paper trading current state if available
-    if has_paper:
-        st.markdown('<div class="section-title">Paper Trading Status</div>', unsafe_allow_html=True)
-        paper_strategies = [
-            p.name for p in PAPER_DIR.iterdir()
-            if p.is_dir() and (p / "state.json").exists()
-        ]
-        for strat_name in sorted(paper_strategies):
-            paper_dir = PAPER_DIR / strat_name
-            with open(paper_dir / "state.json") as f:
-                pstate = json.load(f)
-            p1, p2, p3, p4 = st.columns(4)
-            p1.metric(
-                f"{strat_name}",
-                f"Equity: {fmt_num(pstate.get('equity'), 4)}",
-            )
-            p2.metric("Positions", str(len(pstate.get("holdings", {}))))
-            p3.metric("Trades", str(pstate.get("trade_count", 0)))
-            p4.metric("Last Rebalance", pstate.get("last_rebalance", "never"))
-
-# ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║  OVERVIEW                                                                  ║
-# ╚══════════════════════════════════════════════════════════════════════════════╝
-with tab_overview:
-    st.markdown(f'<div class="section-title">{selected}</div>', unsafe_allow_html=True)
-    st.caption(
-        f"{equity.index.min().date()} to {equity.index.max().date()}  |  "
-        f"{len(equity):,} trading days"
+    # ── Equity Curve ───────────────────────────────────────────────────────────
+    st.markdown(
+        '<div class="section"><h2>Backtest Performance</h2>'
+        f'<div class="desc">Growth of Rs. 1 invested in Jan 2010. '
+        f'Strategy turned Rs. 1 into Rs. {final_eq:.0f} over {len(equity)//252} years.</div>',
+        unsafe_allow_html=True,
     )
 
-    c1, c2, c3, c4, c5 = st.columns(5)
-    c1.metric("CAGR", fmt_pct(summary.get("cagr")))
-    c2.metric("Sharpe", fmt_num(summary.get("sharpe")))
-    c3.metric("Max Drawdown", fmt_pct(summary.get("max_drawdown")))
-    c4.metric("Calmar", fmt_num(summary.get("calmar")))
-    c5.metric("Final Equity", fmt_num(summary.get("final_equity"), 4))
-
-    # Equity curve — Plotly
-    st.markdown('<div class="section-title">Equity Curve</div>', unsafe_allow_html=True)
-    fig_eq = make_fig(height=360)
-    fig_eq.add_trace(
+    fig = go.Figure()
+    fig.add_trace(
         go.Scatter(
             x=equity.index,
             y=equity.values,
             mode="lines",
-            line=dict(color=COLORS["green"], width=2),
+            line=dict(color=C["green"], width=2),
             fill="tozeroy",
-            fillcolor="rgba(63,185,80,0.05)",
-            name="Equity",
-            hovertemplate="%{x|%Y-%m-%d}: %{y:.4f}<extra></extra>",
+            fillcolor="rgba(63,185,80,0.06)",
+            hovertemplate="%{x|%b %Y}: Rs. %{y:.2f}<extra></extra>",
         )
     )
-    fig_eq.update_layout(showlegend=False, xaxis_title="", yaxis_title="")
-    st.plotly_chart(fig_eq, use_container_width=True)
+    fig.update_layout(
+        **PL,
+        height=350,
+        showlegend=False,
+        xaxis_title="",
+        yaxis_title="",
+        yaxis_type="log",
+        yaxis_tickprefix="Rs. ",
+    )
+    st.plotly_chart(fig, use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    # Drawdown — Plotly
-    st.markdown('<div class="section-title">Drawdown</div>', unsafe_allow_html=True)
+    # ── Drawdown ───────────────────────────────────────────────────────────────
+    st.markdown(
+        '<div class="section"><h2>Drawdowns</h2>'
+        f'<div class="desc">Worst peak-to-trough decline: {max_dd*100:.1f}%. '
+        f'Every strategy has bad periods — this shows the pain you\'d need to sit through.</div>',
+        unsafe_allow_html=True,
+    )
+
     peak = equity.cummax()
     dd = equity / peak - 1
-    fig_dd = make_fig(height=240)
+    fig_dd = go.Figure()
     fig_dd.add_trace(
         go.Scatter(
             x=dd.index,
             y=dd.values,
             mode="lines",
-            line=dict(color=COLORS["red"], width=1.5),
+            line=dict(color=C["red"], width=1.5),
             fill="tozeroy",
-            fillcolor="rgba(248,81,73,0.13)",
-            name="Drawdown",
-            hovertemplate="%{x|%Y-%m-%d}: %{y:.2%}<extra></extra>",
+            fillcolor="rgba(248,81,73,0.12)",
+            hovertemplate="%{x|%b %Y}: %{y:.1%}<extra></extra>",
         )
     )
     fig_dd.update_layout(
+        **PL,
+        height=220,
         showlegend=False,
         xaxis_title="",
         yaxis_title="",
         yaxis_tickformat=".0%",
     )
     st.plotly_chart(fig_dd, use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-# ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║  PERFORMANCE                                                               ║
-# ╚══════════════════════════════════════════════════════════════════════════════╝
-with tab_perf:
-    st.markdown('<div class="section-title">Performance Detail</div>', unsafe_allow_html=True)
-
-    left, right = st.columns([1, 1])
-    with left:
-        st.markdown("**Summary Metrics**")
-        tbl = []
-        for k, v in summary.items():
-            if isinstance(v, float):
-                if k in {"cagr", "annual_vol", "max_drawdown", "win_rate_monthly"}:
-                    tbl.append((k.replace("_", " ").title(), fmt_pct(v)))
-                else:
-                    tbl.append((k.replace("_", " ").title(), fmt_num(v)))
-            else:
-                tbl.append((k.replace("_", " ").title(), str(v)))
-        st.dataframe(
-            pd.DataFrame(tbl, columns=["Metric", "Value"]),
-            use_container_width=True,
-            hide_index=True,
-        )
-
-    with right:
-        st.markdown("**Monthly Returns (%)**")
-        try:
-            mr = monthly_returns_table(returns) * 100
-            try:
-                styled = mr.style.format("{:.2f}").background_gradient(cmap="RdYlGn", axis=None)
-                st.dataframe(styled, use_container_width=True)
-            except (ImportError, AttributeError):
-                st.dataframe(mr.round(2), use_container_width=True)
-        except Exception as e:
-            st.warning(f"Could not build monthly table: {e}")
-
-    # Rolling Sharpe — Plotly
-    st.markdown('<div class="section-title">Rolling 1-Year Sharpe</div>', unsafe_allow_html=True)
-    roll = returns.rolling(252)
-    rolling_sharpe = (roll.mean() * 252) / (roll.std() * (252**0.5))
-    rs_clean = rolling_sharpe.dropna()
-
-    fig_rs = make_fig(height=280)
-    fig_rs.add_trace(
-        go.Scatter(
-            x=rs_clean.index,
-            y=rs_clean.values,
-            mode="lines",
-            line=dict(color=COLORS["purple"], width=1.5),
-            hovertemplate="%{x|%Y-%m-%d}: %{y:.2f}<extra></extra>",
-        )
+    # ── Monthly Returns ────────────────────────────────────────────────────────
+    st.markdown(
+        '<div class="section"><h2>Monthly Returns</h2>'
+        '<div class="desc">Color-coded heatmap of monthly returns (%). Green = profit, Red = loss.</div>',
+        unsafe_allow_html=True,
     )
-    # Reference line at 1.0
-    fig_rs.add_hline(
-        y=1.0,
-        line_dash="dash",
-        line_color=COLORS["muted"],
-        opacity=0.5,
-        annotation_text="Sharpe = 1.0",
-        annotation_position="bottom right",
-        annotation_font_color=COLORS["muted"],
+    try:
+        mr = monthly_returns_table(returns) * 100
+        styled = mr.style.format("{:.1f}").background_gradient(cmap="RdYlGn", axis=None)
+        st.dataframe(styled, use_container_width=True, height=400)
+    except Exception:
+        st.dataframe(mr.round(1), use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+
+# ── RIGHT COLUMN ───────────────────────────────────────────────────────────────
+
+with col_right:
+
+    # ── Next Rebalance ─────────────────────────────────────────────────────────
+    days_left = days_until_next_rebalance()
+    st.markdown(
+        f"""
+        <div class="countdown">
+            <div class="days">{days_left}</div>
+            <div class="label">Days until next rebalance</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
-    fig_rs.update_layout(showlegend=False, xaxis_title="", yaxis_title="")
-    st.plotly_chart(fig_rs, use_container_width=True)
 
-    # Turnover
-    turnover_path = run_dir / "turnover.csv"
-    if turnover_path.exists():
-        st.markdown('<div class="section-title">Turnover per Rebalance</div>', unsafe_allow_html=True)
-        turnover = load_series(str(run_dir), "turnover.csv")
-        if not turnover.empty:
-            fig_tv = make_fig(height=250)
-            fig_tv.add_trace(
-                go.Bar(
-                    x=turnover.index,
-                    y=turnover.values,
-                    marker_color=COLORS["orange"],
-                    opacity=0.8,
-                    hovertemplate="%{x|%Y-%m-%d}: %{y:.1%}<extra></extra>",
-                )
-            )
-            fig_tv.update_layout(
-                showlegend=False,
-                xaxis_title="",
-                yaxis_title="",
-                yaxis_tickformat=".0%",
-            )
-            st.plotly_chart(fig_tv, use_container_width=True)
-            st.caption(f"Average turnover: {turnover.mean():.1%}")
+    st.markdown("")  # spacer
 
-# ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║  PORTFOLIO                                                                 ║
-# ╚══════════════════════════════════════════════════════════════════════════════╝
-with tab_port:
-    st.markdown('<div class="section-title">Portfolio</div>', unsafe_allow_html=True)
+    # ── Live P&L ───────────────────────────────────────────────────────────────
+    if live_orders is not None and not live_orders.empty:
+        placed = live_orders[live_orders["status"] == "placed"]
+        if not placed.empty:
+            total_invested = placed["estimated_value"].sum()
+            n_stocks = len(placed)
+            trade_date = placed["timestamp"].iloc[0][:10]
 
-    weights_path = run_dir / "weights.csv"
-    if not weights_path.exists():
-        st.info("No weights.csv in this run.")
-    else:
-        weights = load_frame(str(run_dir), "weights.csv")
-        latest_date = weights.index.max()
-        latest = weights.loc[latest_date]
-        latest = latest[latest > 0].sort_values(ascending=False)
-        latest.name = "weight"
-        latest.index.name = "ticker"
-
-        st.caption(f"As of {latest_date.date()}  |  {len(latest)} positions")
-
-        c1, c2 = st.columns([1, 2])
-        with c1:
-            holdings = latest.to_frame("weight")
-            holdings["Weight %"] = (holdings["weight"] * 100).round(2)
-            st.dataframe(holdings[["Weight %"]], use_container_width=True)
-
-        with c2:
-            fig_pos = make_fig(height=400)
-            sorted_latest = latest.sort_values(ascending=True)
-            fig_pos.add_trace(
-                go.Bar(
-                    x=sorted_latest.values,
-                    y=sorted_latest.index,
-                    orientation="h",
-                    marker_color=COLORS["blue"],
-                    opacity=0.85,
-                    hovertemplate="%{y}: %{x:.1%}<extra></extra>",
-                )
-            )
-            fig_pos.update_layout(
-                xaxis_title="Weight",
-                yaxis_title="",
-                xaxis_tickformat=".0%",
-                showlegend=False,
-            )
-            st.plotly_chart(fig_pos, use_container_width=True)
-
-        st.markdown('<div class="section-title">Position History</div>', unsafe_allow_html=True)
-        active_names = weights.columns[(weights != 0).any(axis=0)]
-        history = (weights[active_names] * 100).round(2)
-        st.dataframe(history.tail(20), use_container_width=True)
-        st.caption("Last 20 rebalance dates. Full data in weights.csv.")
-
-# ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║  COMPARE RUNS                                                              ║
-# ╚══════════════════════════════════════════════════════════════════════════════╝
-with tab_compare:
-    st.markdown('<div class="section-title">Compare Runs</div>', unsafe_allow_html=True)
-
-    picks = st.multiselect("Select runs", run_names, default=[selected])
-
-    if not picks:
-        st.info("Select at least one run above.")
-    else:
-        rows = []
-        curves = {}
-        for name in picks:
-            rd = OUTPUTS_DIR / name
-            try:
-                s = load_summary(str(rd))
-                s = dict(s)
-                s["run"] = name
-                rows.append(s)
-                curves[name] = load_series(str(rd), "equity_curve.csv")
-            except Exception as e:
-                st.warning(f"Skipping {name}: {e}")
-
-        if rows:
-            df = pd.DataFrame(rows)
-            col_order = [
-                "run", "cagr", "annual_vol", "sharpe", "sortino",
-                "max_drawdown", "calmar", "win_rate_monthly", "final_equity",
-            ]
-            df = df[[c for c in col_order if c in df.columns]]
-            display_df = df.copy()
-            pct_cols = ["cagr", "annual_vol", "max_drawdown", "win_rate_monthly"]
-            num_cols = ["sharpe", "sortino", "calmar", "final_equity"]
-            for c in pct_cols:
-                if c in display_df.columns:
-                    display_df[c] = display_df[c].apply(
-                        lambda x: f"{x * 100:.2f}%" if pd.notna(x) else "--"
-                    )
-            for c in num_cols:
-                if c in display_df.columns:
-                    display_df[c] = display_df[c].apply(
-                        lambda x: f"{x:.2f}" if pd.notna(x) else "--"
-                    )
-            # Clean up column names
-            display_df.columns = [c.replace("_", " ").title() for c in display_df.columns]
-            st.dataframe(display_df, use_container_width=True, hide_index=True)
-
-            # Plotly equity comparison
             st.markdown(
-                '<div class="section-title">Equity Curves (Normalized)</div>',
+                '<div class="section"><h2>Live Portfolio</h2>'
+                f'<div class="desc">Real money deployed on {trade_date}. '
+                f'{n_stocks} stocks, Rs. {total_invested:,.0f} invested.</div>',
                 unsafe_allow_html=True,
             )
-            aligned = pd.DataFrame(curves)
-            aligned = aligned.apply(lambda s: s / s.dropna().iloc[0])
 
-            trace_colors = [
-                COLORS["blue"], COLORS["green"], COLORS["purple"],
-                COLORS["orange"], COLORS["red"],
-            ]
-            fig_cmp = make_fig(height=400)
-            for i, col in enumerate(aligned.columns):
-                color = trace_colors[i % len(trace_colors)]
-                fig_cmp.add_trace(
-                    go.Scatter(
-                        x=aligned.index,
-                        y=aligned[col],
-                        mode="lines",
-                        name=col,
-                        line=dict(color=color, width=2),
-                        hovertemplate=f"{col}<br>%{{x|%Y-%m-%d}}: %{{y:.4f}}<extra></extra>",
-                    )
+            for _, row in placed.iterrows():
+                qty = row["quantity"]
+                symbol = row["symbol"]
+                value = row["estimated_value"]
+                st.markdown(
+                    f'<div style="display:flex;justify-content:space-between;'
+                    f'padding:0.4rem 0;border-bottom:1px solid {C["border"]}88;'
+                    f'font-size:0.88rem;">'
+                    f'<span style="font-weight:600;color:{C["text"]}">{symbol}</span>'
+                    f'<span style="color:{C["muted"]}">{qty} shares</span>'
+                    f'<span style="color:{C["blue"]};font-weight:600">Rs. {value:,.0f}</span>'
+                    f'</div>',
+                    unsafe_allow_html=True,
                 )
-            fig_cmp.update_layout(
-                legend=dict(
-                    orientation="h",
-                    yanchor="bottom",
-                    y=1.02,
-                    xanchor="left",
-                    x=0,
-                    font=dict(size=11),
-                ),
-                xaxis_title="",
-                yaxis_title="",
-            )
-            st.plotly_chart(fig_cmp, use_container_width=True)
 
-        # Robustness CSVs
-        rob_csvs = sorted(OUTPUTS_DIR.glob("robustness_comparison_*.csv"), reverse=True)
-        if rob_csvs:
             st.markdown(
-                '<div class="section-title">Robustness Comparisons</div>',
+                f'<div style="display:flex;justify-content:space-between;'
+                f'padding:0.6rem 0 0;font-size:0.9rem;">'
+                f'<span style="font-weight:700;color:{C["text"]}">Total</span>'
+                f'<span style="font-weight:700;color:{C["green"]}">Rs. {total_invested:,.0f}</span>'
+                f'</div>',
                 unsafe_allow_html=True,
             )
-            pick_rob = st.selectbox("Robustness CSV", [p.name for p in rob_csvs], index=0)
-            rob_df = pd.read_csv(OUTPUTS_DIR / pick_rob)
-            st.dataframe(rob_df, use_container_width=True, hide_index=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
-# ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║  PAPER TRADING                                                             ║
-# ╚══════════════════════════════════════════════════════════════════════════════╝
-with tab_paper:
-    st.markdown('<div class="section-title">Paper Trading</div>', unsafe_allow_html=True)
+    st.markdown("")  # spacer
 
-    paper_strategies = []
-    if PAPER_DIR.exists():
-        paper_strategies = [
-            p.name for p in PAPER_DIR.iterdir()
-            if p.is_dir() and (p / "state.json").exists()
-        ]
+    # ── How It Works ───────────────────────────────────────────────────────────
+    st.markdown(
+        f"""
+        <div class="section">
+            <h2>How It Works</h2>
+            <div class="desc">A simple, rules-based process. No stock-picking, no gut feelings.</div>
 
-    if not paper_strategies:
-        st.markdown(
-            """
-            <div class="info-banner">
-                No paper trading strategies found. Start one from the CLI.
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-text">
+                    <strong>Universe</strong><br>
+                    <span>Start with NSE 500 stocks, excluding the largest 50 (Nifty 50).
+                    This targets the small & midcap space where momentum works best.</span>
+                </div>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
-        st.code(
-            "python main.py paper -c configs/smallcap_momentum_v2.yaml",
-            language="bash",
-        )
-    else:
-        paper_pick = st.selectbox("Strategy", sorted(paper_strategies), key="paper_strat")
-        paper_dir = PAPER_DIR / paper_pick
 
-        with open(paper_dir / "state.json") as f:
-            pstate = json.load(f)
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-text">
+                    <strong>Rank by momentum</strong><br>
+                    <span>Score every stock by its 12-month return (skipping the most recent month
+                    to avoid short-term reversal). Higher return = higher rank.</span>
+                </div>
+            </div>
 
-        # Metrics
-        pc1, pc2, pc3, pc4, pc5 = st.columns(5)
-        pc1.metric("Equity", fmt_num(pstate.get("equity"), 4))
-        pc2.metric("Positions", str(len(pstate.get("holdings", {}))))
-        pc3.metric("Cash Weight", fmt_pct(pstate.get("cash_weight", 0)))
-        pc4.metric("Total Trades", str(pstate.get("trade_count", 0)))
-        pc5.metric("Last Rebalance", pstate.get("last_rebalance", "never"))
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-text">
+                    <strong>Buy the top 15</strong><br>
+                    <span>Equal-weight the top 15 ranked stocks. No concentration risk,
+                    no size bets. Just pure momentum exposure.</span>
+                </div>
+            </div>
 
-        # Holdings
-        holdings_dict = pstate.get("holdings", {})
-        if holdings_dict:
-            st.markdown(
-                '<div class="section-title">Current Holdings</div>',
-                unsafe_allow_html=True,
-            )
-            h_left, h_right = st.columns([1, 2])
-            with h_left:
-                h_df = pd.DataFrame([
-                    {"Ticker": t, "Weight %": round(w * 100, 2)}
-                    for t, w in sorted(holdings_dict.items(), key=lambda x: -x[1])
-                ])
-                st.dataframe(h_df, use_container_width=True, hide_index=True)
-            with h_right:
-                chart_s = pd.Series(holdings_dict).sort_values(ascending=True)
-                fig_ph = make_fig(height=350)
-                fig_ph.add_trace(
-                    go.Bar(
-                        x=chart_s.values,
-                        y=chart_s.index,
-                        orientation="h",
-                        marker_color=COLORS["orange"],
-                        opacity=0.85,
-                        hovertemplate="%{y}: %{x:.1%}<extra></extra>",
-                    )
-                )
-                fig_ph.update_layout(
-                    xaxis_tickformat=".0%",
-                    showlegend=False,
-                    xaxis_title="",
-                    yaxis_title="",
-                )
-                st.plotly_chart(fig_ph, use_container_width=True)
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-text">
+                    <strong>Rebalance monthly</strong><br>
+                    <span>At month-end, re-run the ranking and swap out stocks that fell out
+                    of the top 15. Simple, mechanical, repeatable.</span>
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-        # Equity history
+    # ── Key Stats ──────────────────────────────────────────────────────────────
+    st.markdown(
+        f"""
+        <div class="section">
+            <h2>Key Numbers</h2>
+            <div class="desc">Based on backtested performance from Jan 2010 to May 2026.</div>
+            <table class="port-table">
+                <tr><td>Annual return (CAGR)</td><td class="weight">{cagr*100:.1f}%</td></tr>
+                <tr><td>Annual volatility</td><td style="color:{C['text']}">{summary.get('annual_vol',0)*100:.1f}%</td></tr>
+                <tr><td>Sharpe ratio</td><td style="color:{C['text']}">{sharpe:.2f}</td></tr>
+                <tr><td>Sortino ratio</td><td style="color:{C['text']}">{summary.get('sortino',0):.2f}</td></tr>
+                <tr><td>Max drawdown</td><td style="color:{C['red']}">{max_dd*100:.1f}%</td></tr>
+                <tr><td>Worst drawdown period</td><td style="color:{C['muted']}">Jan 2018 → Mar 2020</td></tr>
+                <tr><td>Win rate (monthly)</td><td style="color:{C['text']}">{win_rate*100:.0f}%</td></tr>
+                <tr><td>Backtest period</td><td style="color:{C['muted']}">16 years</td></tr>
+                <tr><td>Rebalance frequency</td><td style="color:{C['muted']}">Monthly</td></tr>
+                <tr><td>Number of positions</td><td style="color:{C['muted']}">15</td></tr>
+            </table>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # ── Paper Trading Status ───────────────────────────────────────────────────
+    if paper_state:
         eq_path = paper_dir / "equity.csv"
+        eq_data = None
         if eq_path.exists():
-            eq_df = pd.read_csv(eq_path)
-            if not eq_df.empty:
-                st.markdown(
-                    '<div class="section-title">Equity History</div>',
-                    unsafe_allow_html=True,
-                )
-                eq_df["date"] = pd.to_datetime(eq_df["date"])
-                fig_peq = make_fig(height=280)
-                fig_peq.add_trace(
-                    go.Scatter(
-                        x=eq_df["date"],
-                        y=eq_df["equity"],
-                        mode="lines",
-                        line=dict(color=COLORS["green"], width=2),
-                        fill="tozeroy",
-                        fillcolor="rgba(63,185,80,0.05)",
-                        hovertemplate="%{x|%Y-%m-%d}: %{y:.4f}<extra></extra>",
-                    )
-                )
-                fig_peq.update_layout(showlegend=False, xaxis_title="", yaxis_title="")
-                st.plotly_chart(fig_peq, use_container_width=True)
+            eq_data = pd.read_csv(eq_path)
 
-        # Trade log
-        trades_path = paper_dir / "trades.csv"
-        if trades_path.exists():
-            trades_df = pd.read_csv(trades_path)
-            if not trades_df.empty:
-                st.markdown(
-                    '<div class="section-title">Trade Log</div>',
-                    unsafe_allow_html=True,
-                )
-                tc1, tc2, tc3 = st.columns(3)
-                tc1.metric("Total Trades", str(len(trades_df)))
-                tc2.metric("Buy Orders", str(len(trades_df[trades_df["side"] == "buy"])))
-                tc3.metric("Sell Orders", str(len(trades_df[trades_df["side"] == "sell"])))
+        days_tracked = len(eq_data) if eq_data is not None else 0
+        paper_equity = paper_state.get("equity", 1.0)
+        paper_pnl = (paper_equity - 1.0) * 100
 
-                rebal_dates = trades_df["date"].unique()
-                st.caption(f"{len(rebal_dates)} rebalance(s)")
-                st.dataframe(
-                    trades_df.sort_values(["date", "ticker"], ascending=[False, True]),
-                    use_container_width=True,
-                    hide_index=True,
-                )
+        pnl_class = "up" if paper_pnl >= 0 else "down"
+        pnl_sign = "+" if paper_pnl >= 0 else ""
 
-        # Signals
-        signals_path = paper_dir / "signals.csv"
-        if signals_path.exists():
-            with st.expander("Signal scores (latest rebalance)"):
-                sig_df = pd.read_csv(signals_path)
-                if not sig_df.empty:
-                    latest_rebal = (
-                        sig_df["rebalance_date"].iloc[-1]
-                        if "rebalance_date" in sig_df.columns
-                        else "unknown"
-                    )
-                    latest_sig = (
-                        sig_df[sig_df["rebalance_date"] == latest_rebal]
-                        if "rebalance_date" in sig_df.columns
-                        else sig_df
-                    )
-                    latest_sig = latest_sig.sort_values("score", ascending=False)
-                    st.caption(f"Rebalance date: {latest_rebal}")
-                    st.dataframe(latest_sig.head(30), use_container_width=True, hide_index=True)
-
-        # Gate comparison
-        comp_path = paper_dir / "comparison.json"
-        if comp_path.exists():
-            st.markdown(
-                '<div class="section-title">Paper vs Backtest Gate</div>',
-                unsafe_allow_html=True,
-            )
-            with open(comp_path) as f:
-                comp = json.load(f)
-
-            gate_pass = comp.get("passes_gate", False)
-            if gate_pass:
-                st.success(
-                    f"GATE: PASS - CAGR diff {comp.get('cagr_diff', 0):.2%} "
-                    f"within +/-{comp.get('gate_threshold', 0.03):.0%}"
-                )
-            else:
-                st.error(
-                    f"GATE: FAIL - CAGR diff {comp.get('cagr_diff', 0):.2%} "
-                    f"exceeds +/-{comp.get('gate_threshold', 0.03):.0%}"
-                )
-
-            gc1, gc2, gc3, gc4 = st.columns(4)
-            gc1.metric("Paper CAGR", fmt_pct(comp.get("paper_cagr")))
-            gc2.metric("Backtest CAGR", fmt_pct(comp.get("backtest_cagr")))
-            gc3.metric("Tracking Error", fmt_pct(comp.get("tracking_error_annualized")))
-            gc4.metric("Days Tracked", str(comp.get("days_tracked", 0)))
-
-            days = comp.get("days_tracked", 0)
-            if days < 90:
-                st.warning(f"Only {days} days tracked. Need 90+ for graduation ({90 - days} more).")
-
-# ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║  LIVE TRADING                                                              ║
-# ╚══════════════════════════════════════════════════════════════════════════════╝
-with tab_live:
-    st.markdown('<div class="section-title">Live Trading</div>', unsafe_allow_html=True)
-
-    live_strategies = []
-    if LIVE_DIR.exists():
-        live_strategies = [
-            p.name for p in LIVE_DIR.iterdir()
-            if p.is_dir() and (p / "orders.csv").exists()
-        ]
-
-    if not live_strategies:
         st.markdown(
-            """
-            <div class="info-banner">
-                No live trading history found. Run a live rebalance from the CLI.
+            f"""
+            <div class="section">
+                <h2>Paper Trading</h2>
+                <div class="desc">Live simulation running since {paper_state.get('created', '—')[:10]}.
+                Tracking real market prices without real money.</div>
+
+                <div class="pnl-card">
+                    <div class="amount {pnl_class}">{pnl_sign}{paper_pnl:.2f}%</div>
+                    <div class="label">Paper P&L</div>
+                </div>
+                <div style="margin-top:0.8rem;text-align:center;">
+                    <span style="color:{C['muted']};font-size:0.8rem;">
+                        {days_tracked} day(s) tracked  |
+                        {90 - days_tracked} more days until graduation gate
+                    </span>
+                </div>
             </div>
             """,
             unsafe_allow_html=True,
         )
-        st.code(
-            "python main.py live -c configs/smallcap_momentum_v2.yaml --capital 100000 --dry-run",
-            language="bash",
+
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  DETAILED VIEW (expandable)                                                ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+st.markdown("")
+st.markdown("")
+
+with st.expander("Detailed Analysis (for quants)", expanded=False):
+    tab_perf, tab_compare = st.tabs(["Rolling Stats", "Compare Runs"])
+
+    with tab_perf:
+        # Rolling Sharpe
+        roll = returns.rolling(252)
+        rolling_sharpe = (roll.mean() * 252) / (roll.std() * (252**0.5))
+        rs_clean = rolling_sharpe.dropna()
+
+        fig_rs = go.Figure()
+        fig_rs.add_trace(
+            go.Scatter(
+                x=rs_clean.index,
+                y=rs_clean.values,
+                mode="lines",
+                line=dict(color=C["purple"], width=1.5),
+                hovertemplate="%{x|%b %Y}: %{y:.2f}<extra></extra>",
+            )
         )
-    else:
-        live_pick = st.selectbox("Strategy", sorted(live_strategies), key="live_strat")
-        live_dir = LIVE_DIR / live_pick
+        fig_rs.add_hline(
+            y=1.0, line_dash="dash", line_color=C["muted"], opacity=0.5,
+            annotation_text="Sharpe = 1.0",
+            annotation_position="bottom right",
+            annotation_font_color=C["muted"],
+        )
+        fig_rs.update_layout(**PL, height=300, showlegend=False, title="Rolling 1-Year Sharpe")
+        st.plotly_chart(fig_rs, use_container_width=True)
 
-        orders_path = live_dir / "orders.csv"
-        if orders_path.exists():
-            orders_df = pd.read_csv(orders_path)
-            if not orders_df.empty:
-                st.markdown(
-                    '<div class="section-title">Order History</div>',
-                    unsafe_allow_html=True,
+        # Turnover
+        turnover_path = primary_run / "turnover.csv"
+        if turnover_path.exists():
+            turnover = load_series(str(primary_run), "turnover.csv")
+            if not turnover.empty:
+                fig_tv = go.Figure()
+                fig_tv.add_trace(
+                    go.Bar(
+                        x=turnover.index, y=turnover.values,
+                        marker_color=C["orange"], opacity=0.8,
+                        hovertemplate="%{x|%b %Y}: %{y:.1%}<extra></extra>",
+                    )
                 )
+                fig_tv.update_layout(
+                    **PL, height=250, showlegend=False,
+                    title="Turnover per Rebalance", yaxis_tickformat=".0%",
+                )
+                st.plotly_chart(fig_tv, use_container_width=True)
+                st.caption(f"Average turnover: {turnover.mean():.1%} per rebalance")
 
-                lc1, lc2, lc3, lc4 = st.columns(4)
-                lc1.metric("Total Orders", str(len(orders_df)))
-                placed = (
-                    len(orders_df[orders_df["status"] == "placed"])
-                    if "status" in orders_df.columns
-                    else 0
-                )
-                failed = (
-                    len(orders_df[orders_df["status"].str.startswith("failed")])
-                    if "status" in orders_df.columns
-                    else 0
-                )
-                lc2.metric("Placed", str(placed))
-                lc3.metric("Failed", str(failed))
-                total_value = (
-                    orders_df["estimated_value"].sum()
-                    if "estimated_value" in orders_df.columns
-                    else 0
-                )
-                lc4.metric("Total Value", f"Rs. {total_value:,.0f}")
+    with tab_compare:
+        run_names = [p.name for p in runs]
+        picks = st.multiselect("Select runs", run_names, default=[primary_run.name])
+        if picks:
+            rows = []
+            curves = {}
+            for name in picks:
+                rd = OUTPUTS_DIR / name
+                try:
+                    s = dict(load_summary(str(rd)))
+                    s["run"] = name
+                    rows.append(s)
+                    curves[name] = load_series(str(rd), "equity_curve.csv")
+                except Exception:
+                    pass
 
-                st.dataframe(
-                    orders_df.sort_values("timestamp", ascending=False)
-                    if "timestamp" in orders_df.columns
-                    else orders_df,
-                    use_container_width=True,
-                    hide_index=True,
-                )
+            if rows:
+                df = pd.DataFrame(rows)
+                col_order = ["run", "cagr", "annual_vol", "sharpe", "sortino",
+                             "max_drawdown", "calmar", "win_rate_monthly", "final_equity"]
+                df = df[[c for c in col_order if c in df.columns]]
+                display_df = df.copy()
+                for c in ["cagr", "annual_vol", "max_drawdown", "win_rate_monthly"]:
+                    if c in display_df.columns:
+                        display_df[c] = display_df[c].apply(
+                            lambda x: f"{x*100:.1f}%" if pd.notna(x) else "—")
+                for c in ["sharpe", "sortino", "calmar", "final_equity"]:
+                    if c in display_df.columns:
+                        display_df[c] = display_df[c].apply(
+                            lambda x: f"{x:.2f}" if pd.notna(x) else "—")
+                display_df.columns = [c.replace("_", " ").title() for c in display_df.columns]
+                st.dataframe(display_df, use_container_width=True, hide_index=True)
 
-# ─── Footer ───────────────────────────────────────────────────────────────────
+            if curves:
+                aligned = pd.DataFrame(curves)
+                aligned = aligned.apply(lambda s: s / s.dropna().iloc[0])
+                colors = [C["blue"], C["green"], C["purple"], C["orange"], C["red"]]
+                fig_cmp = go.Figure()
+                for i, col in enumerate(aligned.columns):
+                    fig_cmp.add_trace(
+                        go.Scatter(
+                            x=aligned.index, y=aligned[col],
+                            mode="lines", name=col,
+                            line=dict(color=colors[i % len(colors)], width=2),
+                        )
+                    )
+                fig_cmp.update_layout(
+                    **PL, height=380,
+                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0),
+                )
+                st.plotly_chart(fig_cmp, use_container_width=True)
+
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  DISCLAIMER + FOOTER                                                       ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
 
 st.markdown(
     f"""
-    <div class="dash-footer">
-        Systematic Trading Dashboard &middot;
-        Updated {datetime.now().strftime("%Y-%m-%d %H:%M")} &middot;
-        Past performance does not guarantee future results
+    <div class="disclaimer">
+        <strong>Disclaimer:</strong> This is not financial advice. Past performance does not
+        guarantee future results. The strategy shown is based on historical backtesting which
+        has inherent limitations including survivorship bias and look-ahead bias in universe
+        selection. Always do your own research before investing. The author is personally
+        invested in this strategy with real capital.
+    </div>
+    <div class="footer">
+        JD Quant &middot; Systematic Trading &middot;
+        Last updated {datetime.now().strftime("%d %b %Y, %I:%M %p")} &middot;
+        Built with data, not opinions
     </div>
     """,
     unsafe_allow_html=True,
