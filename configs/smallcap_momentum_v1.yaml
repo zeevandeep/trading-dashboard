@@ -1,0 +1,50 @@
+# Strategy: Indian Smallcap Monthly Momentum v1
+#
+# Philosophy: Jegadeesh-Titman cross-sectional momentum on NSE 500 ex Nifty 50.
+# Trend filter on Nifty 50 index (go to cash when below 200-day SMA).
+# Monthly rebalance, top 15 names equal weight.
+
+name: smallcap_momentum_v1
+
+data:
+  start: "2010-01-01"
+  end: null  # null = through today
+
+universe:
+  mode: nse500_ex_nifty50  # options: nse500_ex_nifty50 | nse500 | nifty50
+
+signal:
+  type: momentum_n_m
+  lookback_months: 12
+  skip_months: 1  # J-T "12-1" — skip most recent month to avoid short-term reversal
+
+trend_filter:
+  enabled: true
+  benchmark_for_filter: "^NSEI"
+  sma_window: 200
+
+portfolio:
+  top_n: 15
+  rebalance_freq: "ME"  # M = month-end; options: W-FRI, ME, QE, YE
+  weighting: equal
+
+benchmark:
+  symbol: "^NSEI"  # Nifty 50 for comparison
+  name: "Nifty 50"
+
+costs:
+  # Slippage: 30 bps per side for smallcaps (conservative)
+  slippage_per_side: 0.003
+  # Other costs (STT, GST, etc.) use defaults in CostConfig
+
+risk_free_rate: 0.06  # 6% — approximate India 10Y yield for Sharpe
+
+initial_capital: 1.0  # unit equity — results expressed as multiples
+
+# Notes on assumptions (read before interpreting results)
+notes:
+  - "Universe is static (survivorship bias — top NSE 500 as of 2024)."
+  - "Prices are adjusted close (splits, dividends)."
+  - "Fills assumed at close of rebalance day; no intraday modeling."
+  - "No cash yield between rebalances when trend filter goes defensive."
+  - "F&O not modeled. Options, leverage, pledging all out of scope for v1."

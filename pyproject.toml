@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trading"
+version = "0.1.0"
+description = "Personal systematic trading infrastructure — Indian equities first, multi-market multi-strategy framework"
+requires-python = ">=3.11"
+authors = [
+    { name = "Jeevandeep" }
+]
+dependencies = [
+    "pandas>=2.1.0",
+    "numpy>=1.26.0",
+    "yfinance>=0.2.40",
+    "pyarrow>=15.0.0",
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0.0",
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
+    "scipy>=1.12.0",
+    "tqdm>=4.66.0",
+    "click>=8.1.0",
+    "tabulate>=0.9.0",
+]
+
+[project.optional-dependencies]
+live = [
+    "kiteconnect>=4.2.0",
+]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.3.0",
+    "jupyter>=1.0.0",
+]
+dashboard = [
+    "streamlit>=1.32.0",
+    "plotly>=5.18.0",
+]
+
+[project.scripts]
+trading = "trading.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM"]
+ignore = ["E501"]

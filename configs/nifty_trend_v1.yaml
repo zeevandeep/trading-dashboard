@@ -1,0 +1,50 @@
+# Strategy: Nifty Trend-Following v1
+#
+# Philosophy: Binary trend-following on Nifty 50 index via ETF proxy.
+# Long when Nifty 50 is above its 200-day SMA, 100% cash when below.
+# Monthly rebalance. Single position. No stock selection — pure regime.
+#
+# Purpose: Low-correlation diversifier for the smallcap momentum strategy.
+# When smallcap momentum draws down (broad market selloff), this strategy
+# goes to cash and preserves capital. When markets trend up, it captures
+# the broad market return with zero stock-picking risk.
+#
+# ETF proxy: we use ^NSEI (Nifty 50 index) as both the signal source
+# and the traded instrument. In live trading, buy Nifty BeES or
+# Nifty 50 ETF (e.g., NIFTYBEES.NS).
+
+name: nifty_trend_v1
+
+data:
+  start: "2010-01-01"
+  end: null
+
+universe:
+  mode: nifty_etf  # special mode: single-instrument trend-following
+
+signal:
+  type: trend_follow
+  sma_window: 200
+
+portfolio:
+  top_n: 1
+  rebalance_freq: "ME"
+  weighting: equal
+
+benchmark:
+  symbol: "^NSEI"
+  name: "Nifty 50"
+
+costs:
+  # ETF slippage is much tighter than smallcaps
+  slippage_per_side: 0.001  # 10 bps — liquid ETF
+
+risk_free_rate: 0.06
+
+initial_capital: 1.0
+
+notes:
+  - "Single instrument: Nifty 50 ETF (NIFTYBEES proxy)"
+  - "Binary: 100% long or 100% cash based on 200-day SMA"
+  - "No stock selection risk — captures broad market trend only"
+  - "Low correlation with cross-sectional momentum"

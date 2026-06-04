@@ -1,0 +1,42 @@
+# Strategy: Indian Smallcap Monthly Momentum v2 — LIVE (top 5, Rs 10K)
+#
+# Same signal as v2 (12-1 momentum, no trend filter) but concentrated
+# to top 5 equal-weight positions for a Rs 10,000 live allocation.
+# ~Rs 2,000 per position — enough to buy at least 1 share of most names.
+#
+# Monthly rebalance at month-end via Kite Connect CNC orders.
+
+name: smallcap_momentum_v2_live
+
+data:
+  start: "2010-01-01"
+  end: null
+
+universe:
+  mode: nse500_ex_nifty50
+
+signal:
+  type: momentum_n_m
+  lookback_months: 12
+  skip_months: 1
+
+trend_filter:
+  enabled: false
+  benchmark_for_filter: "^NSEI"
+  sma_window: 200
+
+portfolio:
+  top_n: 5
+  rebalance_freq: "ME"
+  weighting: equal
+
+benchmark:
+  symbol: "^NSEI"
+  name: "Nifty 50"
+
+costs:
+  slippage_per_side: 0.003
+
+risk_free_rate: 0.06
+
+initial_capital: 1.0

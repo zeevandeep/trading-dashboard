@@ -1,0 +1,37 @@
+# Strategy: Nifty Trend-Following v2 (momentum-based)
+#
+# v1 used 200-day SMA which whipsawed badly (4.6% CAGR vs 12% buy-and-hold).
+# v2 uses 10-month price momentum: if Nifty's 10-month return is positive,
+# go long. If negative, go to cash. Checked monthly, which naturally
+# reduces whipsaw vs daily SMA crossovers.
+#
+# This is Meb Faber's GTAA approach adapted for India.
+
+name: nifty_trend_v2
+
+data:
+  start: "2010-01-01"
+  end: null
+
+universe:
+  mode: nifty_etf
+
+signal:
+  type: trend_follow_momentum
+  lookback_months: 10  # 10-month return > 0 = risk-on
+
+portfolio:
+  top_n: 1
+  rebalance_freq: "ME"
+  weighting: equal
+
+benchmark:
+  symbol: "^NSEI"
+  name: "Nifty 50"
+
+costs:
+  slippage_per_side: 0.001
+
+risk_free_rate: 0.06
+
+initial_capital: 1.0
