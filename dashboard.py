@@ -483,48 +483,48 @@ col_left, col_right = st.columns([3, 2], gap="medium")
 with col_left:
 
     # ── Current Portfolio ──────────────────────────────────────────────────────
-    st.markdown(
-        '<div class="section"><h2>Current Portfolio</h2>'
-        '<div class="desc">These are the stocks the strategy currently holds. '
-        'Updated at each monthly rebalance.</div>',
-        unsafe_allow_html=True,
-    )
-
-    # Determine which holdings to show
     if paper_state and paper_state.get("holdings"):
         holdings = paper_state["holdings"]
         last_rebal = paper_state.get("last_rebalance", "—")
         n_positions = len(holdings)
-
         sorted_holdings = sorted(holdings.items(), key=lambda x: -x[1])
 
-        table_html = '<table class="port-table"><thead><tr>'
-        table_html += '<th>#</th><th>Stock</th><th>Weight</th>'
-        table_html += '</tr></thead><tbody>'
-
+        rows_html = ""
         for i, (ticker, weight) in enumerate(sorted_holdings, 1):
             pct = f"{weight * 100:.1f}%"
-            table_html += f"""
-            <tr>
-                <td class="rank">{i}</td>
-                <td class="ticker">{ticker}</td>
-                <td class="weight">{pct}</td>
-            </tr>
-            """
-        table_html += '</tbody></table>'
+            rows_html += (
+                f'<tr><td class="rank">{i}</td>'
+                f'<td class="ticker">{ticker}</td>'
+                f'<td class="weight">{pct}</td></tr>'
+            )
 
-        st.markdown(table_html, unsafe_allow_html=True)
-        st.caption(f"Last rebalanced: {last_rebal}  |  {n_positions} positions  |  Equal weight")
+        st.markdown(
+            f"""
+            <div class="section">
+                <h2>Current Portfolio</h2>
+                <div class="desc">These are the stocks the strategy currently holds.
+                Updated at each monthly rebalance.
+                Last rebalanced: {last_rebal} | {n_positions} positions | Equal weight</div>
+                <table class="port-table">
+                    <thead><tr><th>#</th><th>Stock</th><th>Weight</th></tr></thead>
+                    <tbody>{rows_html}</tbody>
+                </table>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
     else:
         st.info("No active positions yet.")
 
-    st.markdown('</div>', unsafe_allow_html=True)
-
     # ── Equity Curve ───────────────────────────────────────────────────────────
     st.markdown(
-        '<div class="section"><h2>Backtest Performance</h2>'
-        f'<div class="desc">Growth of Rs. 1 invested in Jan 2010. '
-        f'Strategy turned Rs. 1 into Rs. {final_eq:.0f} over {len(equity)//252} years.</div>',
+        f"""
+        <div class="section">
+            <h2>Backtest Performance</h2>
+            <div class="desc">Growth of Rs. 1 invested in Jan 2010.
+            Strategy turned Rs. 1 into Rs. {final_eq:.0f} over {len(equity)//252} years.</div>
+        </div>
+        """,
         unsafe_allow_html=True,
     )
 
@@ -550,13 +550,16 @@ with col_left:
         yaxis_tickprefix="Rs. ",
     )
     st.plotly_chart(fig, use_container_width=True)
-    st.markdown('</div>', unsafe_allow_html=True)
 
     # ── Drawdown ───────────────────────────────────────────────────────────────
     st.markdown(
-        '<div class="section"><h2>Drawdowns</h2>'
-        f'<div class="desc">Worst peak-to-trough decline: {max_dd*100:.1f}%. '
-        f'Every strategy has bad periods — this shows the pain you\'d need to sit through.</div>',
+        f"""
+        <div class="section">
+            <h2>Drawdowns</h2>
+            <div class="desc">Worst peak-to-trough decline: {max_dd*100:.1f}%.
+            Every strategy has bad periods — this shows the pain you'd need to sit through.</div>
+        </div>
+        """,
         unsafe_allow_html=True,
     )
 
@@ -583,12 +586,15 @@ with col_left:
         yaxis_tickformat=".0%",
     )
     st.plotly_chart(fig_dd, use_container_width=True)
-    st.markdown('</div>', unsafe_allow_html=True)
 
     # ── Monthly Returns ────────────────────────────────────────────────────────
     st.markdown(
-        '<div class="section"><h2>Monthly Returns</h2>'
-        '<div class="desc">Color-coded heatmap of monthly returns (%). Green = profit, Red = loss.</div>',
+        """
+        <div class="section">
+            <h2>Monthly Returns</h2>
+            <div class="desc">Color-coded heatmap of monthly returns (%). Green = profit, Red = loss.</div>
+        </div>
+        """,
         unsafe_allow_html=True,
     )
     try:
@@ -597,7 +603,6 @@ with col_left:
         st.dataframe(styled, use_container_width=True, height=400)
     except Exception:
         st.dataframe(mr.round(1), use_container_width=True)
-    st.markdown('</div>', unsafe_allow_html=True)
 
 
 # ── RIGHT COLUMN ───────────────────────────────────────────────────────────────
@@ -616,7 +621,7 @@ with col_right:
         unsafe_allow_html=True,
     )
 
-    st.markdown("")  # spacer
+    st.markdown("")
 
     # ── Live P&L ───────────────────────────────────────────────────────────────
     if live_orders is not None and not live_orders.empty:
@@ -626,39 +631,39 @@ with col_right:
             n_stocks = len(placed)
             trade_date = placed["timestamp"].iloc[0][:10]
 
-            st.markdown(
-                '<div class="section"><h2>Live Portfolio</h2>'
-                f'<div class="desc">Real money deployed on {trade_date}. '
-                f'{n_stocks} stocks, Rs. {total_invested:,.0f} invested.</div>',
-                unsafe_allow_html=True,
-            )
-
+            order_rows = ""
             for _, row in placed.iterrows():
                 qty = row["quantity"]
                 symbol = row["symbol"]
                 value = row["estimated_value"]
-                st.markdown(
+                order_rows += (
                     f'<div style="display:flex;justify-content:space-between;'
                     f'padding:0.4rem 0;border-bottom:1px solid {C["border"]}88;'
                     f'font-size:0.88rem;">'
                     f'<span style="font-weight:600;color:{C["text"]}">{symbol}</span>'
                     f'<span style="color:{C["muted"]}">{qty} shares</span>'
                     f'<span style="color:{C["blue"]};font-weight:600">Rs. {value:,.0f}</span>'
-                    f'</div>',
-                    unsafe_allow_html=True,
+                    f'</div>'
                 )
 
             st.markdown(
-                f'<div style="display:flex;justify-content:space-between;'
-                f'padding:0.6rem 0 0;font-size:0.9rem;">'
-                f'<span style="font-weight:700;color:{C["text"]}">Total</span>'
-                f'<span style="font-weight:700;color:{C["green"]}">Rs. {total_invested:,.0f}</span>'
-                f'</div>',
+                f"""
+                <div class="section">
+                    <h2>Live Portfolio</h2>
+                    <div class="desc">Real money deployed on {trade_date}.
+                    {n_stocks} stocks, Rs. {total_invested:,.0f} invested.</div>
+                    {order_rows}
+                    <div style="display:flex;justify-content:space-between;
+                    padding:0.6rem 0 0;font-size:0.9rem;">
+                        <span style="font-weight:700;color:{C["text"]}">Total</span>
+                        <span style="font-weight:700;color:{C["green"]}">Rs. {total_invested:,.0f}</span>
+                    </div>
+                </div>
+                """,
                 unsafe_allow_html=True,
             )
-            st.markdown('</div>', unsafe_allow_html=True)
 
-    st.markdown("")  # spacer
+    st.markdown("")
 
     # ── How It Works ───────────────────────────────────────────────────────────
     st.markdown(
@@ -666,16 +671,14 @@ with col_right:
         <div class="section">
             <h2>How It Works</h2>
             <div class="desc">A simple, rules-based process. No stock-picking, no gut feelings.</div>
-
             <div class="step">
                 <div class="step-num">1</div>
                 <div class="step-text">
                     <strong>Universe</strong><br>
                     <span>Start with NSE 500 stocks, excluding the largest 50 (Nifty 50).
-                    This targets the small & midcap space where momentum works best.</span>
+                    This targets the small &amp; midcap space where momentum works best.</span>
                 </div>
             </div>
-
             <div class="step">
                 <div class="step-num">2</div>
                 <div class="step-text">
@@ -684,7 +687,6 @@ with col_right:
                     to avoid short-term reversal). Higher return = higher rank.</span>
                 </div>
             </div>
-
             <div class="step">
                 <div class="step-num">3</div>
                 <div class="step-text">
@@ -693,7 +695,6 @@ with col_right:
                     no size bets. Just pure momentum exposure.</span>
                 </div>
             </div>
-
             <div class="step">
                 <div class="step-num">4</div>
                 <div class="step-text">
@@ -719,7 +720,7 @@ with col_right:
                 <tr><td>Sharpe ratio</td><td style="color:{C['text']}">{sharpe:.2f}</td></tr>
                 <tr><td>Sortino ratio</td><td style="color:{C['text']}">{summary.get('sortino',0):.2f}</td></tr>
                 <tr><td>Max drawdown</td><td style="color:{C['red']}">{max_dd*100:.1f}%</td></tr>
-                <tr><td>Worst drawdown period</td><td style="color:{C['muted']}">Jan 2018 → Mar 2020</td></tr>
+                <tr><td>Worst drawdown period</td><td style="color:{C['muted']}">Jan 2018 to Mar 2020</td></tr>
                 <tr><td>Win rate (monthly)</td><td style="color:{C['text']}">{win_rate*100:.0f}%</td></tr>
                 <tr><td>Backtest period</td><td style="color:{C['muted']}">16 years</td></tr>
                 <tr><td>Rebalance frequency</td><td style="color:{C['muted']}">Monthly</td></tr>
@@ -750,14 +751,13 @@ with col_right:
                 <h2>Paper Trading</h2>
                 <div class="desc">Live simulation running since {paper_state.get('created', '—')[:10]}.
                 Tracking real market prices without real money.</div>
-
                 <div class="pnl-card">
                     <div class="amount {pnl_class}">{pnl_sign}{paper_pnl:.2f}%</div>
-                    <div class="label">Paper P&L</div>
+                    <div class="label">Paper P&amp;L</div>
                 </div>
                 <div style="margin-top:0.8rem;text-align:center;">
                     <span style="color:{C['muted']};font-size:0.8rem;">
-                        {days_tracked} day(s) tracked  |
+                        {days_tracked} day(s) tracked |
                         {90 - days_tracked} more days until graduation gate
                     </span>
                 </div>
