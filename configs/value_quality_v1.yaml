@@ -1,0 +1,39 @@
+# Strategy: Indian Value + Quality v1
+#
+# Buys cheap, high-quality stocks — low P/E, high ROE, low debt,
+# growing earnings. Rebalances quarterly (fundamentals change slowly).
+#
+# Designed to complement the momentum strategy:
+# - Momentum catches trending stocks (works in bull markets)
+# - Value+Quality catches underpriced quality (works in corrections)
+# - Together they reduce portfolio-level drawdowns
+
+name: value_quality_v1
+
+data:
+  start: "2010-01-01"
+  end: null
+
+universe:
+  mode: nse500_ex_nifty50
+
+signal:
+  type: value_quality
+  # Factors: earnings_yield, roe, debt_equity (inverted), earnings_growth
+  # Equal weighted composite score
+
+portfolio:
+  top_n: 15
+  rebalance_freq: "QE"  # Quarterly — fundamentals change slowly
+  weighting: equal
+
+benchmark:
+  symbol: "^NSEI"
+  name: "Nifty 50"
+
+costs:
+  slippage_per_side: 0.003
+
+risk_free_rate: 0.06
+
+initial_capital: 1.0
