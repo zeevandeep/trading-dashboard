@@ -628,11 +628,12 @@ with col_left:
                         font=dict(size=9, color=C["text"]),
                     )
 
+        hm_layout = {k: v for k, v in PL.items() if k not in ("xaxis", "yaxis")}
         fig_hm.update_layout(
-            **PL,
+            **hm_layout,
             height=max(350, len(mr) * 26),
-            xaxis=dict(side="top", dtick=1, gridcolor="rgba(0,0,0,0)"),
-            yaxis=dict(autorange="reversed", dtick=1, gridcolor="rgba(0,0,0,0)"),
+            xaxis=dict(side="top", dtick=1, gridcolor="rgba(0,0,0,0)", linecolor="rgba(0,0,0,0)", zeroline=False),
+            yaxis=dict(autorange="reversed", dtick=1, gridcolor="rgba(0,0,0,0)", linecolor="rgba(0,0,0,0)", zeroline=False),
         )
         st.plotly_chart(fig_hm, use_container_width=True)
     except Exception as e:
