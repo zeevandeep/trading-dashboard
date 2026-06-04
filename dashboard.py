@@ -625,6 +625,152 @@ with col_r:
         </div>
         """, unsafe_allow_html=True)
 
+# ═══════════════════════════════════════════════════════════════════════════════
+#  STRATEGY 2 — VALUE + QUALITY
+# ═══════════════════════════════════════════════════════════════════════════════
+
+st.markdown("")
+
+st.markdown("""
+<div class="navbar" style="margin-top:1rem;padding-top:2rem;">
+    <div class="logo" style="font-size:1rem;">Strategy 2</div>
+    <div class="nav-status">Quarterly rebalance</div>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<div class="hero-v2" style="padding-bottom:1.5rem;">
+    <div class="eyebrow">Fundamental Analysis</div>
+    <h1 style="font-size:2rem;">Value + <span>Quality</span></h1>
+    <div class="tagline" style="font-size:0.9rem;">
+        Buys cheap, high-quality stocks — low P/E, high ROE, low debt, growing earnings.
+        Designed to complement the momentum strategy with uncorrelated returns.
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# Fetch V+Q scores (cached for 6 hours)
+from trading.data.universe import smallcap_universe  # noqa: E402
+from trading.signals.value_quality import fetch_fundamentals, score_value_quality  # noqa: E402
+
+@st.cache_data(ttl=6*3600, show_spinner="Scoring stocks on fundamentals...")
+def get_vq_data():
+    tickers = smallcap_universe()
+    fund = fetch_fundamentals(tickers, max_workers=15)
+    scores = score_value_quality(fund)
+    return fund, scores
+
+try:
+    vq_fund, vq_scores = get_vq_data()
+
+    if not vq_scores.empty:
+        top_15 = vq_scores.head(15)
+
+        vq_l, vq_r = st.columns([3, 2], gap="large")
+
+        with vq_l:
+            # V+Q Portfolio table
+            vq_rows = ""
+            for i, (ticker, score) in enumerate(top_15.items(), 1):
+                row = vq_fund.loc[ticker]
+                pe = row.get("pe", 0)
+                roe = row.get("roe", 0) * 100
+                de = row.get("de", 0)
+                eg = row.get("earnings_growth", 0) * 100
+                eg_color = "var(--green)" if eg > 0 else "var(--red)"
+                vq_rows += (
+                    f'<tr>'
+                    f'<td class="idx">{i}</td>'
+                    f'<td class="sym">{ticker}</td>'
+                    f'<td style="font-family:JetBrains Mono,monospace;font-size:0.8rem;color:var(--text-secondary)">{pe:.1f}</td>'
+                    f'<td style="font-family:JetBrains Mono,monospace;font-size:0.8rem;color:var(--green)">{roe:.1f}%</td>'
+                    f'<td style="font-family:JetBrains Mono,monospace;font-size:0.8rem;color:var(--text-secondary)">{de:.1f}</td>'
+                    f'<td style="font-family:JetBrains Mono,monospace;font-size:0.8rem;color:{eg_color}">{eg:+.0f}%</td>'
+                    f'<td class="wt">{score:.3f}</td>'
+                    f'</tr>'
+                )
+
+            st.markdown(f"""
+            <div class="card-v2">
+                <div class="card-header">
+                    <div class="card-title">Value + Quality Picks</div>
+                    <div class="card-badge" style="background:var(--purple-dim);color:var(--purple);">Top 15</div>
+                </div>
+                <div class="card-desc">Ranked by composite score: Earnings Yield + ROE + Low Debt + Earnings Growth. Updated live.</div>
+                <table class="htable">
+                    <thead><tr><th>#</th><th>Ticker</th><th>P/E</th><th>ROE</th><th>D/E</th><th>EPS Gr.</th><th>Score</th></tr></thead>
+                    <tbody>{vq_rows}</tbody>
+                </table>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with vq_r:
+            # Overlap analysis
+            momentum_holdings = set(paper_state.get("holdings", {}).keys()) if paper_state else set()
+            vq_holdings = set(top_15.index)
+            overlap = momentum_holdings & vq_holdings
+            only_momentum = momentum_holdings - vq_holdings
+            only_vq = vq_holdings - momentum_holdings
+
+            st.markdown(f"""
+            <div class="card-v2">
+                <div class="card-header">
+                    <div class="card-title">Strategy Overlap</div>
+                </div>
+                <div class="card-desc">Stocks appearing in both strategies have the strongest conviction.</div>
+                <table class="kstats">
+                    <tr><td>Momentum-only stocks</td><td>{len(only_momentum)}</td></tr>
+                    <tr><td>Value+Quality-only stocks</td><td>{len(only_vq)}</td></tr>
+                    <tr><td>Both strategies</td><td style="color:var(--green)">{len(overlap)}</td></tr>
+                </table>
+            </div>
+            """, unsafe_allow_html=True)
+
+            if overlap:
+                overlap_list = ", ".join(sorted(overlap))
+                st.markdown(f"""
+                <div class="card-v2">
+                    <div class="card-header">
+                        <div class="card-title">High Conviction</div>
+                        <div class="card-badge" style="background:var(--green-dim);color:var(--green);">Both Signals</div>
+                    </div>
+                    <div class="card-desc">These stocks rank highly on BOTH momentum and fundamentals:</div>
+                    <div style="color:var(--text-primary);font-weight:600;font-size:0.95rem;line-height:1.8;">
+                        {overlap_list}
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+
+            # V+Q Process
+            st.markdown("""
+            <div class="card-v2">
+                <div class="card-header">
+                    <div class="card-title">How It Works</div>
+                </div>
+                <div class="process">
+                    <div class="proc-step">
+                        <div class="num" style="background:var(--purple-dim);color:var(--purple);">1</div>
+                        <div class="txt"><strong>Earnings Yield</strong><br><span>Inverse of P/E. Cheaper stocks score higher.</span></div>
+                    </div>
+                    <div class="proc-step">
+                        <div class="num" style="background:var(--purple-dim);color:var(--purple);">2</div>
+                        <div class="txt"><strong>Return on Equity</strong><br><span>Higher ROE = better capital efficiency.</span></div>
+                    </div>
+                    <div class="proc-step">
+                        <div class="num" style="background:var(--purple-dim);color:var(--purple);">3</div>
+                        <div class="txt"><strong>Low Debt</strong><br><span>Lower debt/equity = safer balance sheet.</span></div>
+                    </div>
+                    <div class="proc-step">
+                        <div class="num" style="background:var(--purple-dim);color:var(--purple);">4</div>
+                        <div class="txt"><strong>Earnings Growth</strong><br><span>Growing profits confirm the value isn't a trap.</span></div>
+                    </div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+except Exception as e:
+    st.warning(f"Value+Quality data unavailable: {e}")
+
 # ── Disclaimer
 st.markdown("""
 <div class="disc">
