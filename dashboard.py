@@ -424,12 +424,6 @@ if (paper_dir / "state.json").exists():
     with open(paper_dir / "state.json") as f:
         paper_state = json.load(f)
 
-# Live orders
-live_orders = None
-live_dir = LIVE_DIR / "smallcap_momentum_v2_live"
-if (live_dir / "orders.csv").exists():
-    live_orders = pd.read_csv(live_dir / "orders.csv")
-
 # ╔══════════════════════════════════════════════════════════════════════════════╗
 # ║  HERO BANNER                                                               ║
 # ╚══════════════════════════════════════════════════════════════════════════════╝
@@ -667,48 +661,6 @@ with col_right:
         """,
         unsafe_allow_html=True,
     )
-
-    st.markdown("")
-
-    # ── Live P&L ───────────────────────────────────────────────────────────────
-    if live_orders is not None and not live_orders.empty:
-        placed = live_orders[live_orders["status"] == "placed"]
-        if not placed.empty:
-            total_invested = placed["estimated_value"].sum()
-            n_stocks = len(placed)
-            trade_date = placed["timestamp"].iloc[0][:10]
-
-            order_rows = ""
-            for _, row in placed.iterrows():
-                qty = row["quantity"]
-                symbol = row["symbol"]
-                value = row["estimated_value"]
-                order_rows += (
-                    f'<div style="display:flex;justify-content:space-between;'
-                    f'padding:0.4rem 0;border-bottom:1px solid {C["border"]}88;'
-                    f'font-size:0.88rem;">'
-                    f'<span style="font-weight:600;color:{C["text"]}">{symbol}</span>'
-                    f'<span style="color:{C["muted"]}">{qty} shares</span>'
-                    f'<span style="color:{C["blue"]};font-weight:600">Rs. {value:,.0f}</span>'
-                    f'</div>'
-                )
-
-            st.markdown(
-                f"""
-                <div class="section">
-                    <h2>Live Portfolio</h2>
-                    <div class="desc">Real money deployed on {trade_date}.
-                    {n_stocks} stocks, Rs. {total_invested:,.0f} invested.</div>
-                    {order_rows}
-                    <div style="display:flex;justify-content:space-between;
-                    padding:0.6rem 0 0;font-size:0.9rem;">
-                        <span style="font-weight:700;color:{C["text"]}">Total</span>
-                        <span style="font-weight:700;color:{C["green"]}">Rs. {total_invested:,.0f}</span>
-                    </div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
 
     st.markdown("")
 
