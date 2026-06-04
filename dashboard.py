@@ -609,10 +609,18 @@ with col_left:
                 z=mr.values,
                 x=months,
                 y=years,
-                colorscale=[[0, C["red"]], [0.45, "#1e1e1e"], [0.55, "#1e1e1e"], [1, C["green"]]],
+                colorscale=[
+                    [0, "#d62728"],
+                    [0.35, "#8b0000"],
+                    [0.5, "#1a1a2e"],
+                    [0.65, "#006400"],
+                    [1, "#2ca02c"],
+                ],
                 zmid=0,
                 showscale=False,
                 hovertemplate="%{y} %{x}: %{z:.1f}%<extra></extra>",
+                xgap=2,
+                ygap=2,
             )
         )
 
@@ -625,15 +633,26 @@ with col_left:
                         x=month, y=year,
                         text=f"{val:.1f}",
                         showarrow=False,
-                        font=dict(size=9, color=C["text"]),
+                        font=dict(size=10, color="white"),
                     )
 
-        hm_layout = {k: v for k, v in PL.items() if k not in ("xaxis", "yaxis")}
         fig_hm.update_layout(
-            **hm_layout,
-            height=max(350, len(mr) * 26),
-            xaxis=dict(side="top", dtick=1, gridcolor="rgba(0,0,0,0)", linecolor="rgba(0,0,0,0)", zeroline=False),
-            yaxis=dict(autorange="reversed", dtick=1, gridcolor="rgba(0,0,0,0)", linecolor="rgba(0,0,0,0)", zeroline=False),
+            template="plotly_dark",
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            font=dict(family="Inter, system-ui, sans-serif", color=C["text"], size=12),
+            margin=dict(l=50, r=20, t=40, b=20),
+            height=max(450, len(mr) * 30),
+            xaxis=dict(
+                side="top", dtick=1, tickfont=dict(size=11),
+                gridcolor="rgba(0,0,0,0)", linecolor="rgba(0,0,0,0)",
+                zeroline=False,
+            ),
+            yaxis=dict(
+                autorange="reversed", dtick=1, tickfont=dict(size=11),
+                gridcolor="rgba(0,0,0,0)", linecolor="rgba(0,0,0,0)",
+                zeroline=False,
+            ),
         )
         st.plotly_chart(fig_hm, use_container_width=True)
     except Exception as e:
