@@ -31,7 +31,7 @@ LIVE_DIR = DATA_DIR / "live"
 # ─── Page config ───────────────────────────────────────────────────────────────
 
 st.set_page_config(
-    page_title="Apex Alpha | Quantitative Strategies",
+    page_title="JD Quant | Quantitative Strategies",
     page_icon="",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -444,7 +444,7 @@ st.markdown(
     f"""
     <div class="hero">
         <div class="tag">LIVE TRADING</div>
-        <h1>Apex Alpha</h1>
+        <h1>JD Quant</h1>
         <div class="subtitle">
             A proprietary quantitative strategy that systematically identifies
             high-conviction opportunities in Indian equities. Fully automated,
@@ -888,7 +888,7 @@ st.markdown(
         invested in this strategy with real capital.
     </div>
     <div class="footer">
-        Apex Alpha &middot; Quantitative Strategies &middot;
+        JD Quant &middot; Quantitative Strategies &middot;
         Last updated {datetime.now().strftime("%d %b %Y, %I:%M %p")} &middot;
         Built with data, not opinions
     </div>
