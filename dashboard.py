@@ -797,114 +797,7 @@ with col_right:
         )
 
 # ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║  DETAILED VIEW (expandable)                                                ║
-# ╚══════════════════════════════════════════════════════════════════════════════╝
-
-st.markdown("")
-st.markdown("")
-
-with st.expander("Detailed Analysis (for quants)", expanded=False):
-    tab_perf, tab_compare = st.tabs(["Rolling Stats", "Compare Runs"])
-
-    with tab_perf:
-        # Rolling Sharpe
-        roll = returns.rolling(252)
-        rolling_sharpe = (roll.mean() * 252) / (roll.std() * (252**0.5))
-        rs_clean = rolling_sharpe.dropna()
-
-        fig_rs = go.Figure()
-        fig_rs.add_trace(
-            go.Scatter(
-                x=rs_clean.index,
-                y=rs_clean.values,
-                mode="lines",
-                line=dict(color=C["purple"], width=1.5),
-                hovertemplate="%{x|%b %Y}: %{y:.2f}<extra></extra>",
-            )
-        )
-        fig_rs.add_hline(
-            y=1.0, line_dash="dash", line_color=C["muted"], opacity=0.5,
-            annotation_text="Sharpe = 1.0",
-            annotation_position="bottom right",
-            annotation_font_color=C["muted"],
-        )
-        fig_rs.update_layout(**PL, height=300, showlegend=False, title="Rolling 1-Year Sharpe")
-        st.plotly_chart(fig_rs, use_container_width=True)
-
-        # Turnover
-        turnover_path = primary_run / "turnover.csv"
-        if turnover_path.exists():
-            turnover = load_series(str(primary_run), "turnover.csv")
-            if not turnover.empty:
-                fig_tv = go.Figure()
-                fig_tv.add_trace(
-                    go.Bar(
-                        x=turnover.index, y=turnover.values,
-                        marker_color=C["orange"], opacity=0.8,
-                        hovertemplate="%{x|%b %Y}: %{y:.1%}<extra></extra>",
-                    )
-                )
-                fig_tv.update_layout(
-                    **PL, height=250, showlegend=False,
-                    title="Turnover per Rebalance", yaxis_tickformat=".0%",
-                )
-                st.plotly_chart(fig_tv, use_container_width=True)
-                st.caption(f"Average turnover: {turnover.mean():.1%} per rebalance")
-
-    with tab_compare:
-        run_names = [p.name for p in runs]
-        picks = st.multiselect("Select runs", run_names, default=[primary_run.name])
-        if picks:
-            rows = []
-            curves = {}
-            for name in picks:
-                rd = OUTPUTS_DIR / name
-                try:
-                    s = dict(load_summary(str(rd)))
-                    s["run"] = name
-                    rows.append(s)
-                    curves[name] = load_series(str(rd), "equity_curve.csv")
-                except Exception:
-                    pass
-
-            if rows:
-                df = pd.DataFrame(rows)
-                col_order = ["run", "cagr", "annual_vol", "sharpe", "sortino",
-                             "max_drawdown", "calmar", "win_rate_monthly", "final_equity"]
-                df = df[[c for c in col_order if c in df.columns]]
-                display_df = df.copy()
-                for c in ["cagr", "annual_vol", "max_drawdown", "win_rate_monthly"]:
-                    if c in display_df.columns:
-                        display_df[c] = display_df[c].apply(
-                            lambda x: f"{x*100:.1f}%" if pd.notna(x) else "—")
-                for c in ["sharpe", "sortino", "calmar", "final_equity"]:
-                    if c in display_df.columns:
-                        display_df[c] = display_df[c].apply(
-                            lambda x: f"{x:.2f}" if pd.notna(x) else "—")
-                display_df.columns = [c.replace("_", " ").title() for c in display_df.columns]
-                st.dataframe(display_df, use_container_width=True, hide_index=True)
-
-            if curves:
-                aligned = pd.DataFrame(curves)
-                aligned = aligned.apply(lambda s: s / s.dropna().iloc[0])
-                colors = [C["blue"], C["green"], C["purple"], C["orange"], C["red"]]
-                fig_cmp = go.Figure()
-                for i, col in enumerate(aligned.columns):
-                    fig_cmp.add_trace(
-                        go.Scatter(
-                            x=aligned.index, y=aligned[col],
-                            mode="lines", name=col,
-                            line=dict(color=colors[i % len(colors)], width=2),
-                        )
-                    )
-                fig_cmp.update_layout(
-                    **PL, height=380,
-                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0),
-                )
-                st.plotly_chart(fig_cmp, use_container_width=True)
-
-# ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║  DISCLAIMER + FOOTER                                                       ║
+# ║  DISCLAIMER                                                                ║
 # ╚══════════════════════════════════════════════════════════════════════════════╝
 
 st.markdown(
@@ -912,14 +805,7 @@ st.markdown(
     <div class="disclaimer">
         <strong>Disclaimer:</strong> This is not financial advice. Past performance does not
         guarantee future results. The strategy shown is based on historical backtesting which
-        has inherent limitations including survivorship bias and look-ahead bias in universe
-        selection. Always do your own research before investing. The author is personally
-        invested in this strategy with real capital.
-    </div>
-    <div class="footer">
-        JD Quant &middot; Quantitative Strategies &middot;
-        Last updated {datetime.now().strftime("%d %b %Y, %I:%M %p")} &middot;
-        Built with data, not opinions
+        has inherent limitations. Always do your own research before investing.
     </div>
     """,
     unsafe_allow_html=True,
