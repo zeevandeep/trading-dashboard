@@ -291,6 +291,220 @@ def _extract_from_screener(ticker: str) -> pd.DataFrame | None:
     return df
 
 
+def _mc_search(ticker: str) -> dict | None:
+    """Resolve an NSE ticker to Moneycontrol's internal identifiers."""
+    import requests
+
+    try:
+        resp = requests.get(
+            "https://www.moneycontrol.com/mccode/common/autosuggestion_solr.php",
+            params={"classic": "true", "query": ticker, "type": "1", "format": "json"},
+            headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"},
+            timeout=10,
+        )
+        results = resp.json()
+        for r in results:
+            desc = r.get("pdt_dis_nm", "")
+            if f", {ticker}," in desc or f", {ticker}<" in desc:
+                url = r["link_src"]
+                parts = url.split("/")
+                sector = parts[5] if len(parts) > 5 else ""
+                company = parts[6] if len(parts) > 6 else ""
+                return {"sc_id": r["sc_id"], "sector": sector, "company": company}
+    except Exception:
+        pass
+    return None
+
+
+def _parse_mc_table(soup) -> dict[str, list[tuple[str, float | None]]]:
+    """Parse a Moneycontrol financial table. Returns {row_label: [(year, value), ...]}."""
+    tbl = soup.find("table", class_="mctable1")
+    if not tbl:
+        return {}
+
+    rows = tbl.find_all("tr")
+    if not rows:
+        return {}
+
+    # Header row has years like "Mar 26", "Mar 25", etc.
+    header_cells = [td.text.strip() for td in rows[0].find_all("td")]
+    years = header_cells[1:]  # skip the label column
+
+    data = {}
+    for row in rows[1:]:
+        cells = [td.text.strip() for td in row.find_all("td")]
+        if len(cells) < 2:
+            continue
+        label = cells[0]
+        vals = []
+        for i, yr in enumerate(years):
+            if i + 1 < len(cells):
+                txt = cells[i + 1].replace(",", "").replace("%", "").strip()
+                try:
+                    vals.append((yr, float(txt)))
+                except ValueError:
+                    vals.append((yr, None))
+        data[label] = vals
+
+    return data
+
+
+def _extract_from_moneycontrol(ticker: str) -> pd.DataFrame | None:
+    """Fetch 10-15 years of annual fundamentals from Moneycontrol.
+
+    Returns DataFrame indexed by fiscal year-end date with columns:
+    net_income, equity, total_debt, shares, revenue (all in Rs).
+    """
+    import requests
+    from bs4 import BeautifulSoup
+
+    # Step 1: Resolve ticker to Moneycontrol IDs
+    mc = _mc_search(ticker)
+    if not mc:
+        return None
+
+    sc_id = mc["sc_id"]
+    sector = mc["sector"]
+    company = mc["company"]
+
+    headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"}
+
+    # Step 2: Fetch P&L and Balance Sheet across 3 pages (5 years each = 15 years)
+    pl_data: dict[str, float | None] = {}
+    bs_eq_cap: dict[str, float | None] = {}
+    bs_reserves: dict[str, float | None] = {}
+    bs_lt_borrow: dict[str, float | None] = {}
+    bs_st_borrow: dict[str, float | None] = {}
+    bs_bonus_eq: dict[str, float | None] = {}
+
+    import time
+
+    for page in [1, 2, 3]:
+        # P&L
+        try:
+            url_pl = f"https://www.moneycontrol.com/financials/{company}/profit-lossVI/{sc_id}/{page}"
+            resp = requests.get(url_pl, headers=headers, timeout=15)
+            if resp.status_code == 200:
+                soup = BeautifulSoup(resp.text, "html.parser")
+                data = _parse_mc_table(soup)
+
+                for label, vals in data.items():
+                    ll = label.lower()
+                    if "profit/loss for the period" in ll or ("net profit" in ll and "minority" not in ll):
+                        for yr, v in vals:
+                            if yr and v is not None:
+                                pl_data[yr] = v
+        except Exception:
+            pass
+
+        time.sleep(0.3)
+
+        # Balance Sheet
+        try:
+            url_bs = f"https://www.moneycontrol.com/financials/{company}/balance-sheetVI/{sc_id}/{page}"
+            resp = requests.get(url_bs, headers=headers, timeout=15)
+            if resp.status_code == 200:
+                soup = BeautifulSoup(resp.text, "html.parser")
+                data = _parse_mc_table(soup)
+
+                for label, vals in data.items():
+                    ll = label.lower()
+                    if "equity share capital" in ll:
+                        for yr, v in vals:
+                            if yr and v is not None:
+                                bs_eq_cap[yr] = v
+                    elif "total reserves and surplus" in ll:
+                        for yr, v in vals:
+                            if yr and v is not None:
+                                bs_reserves[yr] = v
+                    elif "long term borrowings" in ll and "current" not in ll:
+                        for yr, v in vals:
+                            if yr and v is not None:
+                                bs_lt_borrow[yr] = v
+                    elif "short term borrowings" in ll:
+                        for yr, v in vals:
+                            if yr and v is not None:
+                                bs_st_borrow[yr] = v
+                    elif "bonus equity" in ll:
+                        for yr, v in vals:
+                            if yr and v is not None:
+                                bs_bonus_eq[yr] = v
+        except Exception:
+            pass
+
+        time.sleep(0.3)
+
+    if not pl_data or not bs_eq_cap:
+        return None
+
+    # Step 3: Build the DataFrame
+    # Moneycontrol values are in Crores
+    # Face value: derive from equity capital and bonus equity share capital
+    # Default face value = 10 (most common in India)
+    face_value = 10.0
+
+    month_map = {
+        "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "May": 5, "Jun": 6,
+        "Jul": 7, "Aug": 8, "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12,
+    }
+
+    result_rows = []
+    for period, ni_cr in pl_data.items():
+        parts = period.strip().split()
+        if len(parts) != 2 or parts[0] not in month_map:
+            continue
+        try:
+            yr_short = int(parts[1])
+        except ValueError:
+            continue
+
+        # Convert 2-digit year to 4-digit
+        year = yr_short + 2000 if yr_short < 100 else yr_short
+        month = month_map[parts[0]]
+        from calendar import monthrange
+        _, last_day = monthrange(year, month)
+        dt = pd.Timestamp(year=year, month=month, day=last_day)
+
+        eq_cap_cr = bs_eq_cap.get(period)
+        res_cr = bs_reserves.get(period)
+        lt_borrow = bs_lt_borrow.get(period, 0) or 0
+        st_borrow = bs_st_borrow.get(period, 0) or 0
+
+        equity_cr = None
+        if eq_cap_cr is not None and res_cr is not None:
+            equity_cr = eq_cap_cr + res_cr
+
+        shares = None
+        if eq_cap_cr is not None and eq_cap_cr > 0:
+            shares = eq_cap_cr * _CR / face_value
+
+        total_debt_cr = lt_borrow + st_borrow
+
+        result_rows.append({
+            "date": dt,
+            "net_income": ni_cr * _CR if ni_cr is not None else np.nan,
+            "equity": equity_cr * _CR if equity_cr is not None else np.nan,
+            "total_debt": total_debt_cr * _CR,
+            "shares": shares if shares is not None else np.nan,
+            "revenue": np.nan,
+        })
+
+    if len(result_rows) < 2:
+        return None
+
+    df = pd.DataFrame(result_rows).set_index("date").sort_index()
+    return df
+
+
+def _extract_fundamentals(ticker: str) -> pd.DataFrame | None:
+    """Try Screener.in first, fall back to Moneycontrol."""
+    df = _extract_from_screener(ticker)
+    if df is not None and len(df) >= 2:
+        return df
+    df = _extract_from_moneycontrol(ticker)
+    return df
+
+
 def fetch_historical_fundamentals(
     tickers: list[str],
     max_workers: int = 10,
@@ -325,14 +539,14 @@ def fetch_historical_fundamentals(
 
     import time
 
-    log.info(f"Fetching historical fundamentals from Screener.in for {len(tickers)} tickers...")
+    log.info(f"Fetching historical fundamentals for {len(tickers)} tickers (Screener.in → Moneycontrol fallback)...")
     for i, ticker in enumerate(tickers):
         if (i + 1) % 25 == 0:
             log.info(f"  {i + 1}/{len(tickers)} fetched ({len(result)} OK)...")
-        df = _extract_from_screener(ticker)
+        df = _extract_fundamentals(ticker)
         if df is not None and len(df) >= 2:
             result[ticker] = df
-        time.sleep(0.3)  # ~3 req/sec sequential — polite to Screener.in
+        time.sleep(0.5)
 
     log.info(f"Got historical fundamentals for {len(result)}/{len(tickers)} tickers")
 
