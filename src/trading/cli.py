@@ -157,7 +157,7 @@ def backtest(config: str, smoke: bool, force_refresh: bool, survivorship_free: b
             # V+Q: fetch historical fundamentals and compute scores at each rebalance date
             from trading.config import CACHE_DIR
             cache_dir = CACHE_DIR / "fundamentals"
-            hist_fund = fetch_historical_fundamentals(tickers, max_workers=15, cache_dir=cache_dir)
+            hist_fund = fetch_historical_fundamentals(tickers, max_workers=4, cache_dir=cache_dir)
 
             # Generate quarterly rebalance dates from price index
             rebal_dates = prices.resample(freq).last().index

@@ -127,51 +127,168 @@ def score_value_quality(fundamentals: pd.DataFrame) -> pd.Series:
 
 REPORTING_LAG_MONTHS = 3  # Indian companies: March YE, results public by ~June
 
+# Screener.in values are in Crores (1 Cr = 10^7 Rs)
+_CR = 1e7
 
-def _extract_annual_fundamentals(ticker: str) -> pd.DataFrame | None:
-    """Pull annual income statement + balance sheet from yfinance.
 
-    Returns a DataFrame indexed by fiscal year-end date with columns:
-    net_income, equity, total_debt, shares, revenue.
-    """
-    try:
-        yf_ticker = f"{ticker}.NS" if not ticker.endswith((".NS", ".BO")) else ticker
-        tk = yf.Ticker(yf_ticker)
-        inc = tk.income_stmt
-        bs = tk.balance_sheet
+def _parse_screener_section(soup, section_name: str) -> dict[str, dict[str, float | None]]:
+    """Parse a named section (P&L, Balance Sheet, etc.) from a Screener.in page."""
+    from bs4 import BeautifulSoup  # noqa: F811
 
-        if inc is None or bs is None or inc.empty or bs.empty:
-            return None
-
-        rows = []
-        for dt in inc.columns:
-            ni = inc.at["Net Income", dt] if "Net Income" in inc.index else np.nan
-            rev = inc.at["Total Revenue", dt] if "Total Revenue" in inc.index else np.nan
-
-            if dt not in bs.columns:
+    for sec in soup.find_all("section"):
+        h2 = sec.find("h2")
+        if h2 and section_name.lower() in h2.text.strip().lower():
+            tbl = sec.find("table", class_="data-table")
+            if not tbl or not tbl.find("thead"):
                 continue
+            headers = [th.text.strip() for th in tbl.find("thead").find_all("th")][1:]
+            data = {}
+            for row in tbl.find("tbody").find_all("tr"):
+                cells = row.find_all("td")
+                label = cells[0].text.strip().replace("\xa0", " ")
+                vals = []
+                for c in cells[1:]:
+                    txt = c.text.strip().replace(",", "").replace("%", "")
+                    try:
+                        vals.append(float(txt))
+                    except ValueError:
+                        vals.append(None)
+                data[label] = dict(zip(headers, vals))
+            return data
+    return {}
 
-            eq = bs.at["Stockholders Equity", dt] if "Stockholders Equity" in bs.index else np.nan
-            debt = bs.at["Total Debt", dt] if "Total Debt" in bs.index else np.nan
-            shares = bs.at["Share Issued", dt] if "Share Issued" in bs.index else np.nan
 
-            rows.append({
-                "date": dt,
-                "net_income": ni,
-                "equity": eq,
-                "total_debt": debt,
-                "shares": shares,
-                "revenue": rev,
-            })
+def _parse_face_value(soup) -> float:
+    """Extract face value from Screener.in company page."""
+    for li in soup.find_all("li"):
+        name = li.find("span", class_="name")
+        value = li.find("span", class_="number")
+        if name and "face value" in name.text.lower() and value:
+            txt = value.text.strip().replace(",", "").replace("₹", "").strip()
+            try:
+                return float(txt)
+            except ValueError:
+                pass
+    return 10.0  # default face value for most Indian companies
 
-        if not rows:
-            return None
 
-        df = pd.DataFrame(rows).set_index("date").sort_index()
-        return df
+def _extract_from_screener(ticker: str) -> pd.DataFrame | None:
+    """Fetch 10-15 years of annual fundamentals from Screener.in.
 
-    except Exception:
+    Returns DataFrame indexed by fiscal year-end date with columns:
+    net_income, equity, total_debt, shares, revenue (all in Rs, not Cr).
+    """
+    import time
+    import requests
+    from bs4 import BeautifulSoup
+
+    # Try consolidated first; if too few years, fall back to standalone
+    best_soup = None
+    best_years = 0
+    for suffix in ["/consolidated/", "/"]:
+        url = f"https://www.screener.in/company/{ticker}{suffix}"
+        try:
+            resp = requests.get(
+                url,
+                headers={"User-Agent": "Mozilla/5.0 (compatible; JDQuant/1.0)"},
+                timeout=15,
+            )
+            if resp.status_code != 200:
+                continue
+        except Exception:
+            continue
+
+        s = BeautifulSoup(resp.text, "html.parser")
+        # Count P&L years
+        for sec in s.find_all("section"):
+            h2 = sec.find("h2")
+            if h2 and "profit" in h2.text.lower():
+                tbl = sec.find("table", class_="data-table")
+                if tbl and tbl.find("thead"):
+                    n = len(tbl.find("thead").find_all("th")) - 1
+                    if n > best_years:
+                        best_years = n
+                        best_soup = s
+                break
+        if best_years >= 10:
+            break  # consolidated has enough data
+
+    if best_soup is None:
         return None
+
+    soup = best_soup
+
+    pl = _parse_screener_section(soup, "Profit & Loss")
+    bs = _parse_screener_section(soup, "Balance Sheet")
+
+    if not pl or not bs:
+        return None
+
+    face_value = _parse_face_value(soup)
+
+    # Extract data keyed by "Mar YYYY"
+    net_profit = pl.get("Net Profit +", {})
+    sales = pl.get("Sales +", {})
+    eq_capital = bs.get("Equity Capital", {})
+    reserves = bs.get("Reserves", {})
+    borrowings = bs.get("Borrowings +", {})
+
+    if not net_profit:
+        return None
+
+    month_map = {
+        "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "May": 5, "Jun": 6,
+        "Jul": 7, "Aug": 8, "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12,
+    }
+
+    rows = []
+    for period, ni_cr in net_profit.items():
+        if ni_cr is None:
+            continue
+
+        parts = period.strip().split()
+        if len(parts) != 2 or parts[0] not in month_map:
+            continue
+
+        try:
+            year = int(parts[1])
+        except ValueError:
+            continue
+
+        month = month_map[parts[0]]
+        from calendar import monthrange
+        _, last_day = monthrange(year, month)
+        dt = pd.Timestamp(year=year, month=month, day=last_day)
+
+        rev_cr = sales.get(period)
+        eq_cap_cr = eq_capital.get(period)
+        res_cr = reserves.get(period)
+        borrow_cr = borrowings.get(period)
+
+        # Equity = Equity Capital + Reserves (in Cr)
+        equity_cr = None
+        if eq_cap_cr is not None and res_cr is not None:
+            equity_cr = eq_cap_cr + res_cr
+
+        # Shares = Equity Capital (Cr) * 1e7 / face_value
+        shares = None
+        if eq_cap_cr is not None and eq_cap_cr > 0:
+            shares = eq_cap_cr * _CR / face_value
+
+        rows.append({
+            "date": dt,
+            "net_income": ni_cr * _CR if ni_cr is not None else np.nan,
+            "equity": equity_cr * _CR if equity_cr is not None else np.nan,
+            "total_debt": borrow_cr * _CR if borrow_cr is not None else np.nan,
+            "shares": shares if shares is not None else np.nan,
+            "revenue": rev_cr * _CR if rev_cr is not None else np.nan,
+        })
+
+    if len(rows) < 2:
+        return None
+
+    df = pd.DataFrame(rows).set_index("date").sort_index()
+    return df
 
 
 def fetch_historical_fundamentals(
@@ -179,10 +296,11 @@ def fetch_historical_fundamentals(
     max_workers: int = 10,
     cache_dir: Path | None = None,
 ) -> dict[str, pd.DataFrame]:
-    """Fetch annual financial statements for all tickers.
+    """Fetch annual financial statements for all tickers from Screener.in.
 
     Returns {ticker: DataFrame} where each DataFrame has columns:
     net_income, equity, total_debt, shares, revenue — indexed by fiscal year-end.
+    Typically provides 10-15 years of data (vs ~5 from yfinance).
 
     Results are cached to parquet if cache_dir is provided.
     """
@@ -195,25 +313,26 @@ def fetch_historical_fundamentals(
             result = {}
             for ticker in all_df["ticker"].unique():
                 result[ticker] = all_df[all_df["ticker"] == ticker].drop(columns=["ticker"]).set_index("date")
-            log.info(f"Loaded cached fundamentals for {len(result)} tickers")
-            return result
+            # Check if cache has sufficient history (>8 years for most tickers)
+            avg_years = sum(len(df) for df in result.values()) / max(len(result), 1)
+            if avg_years >= 8:
+                log.info(f"Loaded cached fundamentals for {len(result)} tickers (~{avg_years:.0f} years avg)")
+                return result
+            else:
+                log.info(f"Cache has only ~{avg_years:.0f} years avg — refetching from Screener.in")
 
     result: dict[str, pd.DataFrame] = {}
 
-    def _fetch(t: str) -> tuple[str, pd.DataFrame | None]:
-        return t, _extract_annual_fundamentals(t)
+    import time
 
-    log.info(f"Fetching historical fundamentals for {len(tickers)} tickers...")
-    with ThreadPoolExecutor(max_workers=max_workers) as pool:
-        futures = {pool.submit(_fetch, t): t for t in tickers}
-        done = 0
-        for future in as_completed(futures):
-            done += 1
-            if done % 25 == 0:
-                log.info(f"  {done}/{len(tickers)} fetched...")
-            ticker, df = future.result()
-            if df is not None and len(df) >= 2:
-                result[ticker] = df
+    log.info(f"Fetching historical fundamentals from Screener.in for {len(tickers)} tickers...")
+    for i, ticker in enumerate(tickers):
+        if (i + 1) % 25 == 0:
+            log.info(f"  {i + 1}/{len(tickers)} fetched ({len(result)} OK)...")
+        df = _extract_from_screener(ticker)
+        if df is not None and len(df) >= 2:
+            result[ticker] = df
+        time.sleep(0.3)  # ~3 req/sec sequential — polite to Screener.in
 
     log.info(f"Got historical fundamentals for {len(result)}/{len(tickers)} tickers")
 
