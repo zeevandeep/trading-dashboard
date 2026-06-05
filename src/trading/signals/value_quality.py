@@ -385,7 +385,7 @@ def _extract_from_moneycontrol(ticker: str) -> pd.DataFrame | None:
 
     import time
 
-    for page in [1, 2, 3]:
+    for page in [1, 2, 3, 4, 5]:
         # P&L
         try:
             url_pl = f"https://www.moneycontrol.com/financials/{company}/profit-lossVI/{sc_id}/{page}"
