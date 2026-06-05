@@ -69,6 +69,9 @@ def fetch_fundamentals(tickers: list[str], max_workers: int = 10) -> pd.DataFram
             if result:
                 results.append(result)
 
+    if not results:
+        log.warning("No fundamentals fetched — yfinance returned no data")
+        return pd.DataFrame()
     df = pd.DataFrame(results).set_index("ticker")
     log.info(f"Got fundamentals for {len(df)}/{len(tickers)} tickers")
     return df
