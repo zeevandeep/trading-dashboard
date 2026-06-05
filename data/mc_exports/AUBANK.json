@@ -1,0 +1,103 @@
+{
+  "ticker": "AUBANK",
+  "data": {
+    "Mar 26": {
+      "net_profit": 2641.25,
+      "equity_capital": 748.27,
+      "reserves": 18984.5,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 25": {
+      "net_profit": 2105.93,
+      "equity_capital": 744.53,
+      "reserves": 16297.52,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 24": {
+      "net_profit": 1534.72,
+      "equity_capital": 669.16,
+      "reserves": 11827.64,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 23": {
+      "net_profit": 1427.93,
+      "equity_capital": 666.75,
+      "reserves": 10266.57,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 22": {
+      "net_profit": 1129.83,
+      "equity_capital": 314.9,
+      "reserves": 7157.78,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 21": {
+      "net_profit": 1170.68,
+      "equity_capital": 312.21,
+      "reserves": 5859.89,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 20": {
+      "net_profit": 674.78,
+      "equity_capital": 304.12,
+      "reserves": 4020.56,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 19": {
+      "net_profit": 381.81,
+      "equity_capital": 292.36,
+      "reserves": 2652.59,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 18": {
+      "net_profit": 292.04,
+      "equity_capital": 285.7,
+      "reserves": 1977.98,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 17": {
+      "net_profit": 821.98,
+      "equity_capital": 284.25,
+      "reserves": 1697.19,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 16": {
+      "net_profit": -799.78,
+      "equity_capital": 44.08,
+      "reserves": 956.59,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 15": {
+      "net_profit": -547.57,
+      "equity_capital": 44.08,
+      "reserves": 722.37,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 14": {
+      "net_profit": -492.97,
+      "equity_capital": 42.96,
+      "reserves": 554.79,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 13": {
+      "net_profit": -341.3,
+      "equity_capital": 40.47,
+      "reserves": 401.39,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    }
+  }
+}

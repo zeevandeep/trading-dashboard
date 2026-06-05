@@ -1,0 +1,166 @@
+{
+  "ticker": "BALKRISIND",
+  "data": {
+    "Mar 26": {
+      "net_profit": 1221.85,
+      "equity_capital": 38.66,
+      "reserves": 10927.59,
+      "borrowings_lt": 888,
+      "borrowings_st": 3160.77
+    },
+    "Mar 25": {
+      "net_profit": 1628.37,
+      "equity_capital": 38.66,
+      "reserves": 10345.17,
+      "borrowings_lt": 387.3,
+      "borrowings_st": 2825.06
+    },
+    "Mar 24": {
+      "net_profit": 1437.61,
+      "equity_capital": 38.66,
+      "reserves": 8823.27,
+      "borrowings_lt": 691.44,
+      "borrowings_st": 2345.45
+    },
+    "Mar 23": {
+      "net_profit": 1078.71,
+      "equity_capital": 38.66,
+      "reserves": 7550.48,
+      "borrowings_lt": 1038.09,
+      "borrowings_st": 2215.84
+    },
+    "Mar 22": {
+      "net_profit": 1410.69,
+      "equity_capital": 38.66,
+      "reserves": 6885.89,
+      "borrowings_lt": 500.79,
+      "borrowings_st": 1941.79
+    },
+    "Mar 21": {
+      "net_profit": 1155.38,
+      "equity_capital": 38.66,
+      "reserves": 5968.55,
+      "borrowings_lt": 1.25,
+      "borrowings_st": 892.1
+    },
+    "Mar 20": {
+      "net_profit": 944.98,
+      "equity_capital": 38.66,
+      "reserves": 4989.44,
+      "borrowings_lt": 1.79,
+      "borrowings_st": 859.42
+    },
+    "Mar 19": {
+      "net_profit": 782,
+      "equity_capital": 38.66,
+      "reserves": 4640.05,
+      "borrowings_lt": 2.23,
+      "borrowings_st": 827.1
+    },
+    "Mar 18": {
+      "net_profit": 739.25,
+      "equity_capital": 38.66,
+      "reserves": 4056.57,
+      "borrowings_lt": 2.5,
+      "borrowings_st": 616.07
+    },
+    "Mar 17": {
+      "net_profit": 715.58,
+      "equity_capital": 19.33,
+      "reserves": 3531.9,
+      "borrowings_lt": 218.84,
+      "borrowings_st": 548.46
+    },
+    "Mar 16": {
+      "net_profit": 567.67,
+      "equity_capital": 19.33,
+      "reserves": 2775.96,
+      "borrowings_lt": 832.28,
+      "borrowings_st": 456.03
+    },
+    "Mar 15": {
+      "net_profit": 488.81,
+      "equity_capital": 19.33,
+      "reserves": 2272.34,
+      "borrowings_lt": 1359.28,
+      "borrowings_st": 633.45
+    },
+    "Mar 14": {
+      "net_profit": 488.37,
+      "equity_capital": 19.33,
+      "reserves": 1865.47,
+      "borrowings_lt": 1655.89,
+      "borrowings_st": 688.11
+    },
+    "Mar 13": {
+      "net_profit": 355.83,
+      "equity_capital": 19.33,
+      "reserves": 1399.64,
+      "borrowings_lt": 1504.29,
+      "borrowings_st": 559.26
+    },
+    "Mar 12": {
+      "net_profit": 268.52,
+      "equity_capital": 19.33,
+      "reserves": 1060.76,
+      "borrowings_lt": 913.73,
+      "borrowings_st": 749.22
+    },
+    "Mar 11": {
+      "net_profit": 185.56,
+      "equity_capital": 19.33,
+      "reserves": 812.44,
+      "borrowings_lt": 25.47,
+      "borrowings_st": 572.63
+    },
+    "Mar 10": {
+      "net_profit": 208.73,
+      "equity_capital": 19.33,
+      "reserves": 641.44,
+      "borrowings_lt": 135.32,
+      "borrowings_st": 329
+    },
+    "Mar 09": {
+      "net_profit": 70.3,
+      "equity_capital": 19.33,
+      "reserves": 448.5,
+      "borrowings_lt": 124.03,
+      "borrowings_st": 348.79
+    },
+    "Mar 08": {
+      "net_profit": 105.56,
+      "equity_capital": 19.33,
+      "reserves": 391.77,
+      "borrowings_lt": 146.15,
+      "borrowings_st": 388.7
+    },
+    "Mar 07": {
+      "net_profit": 83.09,
+      "equity_capital": 19.33,
+      "reserves": 328.12,
+      "borrowings_lt": 213.43,
+      "borrowings_st": 185.2
+    },
+    "Mar 06": {
+      "net_profit": 69.08,
+      "equity_capital": 19.33,
+      "reserves": 268.17,
+      "borrowings_lt": 189.17,
+      "borrowings_st": 105.55
+    },
+    "Mar 05": {
+      "net_profit": 63.15,
+      "equity_capital": 12.38,
+      "reserves": 145.59,
+      "borrowings_lt": 92.69,
+      "borrowings_st": 75.58
+    },
+    "Mar 04": {
+      "net_profit": 30.24,
+      "equity_capital": 12.38,
+      "reserves": 96.49,
+      "borrowings_lt": 65.96,
+      "borrowings_st": 63.99
+    }
+  }
+}

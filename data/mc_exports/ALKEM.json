@@ -1,0 +1,33 @@
+{
+  "ticker": "ALKEM",
+  "data": {
+    "Mar 26": {
+      "net_profit": 49.8,
+      "equity_capital": 670.67,
+      "reserves": 1197.03,
+      "borrowings_lt": 0,
+      "borrowings_st": 11.51
+    },
+    "Mar 25": {
+      "net_profit": -74.08,
+      "equity_capital": 581.83,
+      "reserves": 327.71,
+      "borrowings_lt": 0,
+      "borrowings_st": 22.46
+    },
+    "Mar 24": {
+      "net_profit": -130.31,
+      "equity_capital": 424.76,
+      "reserves": 147.29,
+      "borrowings_lt": 0,
+      "borrowings_st": 22.99
+    },
+    "Mar 23": {
+      "net_profit": -43.6,
+      "equity_capital": 424.8,
+      "reserves": 113.8,
+      "borrowings_lt": 58.5,
+      "borrowings_st": 41
+    }
+  }
+}

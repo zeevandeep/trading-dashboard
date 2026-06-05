@@ -1,0 +1,159 @@
+{
+  "ticker": "ABB",
+  "data": {
+    "Dec 25": {
+      "net_profit": 1668.26,
+      "equity_capital": 42.38,
+      "reserves": 7793.61,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 24": {
+      "net_profit": 1871.64,
+      "equity_capital": 42.38,
+      "reserves": 7032.95,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 23": {
+      "net_profit": 1242.05,
+      "equity_capital": 42.38,
+      "reserves": 5902.15,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 22": {
+      "net_profit": 1016.23,
+      "equity_capital": 42.38,
+      "reserves": 4896.96,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 21": {
+      "net_profit": 519.71,
+      "equity_capital": 42.38,
+      "reserves": 4002.74,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 20": {
+      "net_profit": 219.22,
+      "equity_capital": 42.38,
+      "reserves": 3563.93,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 19": {
+      "net_profit": 303.4,
+      "equity_capital": 42.38,
+      "reserves": 3477.73,
+      "borrowings_lt": 7.06,
+      "borrowings_st": 0
+    },
+    "Dec 18": {
+      "net_profit": 510.89,
+      "equity_capital": 42.38,
+      "reserves": 3964.94,
+      "borrowings_lt": 2.03,
+      "borrowings_st": 0
+    },
+    "Dec 17": {
+      "net_profit": 419.95,
+      "equity_capital": 42.38,
+      "reserves": 3564.51,
+      "borrowings_lt": 4.14,
+      "borrowings_st": 0
+    },
+    "Dec 16": {
+      "net_profit": 376.25,
+      "equity_capital": 42.38,
+      "reserves": 3240.4,
+      "borrowings_lt": 600,
+      "borrowings_st": 0.04
+    },
+    "Dec 15": {
+      "net_profit": 299.88,
+      "equity_capital": 42.38,
+      "reserves": 2966.17,
+      "borrowings_lt": 600,
+      "borrowings_st": 0
+    },
+    "Dec 14": {
+      "net_profit": 228.51,
+      "equity_capital": 42.38,
+      "reserves": 2769.6,
+      "borrowings_lt": 0,
+      "borrowings_st": 371.07
+    },
+    "Dec 13": {
+      "net_profit": 179.31,
+      "equity_capital": 42.38,
+      "reserves": 2635.18,
+      "borrowings_lt": 0,
+      "borrowings_st": 620.11
+    },
+    "Dec 12": {
+      "net_profit": 137.41,
+      "equity_capital": 42.38,
+      "reserves": 2555.67,
+      "borrowings_lt": 0,
+      "borrowings_st": 327.68
+    },
+    "Dec 11": {
+      "net_profit": 184.54,
+      "equity_capital": 42.38,
+      "reserves": 2492.14,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 10": {
+      "net_profit": 63.39,
+      "equity_capital": 42.38,
+      "reserves": 2381.32,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 09": {
+      "net_profit": 354.64,
+      "equity_capital": 42.38,
+      "reserves": 2381.35,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 08": {
+      "net_profit": 547.41,
+      "equity_capital": 42.38,
+      "reserves": 2076.57,
+      "borrowings_lt": 0.02,
+      "borrowings_st": 0
+    },
+    "Dec 07": {
+      "net_profit": 491.67,
+      "equity_capital": 42.38,
+      "reserves": 1583.96,
+      "borrowings_lt": 0.57,
+      "borrowings_st": 0
+    },
+    "Dec 06": {
+      "net_profit": 340.31,
+      "equity_capital": 42.38,
+      "reserves": 1153.46,
+      "borrowings_lt": 1.55,
+      "borrowings_st": 0
+    },
+    "Dec 05": {
+      "net_profit": 218.39,
+      "equity_capital": 42.38,
+      "reserves": 861.75,
+      "borrowings_lt": 2.73,
+      "borrowings_st": 0
+    },
+    "Dec 04": {
+      "net_profit": 154.32,
+      "equity_capital": 42.38,
+      "reserves": 682.28,
+      "borrowings_lt": 1.49,
+      "borrowings_st": 0
+    }
+  }
+}

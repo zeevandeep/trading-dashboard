@@ -1,0 +1,40 @@
+{
+  "ticker": "DMART",
+  "data": {
+    "Mar 26": {
+      "net_profit": 23.06,
+      "equity_capital": 21.82,
+      "reserves": 299.48,
+      "borrowings_lt": 91.86,
+      "borrowings_st": 112.25
+    },
+    "Mar 25": {
+      "net_profit": 18.79,
+      "equity_capital": 21.82,
+      "reserves": 276.42,
+      "borrowings_lt": 13.61,
+      "borrowings_st": 77.5
+    },
+    "Mar 24": {
+      "net_profit": 14.22,
+      "equity_capital": 17.59,
+      "reserves": 90.85,
+      "borrowings_lt": 2.96,
+      "borrowings_st": 54.26
+    },
+    "Mar 23": {
+      "net_profit": 7.14,
+      "equity_capital": 16.42,
+      "reserves": 43.34,
+      "borrowings_lt": 6.27,
+      "borrowings_st": 15.9
+    },
+    "Mar 22": {
+      "net_profit": 0.55,
+      "equity_capital": 0.1,
+      "reserves": 0.55,
+      "borrowings_lt": 3.47,
+      "borrowings_st": 3.81
+    }
+  }
+}

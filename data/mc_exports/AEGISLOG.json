@@ -1,0 +1,89 @@
+{
+  "ticker": "AEGISLOG",
+  "data": {
+    "Mar 21": {
+      "net_profit": -1.06,
+      "equity_capital": 12.47,
+      "reserves": -15.1,
+      "borrowings_lt": 1.58,
+      "borrowings_st": 1.03
+    },
+    "Mar 20": {
+      "net_profit": -0.43,
+      "equity_capital": 12.47,
+      "reserves": -14.05,
+      "borrowings_lt": 1.17,
+      "borrowings_st": 0.48
+    },
+    "Mar 19": {
+      "net_profit": -0.27,
+      "equity_capital": 12.47,
+      "reserves": -13.62,
+      "borrowings_lt": 1.17,
+      "borrowings_st": 0.07
+    },
+    "Mar 18": {
+      "net_profit": -15.83,
+      "equity_capital": 12.47,
+      "reserves": -13.35,
+      "borrowings_lt": 0,
+      "borrowings_st": 0.67
+    },
+    "Mar 17": {
+      "net_profit": -1.02,
+      "equity_capital": 12.47,
+      "reserves": 2.49,
+      "borrowings_lt": 0,
+      "borrowings_st": 6.39
+    },
+    "Mar 16": {
+      "net_profit": -0.2,
+      "equity_capital": 12.47,
+      "reserves": 3.74,
+      "borrowings_lt": 0,
+      "borrowings_st": 9.47
+    },
+    "Mar 15": {
+      "net_profit": -1.44,
+      "equity_capital": 12.47,
+      "reserves": 3.94,
+      "borrowings_lt": 0,
+      "borrowings_st": 9.74
+    },
+    "Mar 14": {
+      "net_profit": 0.02,
+      "equity_capital": 12.47,
+      "reserves": 5.38,
+      "borrowings_lt": 6.02,
+      "borrowings_st": 9.19
+    },
+    "Mar 13": {
+      "net_profit": 0.1,
+      "equity_capital": 6.23,
+      "reserves": 11.6,
+      "borrowings_lt": 1.91,
+      "borrowings_st": 8.93
+    },
+    "Mar 10": {
+      "net_profit": 0.05,
+      "equity_capital": 0.46,
+      "reserves": 0.31,
+      "borrowings_lt": 2.49,
+      "borrowings_st": 0
+    },
+    "Mar 09": {
+      "net_profit": 0.01,
+      "equity_capital": 0.46,
+      "reserves": 0.26,
+      "borrowings_lt": 2.51,
+      "borrowings_st": 0
+    },
+    "Mar 08": {
+      "net_profit": 0.01,
+      "equity_capital": 0.46,
+      "reserves": 0.26,
+      "borrowings_lt": 2.34,
+      "borrowings_st": 0
+    }
+  }
+}

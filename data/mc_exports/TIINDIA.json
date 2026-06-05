@@ -1,0 +1,82 @@
+{
+  "ticker": "TIINDIA",
+  "data": {
+    "Mar 26": {
+      "net_profit": 827.35,
+      "equity_capital": 19.36,
+      "reserves": 5968.03,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 25": {
+      "net_profit": 1296.66,
+      "equity_capital": 19.35,
+      "reserves": 5191.29,
+      "borrowings_lt": 0,
+      "borrowings_st": 100
+    },
+    "Mar 24": {
+      "net_profit": 734.51,
+      "equity_capital": 19.34,
+      "reserves": 3951.1,
+      "borrowings_lt": 0,
+      "borrowings_st": 461.02
+    },
+    "Mar 23": {
+      "net_profit": 665.2,
+      "equity_capital": 19.31,
+      "reserves": 3258.35,
+      "borrowings_lt": 0,
+      "borrowings_st": 473.21
+    },
+    "Mar 22": {
+      "net_profit": 475.17,
+      "equity_capital": 19.29,
+      "reserves": 2674.46,
+      "borrowings_lt": 0,
+      "borrowings_st": 348.07
+    },
+    "Mar 21": {
+      "net_profit": 273.18,
+      "equity_capital": 19.28,
+      "reserves": 2265.11,
+      "borrowings_lt": 51.03,
+      "borrowings_st": 207.03
+    },
+    "Mar 20": {
+      "net_profit": 330.55,
+      "equity_capital": 18.79,
+      "reserves": 1684.68,
+      "borrowings_lt": 0,
+      "borrowings_st": 165.93
+    },
+    "Mar 19": {
+      "net_profit": 243.51,
+      "equity_capital": 18.77,
+      "reserves": 1398.3,
+      "borrowings_lt": 100,
+      "borrowings_st": 313.13
+    },
+    "Mar 18": {
+      "net_profit": 136.46,
+      "equity_capital": 18.75,
+      "reserves": 1194.39,
+      "borrowings_lt": 200,
+      "borrowings_st": 237.47
+    },
+    "Mar 17": {
+      "net_profit": 158.95,
+      "equity_capital": 18.74,
+      "reserves": 1123.27,
+      "borrowings_lt": 350,
+      "borrowings_st": 300.97
+    },
+    "Mar 16": {
+      "net_profit": 0,
+      "equity_capital": 0.11,
+      "reserves": -0.06,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    }
+  }
+}

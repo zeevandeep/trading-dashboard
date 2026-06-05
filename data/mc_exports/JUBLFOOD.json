@@ -1,0 +1,159 @@
+{
+  "ticker": "JUBLFOOD",
+  "data": {
+    "Mar 26": {
+      "net_profit": 227.31,
+      "equity_capital": 131.97,
+      "reserves": 2270.37,
+      "borrowings_lt": 307.75,
+      "borrowings_st": 104.21
+    },
+    "Mar 25": {
+      "net_profit": 194.08,
+      "equity_capital": 131.97,
+      "reserves": 2133.27,
+      "borrowings_lt": 256.5,
+      "borrowings_st": 68.1
+    },
+    "Mar 24": {
+      "net_profit": 233.91,
+      "equity_capital": 131.97,
+      "reserves": 2079.71,
+      "borrowings_lt": 198,
+      "borrowings_st": 9.5
+    },
+    "Mar 23": {
+      "net_profit": 356.21,
+      "equity_capital": 131.97,
+      "reserves": 2013.5,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 22": {
+      "net_profit": 437.52,
+      "equity_capital": 131.97,
+      "reserves": 1971.53,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 21": {
+      "net_profit": 233.69,
+      "equity_capital": 131.97,
+      "reserves": 1365.16,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 20": {
+      "net_profit": 275.45,
+      "equity_capital": 131.97,
+      "reserves": 1050.97,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 19": {
+      "net_profit": 322.8,
+      "equity_capital": 131.97,
+      "reserves": 1191.75,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 18": {
+      "net_profit": 206.4,
+      "equity_capital": 65.98,
+      "reserves": 977.92,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 17": {
+      "net_profit": 67.25,
+      "equity_capital": 65.95,
+      "reserves": 786.24,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 16": {
+      "net_profit": 114.56,
+      "equity_capital": 65.8,
+      "reserves": 702.27,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 15": {
+      "net_profit": 123.28,
+      "equity_capital": 65.57,
+      "reserves": 605.54,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 14": {
+      "net_profit": 125.8,
+      "equity_capital": 65.44,
+      "reserves": 498.03,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 13": {
+      "net_profit": 135.11,
+      "equity_capital": 65.28,
+      "reserves": 370.93,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 12": {
+      "net_profit": 105.64,
+      "equity_capital": 65.08,
+      "reserves": 234.47,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 11": {
+      "net_profit": 72,
+      "equity_capital": 64.53,
+      "reserves": 127.16,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 10": {
+      "net_profit": 32.97,
+      "equity_capital": 63.62,
+      "reserves": 52.61,
+      "borrowings_lt": 8.59,
+      "borrowings_st": 0
+    },
+    "Mar 09": {
+      "net_profit": 7.3,
+      "equity_capital": 58.17,
+      "reserves": -34.21,
+      "borrowings_lt": 80.47,
+      "borrowings_st": 1.98
+    },
+    "Mar 08": {
+      "net_profit": 7.76,
+      "equity_capital": 58.17,
+      "reserves": -42.09,
+      "borrowings_lt": 51.68,
+      "borrowings_st": 0
+    },
+    "Mar 07": {
+      "net_profit": 5.58,
+      "equity_capital": 58.16,
+      "reserves": -49.85,
+      "borrowings_lt": 36.04,
+      "borrowings_st": 0
+    },
+    "Mar 06": {
+      "net_profit": 2.02,
+      "equity_capital": 58.16,
+      "reserves": -55.43,
+      "borrowings_lt": 27.2,
+      "borrowings_st": 0
+    },
+    "Mar 05": {
+      "net_profit": -0.58,
+      "equity_capital": 58.16,
+      "reserves": -57.45,
+      "borrowings_lt": 27.56,
+      "borrowings_st": 0
+    }
+  }
+}

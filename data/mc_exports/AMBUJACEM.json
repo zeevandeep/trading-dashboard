@@ -1,0 +1,166 @@
+{
+  "ticker": "AMBUJACEM",
+  "data": {
+    "Mar 26": {
+      "net_profit": 3558.37,
+      "equity_capital": 494.36,
+      "reserves": 52063.65,
+      "borrowings_lt": 6.38,
+      "borrowings_st": 7.99
+    },
+    "Mar 25": {
+      "net_profit": 3754.95,
+      "equity_capital": 492.62,
+      "reserves": 48113.03,
+      "borrowings_lt": 14.39,
+      "borrowings_st": 12.43
+    },
+    "Mar 24": {
+      "net_profit": 2334.69,
+      "equity_capital": 439.54,
+      "reserves": 33787.31,
+      "borrowings_lt": 18.91,
+      "borrowings_st": 17.87
+    },
+    "Mar 23": {
+      "net_profit": 2553.49,
+      "equity_capital": 397.13,
+      "reserves": 23108.38,
+      "borrowings_lt": 34.22,
+      "borrowings_st": 13.49
+    },
+    "Dec 22": {
+      "net_profit": 2051.09,
+      "equity_capital": 397.13,
+      "reserves": 22610.35,
+      "borrowings_lt": 33.6,
+      "borrowings_st": 0
+    },
+    "Dec 21": {
+      "net_profit": 2080.54,
+      "equity_capital": 397.13,
+      "reserves": 21810.13,
+      "borrowings_lt": 43.5,
+      "borrowings_st": 0
+    },
+    "Dec 20": {
+      "net_profit": 1790.1,
+      "equity_capital": 397.13,
+      "reserves": 19918.73,
+      "borrowings_lt": 43.6,
+      "borrowings_st": 0
+    },
+    "Dec 19": {
+      "net_profit": 1528.54,
+      "equity_capital": 397.13,
+      "reserves": 21808.05,
+      "borrowings_lt": 35.28,
+      "borrowings_st": 0
+    },
+    "Dec 18": {
+      "net_profit": 1487.01,
+      "equity_capital": 397.13,
+      "reserves": 20615.4,
+      "borrowings_lt": 39.68,
+      "borrowings_st": 0
+    },
+    "Dec 17": {
+      "net_profit": 1249.57,
+      "equity_capital": 397.13,
+      "reserves": 19576.08,
+      "borrowings_lt": 24.12,
+      "borrowings_st": 0
+    },
+    "Dec 16": {
+      "net_profit": 932.24,
+      "equity_capital": 397.13,
+      "reserves": 18959.74,
+      "borrowings_lt": 15.73,
+      "borrowings_st": 0
+    },
+    "Dec 15": {
+      "net_profit": 807.56,
+      "equity_capital": 310.38,
+      "reserves": 9996.49,
+      "borrowings_lt": 22.68,
+      "borrowings_st": 0
+    },
+    "Dec 14": {
+      "net_profit": 1496.36,
+      "equity_capital": 309.95,
+      "reserves": 9793.38,
+      "borrowings_lt": 19.09,
+      "borrowings_st": 0
+    },
+    "Dec 13": {
+      "net_profit": 1294.57,
+      "equity_capital": 309.17,
+      "reserves": 9176.37,
+      "borrowings_lt": 29.15,
+      "borrowings_st": 0
+    },
+    "Dec 12": {
+      "net_profit": 1297.06,
+      "equity_capital": 308.44,
+      "reserves": 8496.62,
+      "borrowings_lt": 34.63,
+      "borrowings_st": 0
+    },
+    "Dec 11": {
+      "net_profit": 1228.86,
+      "equity_capital": 306.87,
+      "reserves": 7762.56,
+      "borrowings_lt": 42.8,
+      "borrowings_st": 0
+    },
+    "Dec 10": {
+      "net_profit": 1263.61,
+      "equity_capital": 305.97,
+      "reserves": 7022.79,
+      "borrowings_lt": 56.5,
+      "borrowings_st": 8.53
+    },
+    "Dec 09": {
+      "net_profit": 1218.37,
+      "equity_capital": 304.74,
+      "reserves": 6165.92,
+      "borrowings_lt": 165.7,
+      "borrowings_st": 0
+    },
+    "Dec 08": {
+      "net_profit": 1402.27,
+      "equity_capital": 304.52,
+      "reserves": 5368.01,
+      "borrowings_lt": 288.67,
+      "borrowings_st": 0
+    },
+    "Dec 07": {
+      "net_profit": 1769.1,
+      "equity_capital": 304.48,
+      "reserves": 4356.77,
+      "borrowings_lt": 330.42,
+      "borrowings_st": 0
+    },
+    "Dec 06": {
+      "net_profit": 1503.25,
+      "equity_capital": 303.37,
+      "reserves": 3187.21,
+      "borrowings_lt": 865.38,
+      "borrowings_st": 0
+    },
+    "Jun 05": {
+      "net_profit": 468.29,
+      "equity_capital": 270.38,
+      "reserves": 1908.01,
+      "borrowings_lt": 1127.45,
+      "borrowings_st": 0
+    },
+    "Jun 04": {
+      "net_profit": 336.79,
+      "equity_capital": 179.4,
+      "reserves": 1842.29,
+      "borrowings_lt": 1184.08,
+      "borrowings_st": 85.6
+    }
+  }
+}

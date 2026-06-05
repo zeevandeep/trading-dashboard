@@ -1,0 +1,75 @@
+{
+  "ticker": "GLAND",
+  "data": {
+    "Mar 26": {
+      "net_profit": 1299.55,
+      "equity_capital": 16.48,
+      "reserves": 10793.56,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 25": {
+      "net_profit": 1089.75,
+      "equity_capital": 16.48,
+      "reserves": 9738.63,
+      "borrowings_lt": 1.11,
+      "borrowings_st": 1.44
+    },
+    "Mar 24": {
+      "net_profit": 1043.33,
+      "equity_capital": 16.47,
+      "reserves": 8977.43,
+      "borrowings_lt": 2.55,
+      "borrowings_st": 0.71
+    },
+    "Mar 23": {
+      "net_profit": 775.83,
+      "equity_capital": 16.47,
+      "reserves": 7935.16,
+      "borrowings_lt": 3.26,
+      "borrowings_st": 0.56
+    },
+    "Mar 22": {
+      "net_profit": 1212.16,
+      "equity_capital": 16.43,
+      "reserves": 7141.72,
+      "borrowings_lt": 3.82,
+      "borrowings_st": 0.11
+    },
+    "Mar 21": {
+      "net_profit": 997.01,
+      "equity_capital": 16.36,
+      "reserves": 5886.93,
+      "borrowings_lt": 3.93,
+      "borrowings_st": 0
+    },
+    "Mar 20": {
+      "net_profit": 772.86,
+      "equity_capital": 15.5,
+      "reserves": 3630.74,
+      "borrowings_lt": 4.07,
+      "borrowings_st": 0
+    },
+    "Mar 19": {
+      "net_profit": 451.91,
+      "equity_capital": 15.5,
+      "reserves": 2846.62,
+      "borrowings_lt": 4.96,
+      "borrowings_st": 0
+    },
+    "Mar 18": {
+      "net_profit": 321.11,
+      "equity_capital": 15.5,
+      "reserves": 2394.93,
+      "borrowings_lt": 5.49,
+      "borrowings_st": 0
+    },
+    "Mar 17": {
+      "net_profit": 413.73,
+      "equity_capital": 15.5,
+      "reserves": 2074.32,
+      "borrowings_lt": 5.92,
+      "borrowings_st": 0
+    }
+  }
+}

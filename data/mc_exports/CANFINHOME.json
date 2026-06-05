@@ -1,0 +1,166 @@
+{
+  "ticker": "CANFINHOME",
+  "data": {
+    "Mar 26": {
+      "net_profit": 1085.75,
+      "equity_capital": 26.63,
+      "reserves": 5953.77,
+      "borrowings_lt": 0,
+      "borrowings_st": 38257.89
+    },
+    "Mar 25": {
+      "net_profit": 857.17,
+      "equity_capital": 26.63,
+      "reserves": 5040.86,
+      "borrowings_lt": 0,
+      "borrowings_st": 35051.23
+    },
+    "Mar 24": {
+      "net_profit": 750.7,
+      "equity_capital": 26.63,
+      "reserves": 4317.22,
+      "borrowings_lt": 7895.84,
+      "borrowings_st": 23967.09
+    },
+    "Mar 23": {
+      "net_profit": 621.21,
+      "equity_capital": 26.63,
+      "reserves": 3620.65,
+      "borrowings_lt": 6849.01,
+      "borrowings_st": 22219.06
+    },
+    "Mar 22": {
+      "net_profit": 471.11,
+      "equity_capital": 26.63,
+      "reserves": 3039.99,
+      "borrowings_lt": 6665.84,
+      "borrowings_st": 17981.84
+    },
+    "Mar 21": {
+      "net_profit": 456.06,
+      "equity_capital": 26.63,
+      "reserves": 2583.17,
+      "borrowings_lt": 5436.69,
+      "borrowings_st": 13856.21
+    },
+    "Mar 20": {
+      "net_profit": 376.12,
+      "equity_capital": 26.63,
+      "reserves": 2123.44,
+      "borrowings_lt": 4217.55,
+      "borrowings_st": 14530.9
+    },
+    "Mar 19": {
+      "net_profit": 296.74,
+      "equity_capital": 26.63,
+      "reserves": 1755.55,
+      "borrowings_lt": 5998.7,
+      "borrowings_st": 10881.39
+    },
+    "Mar 18": {
+      "net_profit": 286.19,
+      "equity_capital": 26.63,
+      "reserves": 1460.35,
+      "borrowings_lt": 13921.02,
+      "borrowings_st": 0
+    },
+    "Mar 17": {
+      "net_profit": 235.26,
+      "equity_capital": 26.62,
+      "reserves": 1049.68,
+      "borrowings_lt": 8028.25,
+      "borrowings_st": 3081.15
+    },
+    "Mar 16": {
+      "net_profit": 157.11,
+      "equity_capital": 26.62,
+      "reserves": 851.42,
+      "borrowings_lt": 6965.45,
+      "borrowings_st": 1659.62
+    },
+    "Mar 15": {
+      "net_profit": 86.24,
+      "equity_capital": 26.62,
+      "reserves": 744.86,
+      "borrowings_lt": 5457.26,
+      "borrowings_st": 1483.66
+    },
+    "Mar 14": {
+      "net_profit": 75.71,
+      "equity_capital": 20.49,
+      "reserves": 431.82,
+      "borrowings_lt": 4328.79,
+      "borrowings_st": 365.89
+    },
+    "Mar 13": {
+      "net_profit": 54.12,
+      "equity_capital": 20.49,
+      "reserves": 371.68,
+      "borrowings_lt": 2899.26,
+      "borrowings_st": 173.67
+    },
+    "Mar 12": {
+      "net_profit": 43.76,
+      "equity_capital": 20.49,
+      "reserves": 327.09,
+      "borrowings_lt": 1859.25,
+      "borrowings_st": 123.04
+    },
+    "Mar 11": {
+      "net_profit": 42.02,
+      "equity_capital": 20.49,
+      "reserves": 290.47,
+      "borrowings_lt": 1424.3,
+      "borrowings_st": 113.82
+    },
+    "Mar 10": {
+      "net_profit": 39.19,
+      "equity_capital": 20.49,
+      "reserves": 254.41,
+      "borrowings_lt": 1759.64,
+      "borrowings_st": 105.68
+    },
+    "Mar 09": {
+      "net_profit": 31.53,
+      "equity_capital": 20.49,
+      "reserves": 226.01,
+      "borrowings_lt": 1639.96,
+      "borrowings_st": 9.83
+    },
+    "Mar 08": {
+      "net_profit": 27.97,
+      "equity_capital": 20.49,
+      "reserves": 199.27,
+      "borrowings_lt": 1637.07,
+      "borrowings_st": 58.29
+    },
+    "Mar 07": {
+      "net_profit": 30.1,
+      "equity_capital": 20.49,
+      "reserves": 177.3,
+      "borrowings_lt": 1739.9,
+      "borrowings_st": 12.45
+    },
+    "Mar 06": {
+      "net_profit": 26.95,
+      "equity_capital": 20.49,
+      "reserves": 153.18,
+      "borrowings_lt": 1543.08,
+      "borrowings_st": 60.62
+    },
+    "Mar 05": {
+      "net_profit": 20.99,
+      "equity_capital": 20.49,
+      "reserves": 132.08,
+      "borrowings_lt": 1199.46,
+      "borrowings_st": 14.23
+    },
+    "Mar 04": {
+      "net_profit": 17.83,
+      "equity_capital": 20.49,
+      "reserves": 116.92,
+      "borrowings_lt": 1027.9,
+      "borrowings_st": 2.23
+    }
+  }
+}

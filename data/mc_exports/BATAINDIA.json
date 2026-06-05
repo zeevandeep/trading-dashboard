@@ -1,0 +1,159 @@
+{
+  "ticker": "BATAINDIA",
+  "data": {
+    "Mar 26": {
+      "net_profit": 133.56,
+      "equity_capital": 64.26,
+      "reserves": 1521.59,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 25": {
+      "net_profit": 328.45,
+      "equity_capital": 64.26,
+      "reserves": 1501.6,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 24": {
+      "net_profit": 259.93,
+      "equity_capital": 64.26,
+      "reserves": 1455.73,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 23": {
+      "net_profit": 319.12,
+      "equity_capital": 64.26,
+      "reserves": 1369.64,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 22": {
+      "net_profit": 100.89,
+      "equity_capital": 64.26,
+      "reserves": 1749.96,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 21": {
+      "net_profit": -90.28,
+      "equity_capital": 64.26,
+      "reserves": 1695.51,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 20": {
+      "net_profit": 326.92,
+      "equity_capital": 64.26,
+      "reserves": 1832.32,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 19": {
+      "net_profit": 329.66,
+      "equity_capital": 64.26,
+      "reserves": 1682.27,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 18": {
+      "net_profit": 223.58,
+      "equity_capital": 64.26,
+      "reserves": 1414.45,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 17": {
+      "net_profit": 158.75,
+      "equity_capital": 64.26,
+      "reserves": 1261.02,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 16": {
+      "net_profit": 218.75,
+      "equity_capital": 64.26,
+      "reserves": 1118.76,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 15": {
+      "net_profit": 231.17,
+      "equity_capital": 64.26,
+      "reserves": 957.88,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 13": {
+      "net_profit": 190.74,
+      "equity_capital": 64.26,
+      "reserves": 776.74,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 12": {
+      "net_profit": 171.6,
+      "equity_capital": 64.26,
+      "reserves": 636.07,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 11": {
+      "net_profit": 225.84,
+      "equity_capital": 64.26,
+      "reserves": 510.04,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 10": {
+      "net_profit": 95.28,
+      "equity_capital": 64.26,
+      "reserves": 333.97,
+      "borrowings_lt": 13.77,
+      "borrowings_st": 0
+    },
+    "Dec 09": {
+      "net_profit": 67.23,
+      "equity_capital": 64.26,
+      "reserves": 270.02,
+      "borrowings_lt": 10.4,
+      "borrowings_st": 14.65
+    },
+    "Dec 08": {
+      "net_profit": 60.74,
+      "equity_capital": 64.26,
+      "reserves": 226.89,
+      "borrowings_lt": 8.72,
+      "borrowings_st": 35.91
+    },
+    "Dec 07": {
+      "net_profit": 47.44,
+      "equity_capital": 64.26,
+      "reserves": 187.12,
+      "borrowings_lt": 6.73,
+      "borrowings_st": 45.07
+    },
+    "Dec 06": {
+      "net_profit": 40.15,
+      "equity_capital": 64.26,
+      "reserves": 147.73,
+      "borrowings_lt": 6.32,
+      "borrowings_st": 42.01
+    },
+    "Dec 05": {
+      "net_profit": 12.49,
+      "equity_capital": 64.26,
+      "reserves": 197.21,
+      "borrowings_lt": 23.96,
+      "borrowings_st": 52.57
+    },
+    "Dec 04": {
+      "net_profit": -91.94,
+      "equity_capital": 51.42,
+      "reserves": 132.74,
+      "borrowings_lt": 52.23,
+      "borrowings_st": 72.12
+    }
+  }
+}

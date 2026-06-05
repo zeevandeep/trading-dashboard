@@ -1,0 +1,166 @@
+{
+  "ticker": "SIEMENS",
+  "data": {
+    "Mar 26": {
+      "net_profit": 2546,
+      "equity_capital": 71.2,
+      "reserves": 13454.3,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Sep 25": {
+      "net_profit": 2025.9,
+      "equity_capital": 71.2,
+      "reserves": 12969.5,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Sep 24": {
+      "net_profit": 2665.1,
+      "equity_capital": 71.2,
+      "reserves": 15175.8,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Sep 23": {
+      "net_profit": 1911.3,
+      "equity_capital": 71.2,
+      "reserves": 12953.3,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Sep 22": {
+      "net_profit": 1530.8,
+      "equity_capital": 71.2,
+      "reserves": 11524.7,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Sep 21": {
+      "net_profit": 1103,
+      "equity_capital": 71.2,
+      "reserves": 10272.5,
+      "borrowings_lt": 0,
+      "borrowings_st": 2.5
+    },
+    "Sep 20": {
+      "net_profit": 756.5,
+      "equity_capital": 71.2,
+      "reserves": 9402.8,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Sep 19": {
+      "net_profit": 1086.9,
+      "equity_capital": 71.2,
+      "reserves": 8972.4,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Sep 18": {
+      "net_profit": 893.9,
+      "equity_capital": 71.2,
+      "reserves": 8234.2,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Sep 17": {
+      "net_profit": 1133.6,
+      "equity_capital": 71.2,
+      "reserves": 7633.5,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Sep 16": {
+      "net_profit": 2888,
+      "equity_capital": 71.2,
+      "reserves": 6510.7,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Sep 15": {
+      "net_profit": 1183.3,
+      "equity_capital": 71.2,
+      "reserves": 5055.4,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Sep 14": {
+      "net_profit": 603.2,
+      "equity_capital": 71.2,
+      "reserves": 4304.4,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Sep 13": {
+      "net_profit": 194,
+      "equity_capital": 71.2,
+      "reserves": 3959.1,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Sep 12": {
+      "net_profit": 343.2,
+      "equity_capital": 68.1,
+      "reserves": 3892.2,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Sep 11": {
+      "net_profit": 845.4,
+      "equity_capital": 68.1,
+      "reserves": 3748.1,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Sep 10": {
+      "net_profit": 827.21,
+      "equity_capital": 67.43,
+      "reserves": 3410.35,
+      "borrowings_lt": 0.24,
+      "borrowings_st": 0
+    },
+    "Sep 09": {
+      "net_profit": 1044.85,
+      "equity_capital": 67.43,
+      "reserves": 2849.19,
+      "borrowings_lt": 0.59,
+      "borrowings_st": 0
+    },
+    "Sep 08": {
+      "net_profit": 593.33,
+      "equity_capital": 67.43,
+      "reserves": 2001.65,
+      "borrowings_lt": 1.06,
+      "borrowings_st": 0
+    },
+    "Sep 07": {
+      "net_profit": 596.54,
+      "equity_capital": 33.72,
+      "reserves": 1557.16,
+      "borrowings_lt": 1.53,
+      "borrowings_st": 0
+    },
+    "Sep 06": {
+      "net_profit": 360.11,
+      "equity_capital": 33.72,
+      "reserves": 1053.37,
+      "borrowings_lt": 2,
+      "borrowings_st": 0
+    },
+    "Sep 05": {
+      "net_profit": 254.75,
+      "equity_capital": 33.14,
+      "reserves": 747.62,
+      "borrowings_lt": 2.57,
+      "borrowings_st": 0
+    },
+    "Sep 04": {
+      "net_profit": 151.37,
+      "equity_capital": 33.14,
+      "reserves": 573.02,
+      "borrowings_lt": 2.89,
+      "borrowings_st": 0
+    }
+  }
+}

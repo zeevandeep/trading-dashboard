@@ -1,0 +1,33 @@
+{
+  "ticker": "TATAELXSI",
+  "data": {
+    "Mar 26": {
+      "net_profit": 25.31,
+      "equity_capital": 20.77,
+      "reserves": 79.53,
+      "borrowings_lt": 5.41,
+      "borrowings_st": 35.27
+    },
+    "Mar 25": {
+      "net_profit": 15.61,
+      "equity_capital": 0.02,
+      "reserves": 33.21,
+      "borrowings_lt": 19.92,
+      "borrowings_st": 17.3
+    },
+    "Mar 24": {
+      "net_profit": 8.45,
+      "equity_capital": 0.02,
+      "reserves": 12.5,
+      "borrowings_lt": 13.28,
+      "borrowings_st": 12.4
+    },
+    "Mar 23": {
+      "net_profit": 2.56,
+      "equity_capital": 0.01,
+      "reserves": 2.56,
+      "borrowings_lt": 4.25,
+      "borrowings_st": 4.17
+    }
+  }
+}

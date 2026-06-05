@@ -1,0 +1,117 @@
+{
+  "ticker": "CUB",
+  "data": {
+    "Mar 26": {
+      "net_profit": 1326.23,
+      "equity_capital": 74.3,
+      "reserves": 10490.56,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 25": {
+      "net_profit": 1123.63,
+      "equity_capital": 74.1,
+      "reserves": 9392.52,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 24": {
+      "net_profit": 1015.73,
+      "equity_capital": 74.07,
+      "reserves": 8327.36,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 23": {
+      "net_profit": 937.48,
+      "equity_capital": 74.04,
+      "reserves": 7383.17,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 22": {
+      "net_profit": 760.17,
+      "equity_capital": 73.96,
+      "reserves": 6511.75,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 21": {
+      "net_profit": 592.82,
+      "equity_capital": 73.88,
+      "reserves": 5768.59,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 20": {
+      "net_profit": 476.32,
+      "equity_capital": 73.73,
+      "reserves": 5222.34,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 19": {
+      "net_profit": 682.85,
+      "equity_capital": 73.45,
+      "reserves": 4767.31,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 18": {
+      "net_profit": 592,
+      "equity_capital": 66.47,
+      "reserves": 4096.76,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 17": {
+      "net_profit": 502.77,
+      "equity_capital": 60.11,
+      "reserves": 3510.09,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 16": {
+      "net_profit": 444.69,
+      "equity_capital": 59.82,
+      "reserves": 2992.18,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 15": {
+      "net_profit": 384.13,
+      "equity_capital": 59.66,
+      "reserves": 2635.87,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 14": {
+      "net_profit": 347.07,
+      "equity_capital": 54.27,
+      "reserves": 1970.66,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 13": {
+      "net_profit": 322.02,
+      "equity_capital": 47.44,
+      "reserves": 1593.22,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 12": {
+      "net_profit": 280.25,
+      "equity_capital": 40.82,
+      "reserves": 1202.28,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 11": {
+      "net_profit": 215.05,
+      "equity_capital": 40.5,
+      "reserves": 966.12,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    }
+  }
+}

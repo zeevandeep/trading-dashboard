@@ -1,0 +1,68 @@
+{
+  "ticker": "ATGL",
+  "data": {
+    "Mar 26": {
+      "net_profit": 636.88,
+      "equity_capital": 109.98,
+      "reserves": 4714.03,
+      "borrowings_lt": 1596.69,
+      "borrowings_st": 571.43
+    },
+    "Mar 25": {
+      "net_profit": 648.02,
+      "equity_capital": 109.98,
+      "reserves": 4075.14,
+      "borrowings_lt": 1539.99,
+      "borrowings_st": 206.2
+    },
+    "Mar 24": {
+      "net_profit": 653.1,
+      "equity_capital": 109.98,
+      "reserves": 3453.39,
+      "borrowings_lt": 882.87,
+      "borrowings_st": 588.62
+    },
+    "Mar 23": {
+      "net_profit": 529.82,
+      "equity_capital": 109.98,
+      "reserves": 2828.07,
+      "borrowings_lt": 268.36,
+      "borrowings_st": 1103.53
+    },
+    "Mar 22": {
+      "net_profit": 504.66,
+      "equity_capital": 109.98,
+      "reserves": 2320.01,
+      "borrowings_lt": 352.41,
+      "borrowings_st": 643.06
+    },
+    "Mar 21": {
+      "net_profit": 471.95,
+      "equity_capital": 109.98,
+      "reserves": 1842.44,
+      "borrowings_lt": 307.88,
+      "borrowings_st": 122.76
+    },
+    "Mar 20": {
+      "net_profit": 436.24,
+      "equity_capital": 109.98,
+      "reserves": 1370.34,
+      "borrowings_lt": 297.5,
+      "borrowings_st": 57.26
+    },
+    "Mar 19": {
+      "net_profit": 228.71,
+      "equity_capital": 109.98,
+      "reserves": 1001.5,
+      "borrowings_lt": 345.71,
+      "borrowings_st": 0
+    },
+    "Mar 18": {
+      "net_profit": 164.58,
+      "equity_capital": 256.74,
+      "reserves": 768.94,
+      "borrowings_lt": 1234.21,
+      "borrowings_st": 0
+    }
+  }
+}

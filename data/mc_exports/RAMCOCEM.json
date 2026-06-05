@@ -1,0 +1,166 @@
+{
+  "ticker": "RAMCOCEM",
+  "data": {
+    "Mar 26": {
+      "net_profit": 693.62,
+      "equity_capital": 23.63,
+      "reserves": 8118.74,
+      "borrowings_lt": 2803.89,
+      "borrowings_st": 1048.16
+    },
+    "Mar 25": {
+      "net_profit": 417.39,
+      "equity_capital": 23.63,
+      "reserves": 7470.13,
+      "borrowings_lt": 3379.05,
+      "borrowings_st": 1273.05
+    },
+    "Mar 24": {
+      "net_profit": 394.98,
+      "equity_capital": 23.63,
+      "reserves": 7120.49,
+      "borrowings_lt": 3927.21,
+      "borrowings_st": 989.61
+    },
+    "Mar 23": {
+      "net_profit": 343.54,
+      "equity_capital": 23.63,
+      "reserves": 6769.9,
+      "borrowings_lt": 3622.16,
+      "borrowings_st": 865.26
+    },
+    "Mar 22": {
+      "net_profit": 892.7,
+      "equity_capital": 23.63,
+      "reserves": 6501.23,
+      "borrowings_lt": 2857.29,
+      "borrowings_st": 1072.66
+    },
+    "Mar 21": {
+      "net_profit": 761.08,
+      "equity_capital": 23.59,
+      "reserves": 5582.83,
+      "borrowings_lt": 2162.62,
+      "borrowings_st": 939.1
+    },
+    "Mar 20": {
+      "net_profit": 601.09,
+      "equity_capital": 23.56,
+      "reserves": 4873.48,
+      "borrowings_lt": 1832.34,
+      "borrowings_st": 800.06
+    },
+    "Mar 19": {
+      "net_profit": 505.89,
+      "equity_capital": 23.56,
+      "reserves": 4436.55,
+      "borrowings_lt": 701.18,
+      "borrowings_st": 713.58
+    },
+    "Mar 18": {
+      "net_profit": 555.66,
+      "equity_capital": 23.56,
+      "reserves": 4018.62,
+      "borrowings_lt": 416.31,
+      "borrowings_st": 582.64
+    },
+    "Mar 17": {
+      "net_profit": 649.29,
+      "equity_capital": 23.81,
+      "reserves": 3717.7,
+      "borrowings_lt": 503.63,
+      "borrowings_st": 634.51
+    },
+    "Mar 16": {
+      "net_profit": 558.26,
+      "equity_capital": 23.81,
+      "reserves": 3068.82,
+      "borrowings_lt": 1058.61,
+      "borrowings_st": 701.66
+    },
+    "Mar 15": {
+      "net_profit": 242.35,
+      "equity_capital": 23.81,
+      "reserves": 2621.38,
+      "borrowings_lt": 1710.02,
+      "borrowings_st": 553.61
+    },
+    "Mar 14": {
+      "net_profit": 137.7,
+      "equity_capital": 23.8,
+      "reserves": 2458.28,
+      "borrowings_lt": 1520.35,
+      "borrowings_st": 723.62
+    },
+    "Mar 13": {
+      "net_profit": 403.65,
+      "equity_capital": 23.8,
+      "reserves": 2346.96,
+      "borrowings_lt": 1393.06,
+      "borrowings_st": 588.08
+    },
+    "Mar 12": {
+      "net_profit": 385.11,
+      "equity_capital": 23.8,
+      "reserves": 2026.58,
+      "borrowings_lt": 1500.75,
+      "borrowings_st": 613.19
+    },
+    "Mar 11": {
+      "net_profit": 210.98,
+      "equity_capital": 23.8,
+      "reserves": 1710.71,
+      "borrowings_lt": 1642.83,
+      "borrowings_st": 338.3
+    },
+    "Mar 10": {
+      "net_profit": 353.68,
+      "equity_capital": 23.8,
+      "reserves": 1534.36,
+      "borrowings_lt": 2293.36,
+      "borrowings_st": 273.14
+    },
+    "Mar 09": {
+      "net_profit": 363.53,
+      "equity_capital": 23.8,
+      "reserves": 1236.4,
+      "borrowings_lt": 2103.58,
+      "borrowings_st": 359.87
+    },
+    "Mar 08": {
+      "net_profit": 408.29,
+      "equity_capital": 11.9,
+      "reserves": 941.95,
+      "borrowings_lt": 1084.34,
+      "borrowings_st": 551.3
+    },
+    "Mar 07": {
+      "net_profit": 308.02,
+      "equity_capital": 12.08,
+      "reserves": 654.28,
+      "borrowings_lt": 505.02,
+      "borrowings_st": 172.31
+    },
+    "Mar 06": {
+      "net_profit": 79.02,
+      "equity_capital": 12.08,
+      "reserves": 381.1,
+      "borrowings_lt": 418.9,
+      "borrowings_st": 183.54
+    },
+    "Mar 05": {
+      "net_profit": 55.92,
+      "equity_capital": 12.08,
+      "reserves": 322.77,
+      "borrowings_lt": 431.15,
+      "borrowings_st": 259.82
+    },
+    "Mar 04": {
+      "net_profit": 33.4,
+      "equity_capital": 12.08,
+      "reserves": 280.58,
+      "borrowings_lt": 569.31,
+      "borrowings_st": 44.9
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "ticker": "MARICO",
+  "data": {
+    "Mar 12": {
+      "net_profit": 14.31,
+      "equity_capital": 12.82,
+      "reserves": 102.25,
+      "borrowings_lt": 8.6,
+      "borrowings_st": 45.85
+    },
+    "Mar 11": {
+      "net_profit": 12.56,
+      "equity_capital": 12.82,
+      "reserves": 91.67,
+      "borrowings_lt": 8.77,
+      "borrowings_st": 36.84
+    },
+    "Mar 10": {
+      "net_profit": 8.24,
+      "equity_capital": 8.32,
+      "reserves": 26.75,
+      "borrowings_lt": 42.33,
+      "borrowings_st": 0
+    },
+    "Mar 09": {
+      "net_profit": 5.34,
+      "equity_capital": 8.32,
+      "reserves": 18.52,
+      "borrowings_lt": 13.08,
+      "borrowings_st": 28.26
+    },
+    "Mar 08": {
+      "net_profit": 4.21,
+      "equity_capital": 8.07,
+      "reserves": 11.89,
+      "borrowings_lt": 8.64,
+      "borrowings_st": 19.38
+    },
+    "Mar 07": {
+      "net_profit": 1.87,
+      "equity_capital": 6.87,
+      "reserves": 4.45,
+      "borrowings_lt": 19.72,
+      "borrowings_st": 0
+    },
+    "Mar 06": {
+      "net_profit": 1.71,
+      "equity_capital": 4.1,
+      "reserves": 3.77,
+      "borrowings_lt": 14.91,
+      "borrowings_st": 0
+    }
+  }
+}

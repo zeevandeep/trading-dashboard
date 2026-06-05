@@ -1,0 +1,82 @@
+{
+  "ticker": "JSWENERGY",
+  "data": {
+    "Mar 17": {
+      "net_profit": -6.83,
+      "equity_capital": 8.5,
+      "reserves": -68.16,
+      "borrowings_lt": 124.5,
+      "borrowings_st": 0
+    },
+    "Mar 16": {
+      "net_profit": -7.01,
+      "equity_capital": 8.5,
+      "reserves": -61.34,
+      "borrowings_lt": 117.98,
+      "borrowings_st": 0
+    },
+    "Mar 15": {
+      "net_profit": -7.1,
+      "equity_capital": 8.5,
+      "reserves": -54.32,
+      "borrowings_lt": 111.44,
+      "borrowings_st": 0
+    },
+    "Mar 14": {
+      "net_profit": -6.94,
+      "equity_capital": 8.5,
+      "reserves": -46.16,
+      "borrowings_lt": 104.97,
+      "borrowings_st": 0
+    },
+    "Mar 13": {
+      "net_profit": -2.45,
+      "equity_capital": 8.5,
+      "reserves": -39.02,
+      "borrowings_lt": 99.25,
+      "borrowings_st": 0
+    },
+    "Mar 12": {
+      "net_profit": -6.64,
+      "equity_capital": 8.5,
+      "reserves": -39.66,
+      "borrowings_lt": 110.35,
+      "borrowings_st": 0
+    },
+    "Mar 11": {
+      "net_profit": -8.55,
+      "equity_capital": 8.5,
+      "reserves": -32.98,
+      "borrowings_lt": 102.39,
+      "borrowings_st": 0
+    },
+    "Mar 10": {
+      "net_profit": -4.7,
+      "equity_capital": 8.5,
+      "reserves": -24.37,
+      "borrowings_lt": 72.93,
+      "borrowings_st": 0
+    },
+    "Dec 08": {
+      "net_profit": -5.52,
+      "equity_capital": 8.5,
+      "reserves": -19.61,
+      "borrowings_lt": 79.87,
+      "borrowings_st": 0
+    },
+    "Sep 06": {
+      "net_profit": -12.68,
+      "equity_capital": 8.5,
+      "reserves": -20.75,
+      "borrowings_lt": 49.23,
+      "borrowings_st": 41.28
+    },
+    "Jun 05": {
+      "net_profit": -16.63,
+      "equity_capital": 8.5,
+      "reserves": -8.01,
+      "borrowings_lt": 39.38,
+      "borrowings_st": 35.17
+    }
+  }
+}

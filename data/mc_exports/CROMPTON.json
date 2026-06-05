@@ -1,0 +1,89 @@
+{
+  "ticker": "CROMPTON",
+  "data": {
+    "Mar 26": {
+      "net_profit": -243.31,
+      "equity_capital": 128.78,
+      "reserves": 3049.29,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 25": {
+      "net_profit": 563.18,
+      "equity_capital": 128.76,
+      "reserves": 3475.29,
+      "borrowings_lt": 0,
+      "borrowings_st": 299.81
+    },
+    "Mar 24": {
+      "net_profit": 466.45,
+      "equity_capital": 128.62,
+      "reserves": 3002.62,
+      "borrowings_lt": 298.97,
+      "borrowings_st": 300
+    },
+    "Mar 23": {
+      "net_profit": 475.56,
+      "equity_capital": 127.22,
+      "reserves": 2572.63,
+      "borrowings_lt": 597.18,
+      "borrowings_st": 325
+    },
+    "Mar 22": {
+      "net_profit": 593.48,
+      "equity_capital": 126.68,
+      "reserves": 2190.35,
+      "borrowings_lt": 0,
+      "borrowings_st": 1555.25
+    },
+    "Mar 21": {
+      "net_profit": 604.74,
+      "equity_capital": 125.54,
+      "reserves": 1630.92,
+      "borrowings_lt": 298.79,
+      "borrowings_st": 0
+    },
+    "Mar 20": {
+      "net_profit": 494.7,
+      "equity_capital": 125.46,
+      "reserves": 1201.1,
+      "borrowings_lt": 179.72,
+      "borrowings_st": 0
+    },
+    "Mar 19": {
+      "net_profit": 402.52,
+      "equity_capital": 125.4,
+      "reserves": 852.25,
+      "borrowings_lt": 349.26,
+      "borrowings_st": 0
+    },
+    "Mar 18": {
+      "net_profit": 323.79,
+      "equity_capital": 125.36,
+      "reserves": 664.14,
+      "borrowings_lt": 648.55,
+      "borrowings_st": 0
+    },
+    "Mar 17": {
+      "net_profit": 283.17,
+      "equity_capital": 125.35,
+      "reserves": 392.4,
+      "borrowings_lt": 647.84,
+      "borrowings_st": 0
+    },
+    "Mar 16": {
+      "net_profit": 105.19,
+      "equity_capital": 125.35,
+      "reserves": 103.37,
+      "borrowings_lt": 507.21,
+      "borrowings_st": 10
+    },
+    "Mar 15": {
+      "net_profit": -1.87,
+      "equity_capital": 0.05,
+      "reserves": -1.87,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    }
+  }
+}

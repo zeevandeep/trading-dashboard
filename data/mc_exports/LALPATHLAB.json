@@ -1,0 +1,117 @@
+{
+  "ticker": "LALPATHLAB",
+  "data": {
+    "Mar 26": {
+      "net_profit": 508.2,
+      "equity_capital": 167.6,
+      "reserves": 2305.3,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 25": {
+      "net_profit": 497.26,
+      "equity_capital": 83.59,
+      "reserves": 2050.64,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 24": {
+      "net_profit": 384.37,
+      "equity_capital": 83.48,
+      "reserves": 1765.18,
+      "borrowings_lt": 0,
+      "borrowings_st": 83.33
+    },
+    "Mar 23": {
+      "net_profit": 292.36,
+      "equity_capital": 83.37,
+      "reserves": 1548.48,
+      "borrowings_lt": 83.33,
+      "borrowings_st": 153.34
+    },
+    "Mar 22": {
+      "net_profit": 344.05,
+      "equity_capital": 83.35,
+      "reserves": 1335.68,
+      "borrowings_lt": 166.67,
+      "borrowings_st": 178.76
+    },
+    "Mar 21": {
+      "net_profit": 280.11,
+      "equity_capital": 83.35,
+      "reserves": 1093.94,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 20": {
+      "net_profit": 223.2,
+      "equity_capital": 83.35,
+      "reserves": 900.12,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 19": {
+      "net_profit": 195.44,
+      "equity_capital": 83.34,
+      "reserves": 847.49,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 18": {
+      "net_profit": 168.27,
+      "equity_capital": 83.33,
+      "reserves": 693.19,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 17": {
+      "net_profit": 152.48,
+      "equity_capital": 83.07,
+      "reserves": 503.37,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 16": {
+      "net_profit": 125.75,
+      "equity_capital": 82.68,
+      "reserves": 395.84,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 15": {
+      "net_profit": 87.97,
+      "equity_capital": 54.63,
+      "reserves": 237.98,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 14": {
+      "net_profit": 73.95,
+      "equity_capital": 53.68,
+      "reserves": 135.49,
+      "borrowings_lt": 0,
+      "borrowings_st": 0.01
+    },
+    "Mar 13": {
+      "net_profit": 48.88,
+      "equity_capital": 3.36,
+      "reserves": 146.83,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 12": {
+      "net_profit": 41.01,
+      "equity_capital": 3.35,
+      "reserves": 107.01,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 11": {
+      "net_profit": 28.43,
+      "equity_capital": 3.39,
+      "reserves": 87.55,
+      "borrowings_lt": 3.75,
+      "borrowings_st": 14.17
+    }
+  }
+}

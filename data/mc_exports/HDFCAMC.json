@@ -1,0 +1,110 @@
+{
+  "ticker": "HDFCAMC",
+  "data": {
+    "Mar 26": {
+      "net_profit": 2859.36,
+      "equity_capital": 214.2,
+      "reserves": 8820.9,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 25": {
+      "net_profit": 2461.05,
+      "equity_capital": 106.9,
+      "reserves": 7869.39,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 24": {
+      "net_profit": 1945.88,
+      "equity_capital": 106.74,
+      "reserves": 6814.49,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 23": {
+      "net_profit": 1423.92,
+      "equity_capital": 106.71,
+      "reserves": 5890.33,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 22": {
+      "net_profit": 1393.13,
+      "equity_capital": 106.64,
+      "reserves": 5423.4,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 21": {
+      "net_profit": 1325.76,
+      "equity_capital": 106.48,
+      "reserves": 4669.7,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 20": {
+      "net_profit": 1262.41,
+      "equity_capital": 106.4,
+      "reserves": 3922.86,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 19": {
+      "net_profit": 930.6,
+      "equity_capital": 106.29,
+      "reserves": 2964.3,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 18": {
+      "net_profit": 711.29,
+      "equity_capital": 105.28,
+      "reserves": 2138.99,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 17": {
+      "net_profit": 550.25,
+      "equity_capital": 25.17,
+      "reserves": 1397.77,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 16": {
+      "net_profit": 477.88,
+      "equity_capital": 25.16,
+      "reserves": 1126.06,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 15": {
+      "net_profit": 415.5,
+      "equity_capital": 25.24,
+      "reserves": 1094.65,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 14": {
+      "net_profit": 357.77,
+      "equity_capital": 25.24,
+      "reserves": 876.02,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 13": {
+      "net_profit": 318.75,
+      "equity_capital": 25.24,
+      "reserves": 676.76,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 12": {
+      "net_profit": 269.13,
+      "equity_capital": 25.17,
+      "reserves": 577.13,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    }
+  }
+}

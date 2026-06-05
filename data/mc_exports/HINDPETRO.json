@@ -1,0 +1,166 @@
+{
+  "ticker": "HINDPETRO",
+  "data": {
+    "Mar 26": {
+      "net_profit": 17175.23,
+      "equity_capital": 2128.21,
+      "reserves": 57718.88,
+      "borrowings_lt": 32245.73,
+      "borrowings_st": 15352.93
+    },
+    "Mar 25": {
+      "net_profit": 7364.86,
+      "equity_capital": 2128.21,
+      "reserves": 43830.09,
+      "borrowings_lt": 31667.23,
+      "borrowings_st": 31656.14
+    },
+    "Mar 24": {
+      "net_profit": 14693.83,
+      "equity_capital": 1418.94,
+      "reserves": 39610.83,
+      "borrowings_lt": 35505.44,
+      "borrowings_st": 24748.25
+    },
+    "Mar 23": {
+      "net_profit": -8974.03,
+      "equity_capital": 1418.94,
+      "reserves": 26294.49,
+      "borrowings_lt": 46402.99,
+      "borrowings_st": 18114.23
+    },
+    "Mar 22": {
+      "net_profit": 6382.63,
+      "equity_capital": 1418.94,
+      "reserves": 37258.1,
+      "borrowings_lt": 31226.98,
+      "borrowings_st": 11965.93
+    },
+    "Mar 21": {
+      "net_profit": 10663.88,
+      "equity_capital": 1452.41,
+      "reserves": 34733.7,
+      "borrowings_lt": 27069.72,
+      "borrowings_st": 14819.37
+    },
+    "Mar 20": {
+      "net_profit": 2637.26,
+      "equity_capital": 1524.21,
+      "reserves": 27438.15,
+      "borrowings_lt": 22287.17,
+      "borrowings_st": 16145.8
+    },
+    "Mar 19": {
+      "net_profit": 6028.66,
+      "equity_capital": 1524.21,
+      "reserves": 26650.61,
+      "borrowings_lt": 11317.22,
+      "borrowings_st": 13793.11
+    },
+    "Mar 18": {
+      "net_profit": 6357.07,
+      "equity_capital": 1524.21,
+      "reserves": 22424.01,
+      "borrowings_lt": 8830.78,
+      "borrowings_st": 10762.18
+    },
+    "Mar 17": {
+      "net_profit": 6208.8,
+      "equity_capital": 1016.27,
+      "reserves": 19331.14,
+      "borrowings_lt": 6278.15,
+      "borrowings_st": 10892.41
+    },
+    "Mar 16": {
+      "net_profit": 3862.74,
+      "equity_capital": 339.01,
+      "reserves": 18017.09,
+      "borrowings_lt": 10633.48,
+      "borrowings_st": 3888.54
+    },
+    "Mar 15": {
+      "net_profit": 2733.26,
+      "equity_capital": 339.01,
+      "reserves": 15683.08,
+      "borrowings_lt": 14855.83,
+      "borrowings_st": 2199.81
+    },
+    "Mar 14": {
+      "net_profit": 1733.77,
+      "equity_capital": 339.01,
+      "reserves": 14673.15,
+      "borrowings_lt": 15554.88,
+      "borrowings_st": 16375.17
+    },
+    "Mar 13": {
+      "net_profit": 904.71,
+      "equity_capital": 339.01,
+      "reserves": 13387.39,
+      "borrowings_lt": 8947.18,
+      "borrowings_st": 23511.09
+    },
+    "Mar 12": {
+      "net_profit": 911.43,
+      "equity_capital": 339.01,
+      "reserves": 12783.51,
+      "borrowings_lt": 6291.37,
+      "borrowings_st": 21187.88
+    },
+    "Mar 11": {
+      "net_profit": 1539.01,
+      "equity_capital": 339.01,
+      "reserves": 12206.8,
+      "borrowings_lt": 5418.05,
+      "borrowings_st": 18211.04
+    },
+    "Mar 10": {
+      "net_profit": 1301.37,
+      "equity_capital": 339.01,
+      "reserves": 11218.96,
+      "borrowings_lt": 11785.89,
+      "borrowings_st": 9516.48
+    },
+    "Mar 09": {
+      "net_profit": 574.98,
+      "equity_capital": 339.01,
+      "reserves": 10391.62,
+      "borrowings_lt": 19252.83,
+      "borrowings_st": 3502.34
+    },
+    "Mar 08": {
+      "net_profit": 1134.88,
+      "equity_capital": 339.01,
+      "reserves": 10224.28,
+      "borrowings_lt": 12535.09,
+      "borrowings_st": 4251.61
+    },
+    "Mar 07": {
+      "net_profit": 1571.17,
+      "equity_capital": 338.95,
+      "reserves": 9259.7,
+      "borrowings_lt": 8615.18,
+      "borrowings_st": 1902.35
+    },
+    "Mar 06": {
+      "net_profit": 405.63,
+      "equity_capital": 338.94,
+      "reserves": 8396.8,
+      "borrowings_lt": 4419.62,
+      "borrowings_st": 2244.21
+    },
+    "Mar 05": {
+      "net_profit": 1277.33,
+      "equity_capital": 338.93,
+      "reserves": 8101.92,
+      "borrowings_lt": 200.11,
+      "borrowings_st": 1985.24
+    },
+    "Mar 04": {
+      "net_profit": 1903.94,
+      "equity_capital": 338.9,
+      "reserves": 7403.91,
+      "borrowings_lt": 402.79,
+      "borrowings_st": 1298.01
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "ticker": "ZOMATO",
+  "data": {
+    "Mar 26": {
+      "net_profit": 2655,
+      "equity_capital": 919,
+      "reserves": 36137,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 25": {
+      "net_profit": 1960,
+      "equity_capital": 907,
+      "reserves": 33208,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 24": {
+      "net_profit": 1371,
+      "equity_capital": 868,
+      "reserves": 21907,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 23": {
+      "net_profit": 116.9,
+      "equity_capital": 836.4,
+      "reserves": 19970.4,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 22": {
+      "net_profit": -1098,
+      "equity_capital": 764.3,
+      "reserves": 16002.9,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 21": {
+      "net_profit": -886.01,
+      "equity_capital": 0.03,
+      "reserves": 7754.5,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 20": {
+      "net_profit": -2451.18,
+      "equity_capital": 0.03,
+      "reserves": 601.41,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 19": {
+      "net_profit": -570.53,
+      "equity_capital": 0.03,
+      "reserves": 2792.09,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 18": {
+      "net_profit": -78.49,
+      "equity_capital": 0.03,
+      "reserves": 1172.31,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 15": {
+      "net_profit": -71.86,
+      "equity_capital": 0.03,
+      "reserves": 512.53,
+      "borrowings_lt": 0,
+      "borrowings_st": 0.03
+    },
+    "Mar 14": {
+      "net_profit": -37.3,
+      "equity_capital": 0.03,
+      "reserves": 233.08,
+      "borrowings_lt": 0,
+      "borrowings_st": 0.03
+    },
+    "Mar 13": {
+      "net_profit": -10.03,
+      "equity_capital": 0.03,
+      "reserves": 56.46,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 12": {
+      "net_profit": 0,
+      "equity_capital": 0.02,
+      "reserves": 9.68,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    }
+  }
+}

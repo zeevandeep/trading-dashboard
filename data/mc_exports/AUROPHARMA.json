@@ -1,0 +1,166 @@
+{
+  "ticker": "AUROPHARMA",
+  "data": {
+    "Mar 26": {
+      "net_profit": 2414.8,
+      "equity_capital": 58.08,
+      "reserves": 22659.61,
+      "borrowings_lt": 0,
+      "borrowings_st": 4182.47
+    },
+    "Mar 25": {
+      "net_profit": 1746.79,
+      "equity_capital": 58.08,
+      "reserves": 20476.03,
+      "borrowings_lt": 400,
+      "borrowings_st": 4225.09
+    },
+    "Mar 24": {
+      "net_profit": 1954.14,
+      "equity_capital": 58.59,
+      "reserves": 19664.23,
+      "borrowings_lt": 0,
+      "borrowings_st": 2817.84
+    },
+    "Mar 23": {
+      "net_profit": 1230.41,
+      "equity_capital": 58.59,
+      "reserves": 17855.58,
+      "borrowings_lt": 0,
+      "borrowings_st": 4142.57
+    },
+    "Mar 22": {
+      "net_profit": 1454.71,
+      "equity_capital": 58.59,
+      "reserves": 17058.75,
+      "borrowings_lt": 0,
+      "borrowings_st": 1818.62
+    },
+    "Mar 21": {
+      "net_profit": 3112.91,
+      "equity_capital": 58.59,
+      "reserves": 15866.02,
+      "borrowings_lt": 0,
+      "borrowings_st": 3953.1
+    },
+    "Mar 20": {
+      "net_profit": 1872.74,
+      "equity_capital": 58.59,
+      "reserves": 12966.97,
+      "borrowings_lt": 0,
+      "borrowings_st": 3730.32
+    },
+    "Mar 19": {
+      "net_profit": 1529.73,
+      "equity_capital": 58.59,
+      "reserves": 11292.03,
+      "borrowings_lt": 0,
+      "borrowings_st": 4519.8
+    },
+    "Mar 18": {
+      "net_profit": 1812.77,
+      "equity_capital": 58.59,
+      "reserves": 9923.99,
+      "borrowings_lt": 0,
+      "borrowings_st": 3653.83
+    },
+    "Mar 17": {
+      "net_profit": 1706.76,
+      "equity_capital": 58.59,
+      "reserves": 8377.59,
+      "borrowings_lt": 118.9,
+      "borrowings_st": 2751.27
+    },
+    "Mar 16": {
+      "net_profit": 1626.7,
+      "equity_capital": 58.52,
+      "reserves": 6807.33,
+      "borrowings_lt": 334.76,
+      "borrowings_st": 3417.15
+    },
+    "Mar 15": {
+      "net_profit": 1516.35,
+      "equity_capital": 29.2,
+      "reserves": 5330.34,
+      "borrowings_lt": 687.16,
+      "borrowings_st": 2209.37
+    },
+    "Mar 14": {
+      "net_profit": 1172.09,
+      "equity_capital": 29.15,
+      "reserves": 3983.24,
+      "borrowings_lt": 1032.31,
+      "borrowings_st": 1782.55
+    },
+    "Mar 13": {
+      "net_profit": 495.99,
+      "equity_capital": 29.12,
+      "reserves": 2909.98,
+      "borrowings_lt": 1041.06,
+      "borrowings_st": 1733.9
+    },
+    "Mar 12": {
+      "net_profit": -42.61,
+      "equity_capital": 29.11,
+      "reserves": 2464.06,
+      "borrowings_lt": 833.74,
+      "borrowings_st": 1608.21
+    },
+    "Mar 11": {
+      "net_profit": 593.8,
+      "equity_capital": 29.11,
+      "reserves": 2540.5,
+      "borrowings_lt": 474.94,
+      "borrowings_st": 1220.91
+    },
+    "Mar 10": {
+      "net_profit": 525.76,
+      "equity_capital": 27.86,
+      "reserves": 1886.5,
+      "borrowings_lt": 840.61,
+      "borrowings_st": 1104.17
+    },
+    "Mar 09": {
+      "net_profit": 128.54,
+      "equity_capital": 26.88,
+      "reserves": 1293.95,
+      "borrowings_lt": 1134.1,
+      "borrowings_st": 980.58
+    },
+    "Mar 08": {
+      "net_profit": 290.78,
+      "equity_capital": 26.88,
+      "reserves": 1193.72,
+      "borrowings_lt": 1144.71,
+      "borrowings_st": 610.94
+    },
+    "Mar 07": {
+      "net_profit": 229.08,
+      "equity_capital": 26.67,
+      "reserves": 902.63,
+      "borrowings_lt": 1350.14,
+      "borrowings_st": 626.2
+    },
+    "Mar 06": {
+      "net_profit": 69.38,
+      "equity_capital": 26.63,
+      "reserves": 878.78,
+      "borrowings_lt": 658.55,
+      "borrowings_st": 546.67
+    },
+    "Mar 05": {
+      "net_profit": 35.08,
+      "equity_capital": 25.39,
+      "reserves": 763.2,
+      "borrowings_lt": 433.78,
+      "borrowings_st": 395.34
+    },
+    "Mar 04": {
+      "net_profit": 127.02,
+      "equity_capital": 25.38,
+      "reserves": 730.99,
+      "borrowings_lt": 351.04,
+      "borrowings_st": 267.35
+    }
+  }
+}

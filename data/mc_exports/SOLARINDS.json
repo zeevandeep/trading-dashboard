@@ -1,0 +1,68 @@
+{
+  "ticker": "SOLARINDS",
+  "data": {
+    "Mar 26": {
+      "net_profit": 88.9,
+      "equity_capital": 10.8,
+      "reserves": 232.61,
+      "borrowings_lt": 193.15,
+      "borrowings_st": 61.02
+    },
+    "Mar 25": {
+      "net_profit": 39.6,
+      "equity_capital": 10.8,
+      "reserves": 147.4,
+      "borrowings_lt": 68.69,
+      "borrowings_st": 78.81
+    },
+    "Mar 24": {
+      "net_profit": 8.73,
+      "equity_capital": 8,
+      "reserves": 38.24,
+      "borrowings_lt": 47.2,
+      "borrowings_st": 48.96
+    },
+    "Mar 23": {
+      "net_profit": 2.71,
+      "equity_capital": 8,
+      "reserves": 29.63,
+      "borrowings_lt": 44.73,
+      "borrowings_st": 21.21
+    },
+    "Mar 22": {
+      "net_profit": 0.99,
+      "equity_capital": 8,
+      "reserves": 27.04,
+      "borrowings_lt": 13,
+      "borrowings_st": 8.32
+    },
+    "Mar 21": {
+      "net_profit": 1.68,
+      "equity_capital": 4.94,
+      "reserves": 18.64,
+      "borrowings_lt": 1.02,
+      "borrowings_st": 10.21
+    },
+    "Mar 20": {
+      "net_profit": 4.45,
+      "equity_capital": 4.94,
+      "reserves": 17.21,
+      "borrowings_lt": 0,
+      "borrowings_st": 5.09
+    },
+    "Mar 19": {
+      "net_profit": 4.97,
+      "equity_capital": 4.94,
+      "reserves": 13.04,
+      "borrowings_lt": 0.13,
+      "borrowings_st": 6.33
+    },
+    "Mar 18": {
+      "net_profit": 3.16,
+      "equity_capital": 4.94,
+      "reserves": 8.66,
+      "borrowings_lt": 0.38,
+      "borrowings_st": 5.88
+    }
+  }
+}

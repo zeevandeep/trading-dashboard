@@ -1,0 +1,89 @@
+{
+  "ticker": "IDFCFIRSTB",
+  "data": {
+    "Mar 26": {
+      "net_profit": 1636.36,
+      "equity_capital": 8601.7,
+      "reserves": 38462.27,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 25": {
+      "net_profit": 1524.85,
+      "equity_capital": 7322.11,
+      "reserves": 30607.17,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 24": {
+      "net_profit": 2956.51,
+      "equity_capital": 7069.92,
+      "reserves": 25032.46,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 23": {
+      "net_profit": 2437.13,
+      "equity_capital": 6618.12,
+      "reserves": 19065.93,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 22": {
+      "net_profit": 145.49,
+      "equity_capital": 6217.71,
+      "reserves": 14769.65,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 21": {
+      "net_profit": 452.28,
+      "equity_capital": 5675.85,
+      "reserves": 12131.95,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 20": {
+      "net_profit": -2864.21,
+      "equity_capital": 4809.9,
+      "reserves": 10532.7,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 19": {
+      "net_profit": -1944.18,
+      "equity_capital": 4781.68,
+      "reserves": 13377.59,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 18": {
+      "net_profit": 859.3,
+      "equity_capital": 3404.07,
+      "reserves": 11852.46,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 17": {
+      "net_profit": 1019.74,
+      "equity_capital": 3399.01,
+      "reserves": 11277.97,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 16": {
+      "net_profit": 466.85,
+      "equity_capital": 3392.62,
+      "reserves": 10236.61,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 15": {
+      "net_profit": -2.58,
+      "equity_capital": 0.05,
+      "reserves": -2.58,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    }
+  }
+}

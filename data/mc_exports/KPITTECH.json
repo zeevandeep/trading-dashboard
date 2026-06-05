@@ -1,0 +1,68 @@
+{
+  "ticker": "KPITTECH",
+  "data": {
+    "Mar 26": {
+      "net_profit": 545.73,
+      "equity_capital": 272.23,
+      "reserves": 1996.81,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 25": {
+      "net_profit": 481.84,
+      "equity_capital": 271.7,
+      "reserves": 1680.16,
+      "borrowings_lt": 0,
+      "borrowings_st": 0.06
+    },
+    "Mar 24": {
+      "net_profit": 326.83,
+      "equity_capital": 271.22,
+      "reserves": 1330.83,
+      "borrowings_lt": 0.06,
+      "borrowings_st": 0.17
+    },
+    "Mar 23": {
+      "net_profit": 280.16,
+      "equity_capital": 270.35,
+      "reserves": 1113.38,
+      "borrowings_lt": 0.23,
+      "borrowings_st": 0.38
+    },
+    "Mar 22": {
+      "net_profit": 238.12,
+      "equity_capital": 270.02,
+      "reserves": 948.83,
+      "borrowings_lt": 1.87,
+      "borrowings_st": 0.72
+    },
+    "Mar 21": {
+      "net_profit": 93.53,
+      "equity_capital": 269.04,
+      "reserves": 779.22,
+      "borrowings_lt": 2.4,
+      "borrowings_st": 0
+    },
+    "Mar 20": {
+      "net_profit": 178.45,
+      "equity_capital": 268.88,
+      "reserves": 755.86,
+      "borrowings_lt": 2.97,
+      "borrowings_st": 16.61
+    },
+    "Mar 19": {
+      "net_profit": 74.45,
+      "equity_capital": 268.5,
+      "reserves": 654.97,
+      "borrowings_lt": 37.09,
+      "borrowings_st": 59.97
+    },
+    "Mar 18": {
+      "net_profit": -0.27,
+      "equity_capital": 0.1,
+      "reserves": -0.27,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "ticker": "DELHIVERY",
+  "data": {
+    "Mar 26": {
+      "net_profit": -1,
+      "equity_capital": 20,
+      "reserves": -15.58,
+      "borrowings_lt": 27.06,
+      "borrowings_st": 33.07
+    },
+    "Mar 25": {
+      "net_profit": -10.6,
+      "equity_capital": 20,
+      "reserves": -14.6,
+      "borrowings_lt": 20.08,
+      "borrowings_st": 12
+    },
+    "Mar 24": {
+      "net_profit": -12.06,
+      "equity_capital": 20,
+      "reserves": -4.16,
+      "borrowings_lt": 6.28,
+      "borrowings_st": 17.5
+    },
+    "Mar 23": {
+      "net_profit": -12.21,
+      "equity_capital": 20,
+      "reserves": 8.07,
+      "borrowings_lt": 21.26,
+      "borrowings_st": 25
+    },
+    "Mar 22": {
+      "net_profit": 1.18,
+      "equity_capital": 20,
+      "reserves": 19.95,
+      "borrowings_lt": 32.97,
+      "borrowings_st": 23.9
+    },
+    "Mar 21": {
+      "net_profit": 8.94,
+      "equity_capital": 20,
+      "reserves": 18.46,
+      "borrowings_lt": 23.94,
+      "borrowings_st": 23.94
+    },
+    "Mar 20": {
+      "net_profit": -17.59,
+      "equity_capital": 87.64,
+      "reserves": -76.12,
+      "borrowings_lt": 26.04,
+      "borrowings_st": 60.79
+    },
+    "Mar 19": {
+      "net_profit": -44.36,
+      "equity_capital": 87.64,
+      "reserves": -58.68,
+      "borrowings_lt": 26.04,
+      "borrowings_st": 58.31
+    },
+    "Mar 18": {
+      "net_profit": -32.9,
+      "equity_capital": 87.64,
+      "reserves": -15.34,
+      "borrowings_lt": 26.2,
+      "borrowings_st": 55.5
+    },
+    "Mar 17": {
+      "net_profit": -21.6,
+      "equity_capital": 87.64,
+      "reserves": 16.77,
+      "borrowings_lt": 29.17,
+      "borrowings_st": 50.64
+    },
+    "Mar 16": {
+      "net_profit": -9.86,
+      "equity_capital": 87.64,
+      "reserves": 36.44,
+      "borrowings_lt": 9.19,
+      "borrowings_st": 43.96
+    }
+  }
+}

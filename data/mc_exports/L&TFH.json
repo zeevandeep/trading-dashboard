@@ -1,0 +1,103 @@
+{
+  "ticker": "L&TFH",
+  "data": {
+    "Mar 26": {
+      "net_profit": -1.18,
+      "equity_capital": 17.15,
+      "reserves": 43.72,
+      "borrowings_lt": 4.16,
+      "borrowings_st": 38.51
+    },
+    "Mar 25": {
+      "net_profit": 0.47,
+      "equity_capital": 17.15,
+      "reserves": 45.69,
+      "borrowings_lt": 5.79,
+      "borrowings_st": 40.96
+    },
+    "Mar 24": {
+      "net_profit": -0.24,
+      "equity_capital": 17.15,
+      "reserves": 45.8,
+      "borrowings_lt": 6.52,
+      "borrowings_st": 43.67
+    },
+    "Mar 23": {
+      "net_profit": -5.85,
+      "equity_capital": 17.15,
+      "reserves": 30.61,
+      "borrowings_lt": 8.91,
+      "borrowings_st": 33.36
+    },
+    "Mar 22": {
+      "net_profit": 5.45,
+      "equity_capital": 17.15,
+      "reserves": 36.43,
+      "borrowings_lt": 10.25,
+      "borrowings_st": 29.41
+    },
+    "Mar 21": {
+      "net_profit": 1.09,
+      "equity_capital": 17.15,
+      "reserves": 30.96,
+      "borrowings_lt": 13.52,
+      "borrowings_st": 15.54
+    },
+    "Mar 20": {
+      "net_profit": -0.87,
+      "equity_capital": 17.15,
+      "reserves": 29.88,
+      "borrowings_lt": 7.84,
+      "borrowings_st": 37.67
+    },
+    "Mar 19": {
+      "net_profit": 3.66,
+      "equity_capital": 17.15,
+      "reserves": 29.72,
+      "borrowings_lt": 10.36,
+      "borrowings_st": 31.95
+    },
+    "Mar 18": {
+      "net_profit": 2.58,
+      "equity_capital": 17.15,
+      "reserves": 27.09,
+      "borrowings_lt": 13.84,
+      "borrowings_st": 36.48
+    },
+    "Mar 17": {
+      "net_profit": 2.68,
+      "equity_capital": 17.15,
+      "reserves": 25.53,
+      "borrowings_lt": 15.82,
+      "borrowings_st": 34.01
+    },
+    "Mar 16": {
+      "net_profit": 3.19,
+      "equity_capital": 17.15,
+      "reserves": 23.98,
+      "borrowings_lt": 8.01,
+      "borrowings_st": 16.39
+    },
+    "Mar 15": {
+      "net_profit": 2.26,
+      "equity_capital": 17.15,
+      "reserves": 20.87,
+      "borrowings_lt": 13.79,
+      "borrowings_st": 22.37
+    },
+    "Mar 14": {
+      "net_profit": 3.79,
+      "equity_capital": 17.15,
+      "reserves": 19.61,
+      "borrowings_lt": 11.32,
+      "borrowings_st": 18.16
+    },
+    "Mar 13": {
+      "net_profit": 2.3,
+      "equity_capital": 17.15,
+      "reserves": 14.66,
+      "borrowings_lt": 13.93,
+      "borrowings_st": 15.37
+    }
+  }
+}

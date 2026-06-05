@@ -1,0 +1,82 @@
+{
+  "ticker": "ADANIGREEN",
+  "data": {
+    "Mar 26": {
+      "net_profit": 604,
+      "equity_capital": 1647,
+      "reserves": 13243,
+      "borrowings_lt": 10366,
+      "borrowings_st": 8918
+    },
+    "Mar 25": {
+      "net_profit": 654,
+      "equity_capital": 1584,
+      "reserves": 3541,
+      "borrowings_lt": 12781,
+      "borrowings_st": 6880
+    },
+    "Mar 24": {
+      "net_profit": -546,
+      "equity_capital": 1584,
+      "reserves": 2827,
+      "borrowings_lt": 10624,
+      "borrowings_st": 11712
+    },
+    "Mar 23": {
+      "net_profit": -328,
+      "equity_capital": 1584,
+      "reserves": 3323,
+      "borrowings_lt": 11088,
+      "borrowings_st": 1968
+    },
+    "Mar 22": {
+      "net_profit": -58,
+      "equity_capital": 1564,
+      "reserves": -44,
+      "borrowings_lt": 11645,
+      "borrowings_st": 5644
+    },
+    "Mar 21": {
+      "net_profit": 364,
+      "equity_capital": 1564,
+      "reserves": 157,
+      "borrowings_lt": 2148,
+      "borrowings_st": 3162
+    },
+    "Mar 20": {
+      "net_profit": 134.26,
+      "equity_capital": 1564.01,
+      "reserves": -124.57,
+      "borrowings_lt": 1215.83,
+      "borrowings_st": 415.29
+    },
+    "Mar 19": {
+      "net_profit": -34.98,
+      "equity_capital": 1564.01,
+      "reserves": -155.2,
+      "borrowings_lt": 1738.51,
+      "borrowings_st": 541.13
+    },
+    "Mar 18": {
+      "net_profit": -46.22,
+      "equity_capital": 1564.01,
+      "reserves": -120.11,
+      "borrowings_lt": 2266.21,
+      "borrowings_st": 1217.64
+    },
+    "Mar 17": {
+      "net_profit": -49.3,
+      "equity_capital": 1273.9,
+      "reserves": -50.15,
+      "borrowings_lt": 414.36,
+      "borrowings_st": 131.96
+    },
+    "Mar 16": {
+      "net_profit": -0.89,
+      "equity_capital": 160,
+      "reserves": -0.89,
+      "borrowings_lt": 34.14,
+      "borrowings_st": 31.22
+    }
+  }
+}

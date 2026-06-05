@@ -1,0 +1,117 @@
+{
+  "ticker": "VBL",
+  "data": {
+    "Dec 25": {
+      "net_profit": 2676.64,
+      "equity_capital": 676.4,
+      "reserves": 18088.13,
+      "borrowings_lt": 266.39,
+      "borrowings_st": 109.68
+    },
+    "Dec 24": {
+      "net_profit": 2320.36,
+      "equity_capital": 676.3,
+      "reserves": 15882.4,
+      "borrowings_lt": 144.21,
+      "borrowings_st": 687.33
+    },
+    "Dec 23": {
+      "net_profit": 1775.13,
+      "equity_capital": 649.61,
+      "reserves": 6425.85,
+      "borrowings_lt": 3010.55,
+      "borrowings_st": 1749.56
+    },
+    "Dec 22": {
+      "net_profit": 1270.2,
+      "equity_capital": 649.55,
+      "reserves": 4867.85,
+      "borrowings_lt": 1653.26,
+      "borrowings_st": 1818.59
+    },
+    "Dec 21": {
+      "net_profit": 489.49,
+      "equity_capital": 433.03,
+      "reserves": 3965.59,
+      "borrowings_lt": 1712.44,
+      "borrowings_st": 560.52
+    },
+    "Dec 20": {
+      "net_profit": 226.43,
+      "equity_capital": 288.69,
+      "reserves": 3723.08,
+      "borrowings_lt": 1954.35,
+      "borrowings_st": 635.54
+    },
+    "Dec 19": {
+      "net_profit": 448.55,
+      "equity_capital": 288.69,
+      "reserves": 3578.43,
+      "borrowings_lt": 2291.71,
+      "borrowings_st": 411.04
+    },
+    "Dec 18": {
+      "net_profit": 332.36,
+      "equity_capital": 182.64,
+      "reserves": 2406.26,
+      "borrowings_lt": 1835.91,
+      "borrowings_st": 318.88
+    },
+    "Dec 17": {
+      "net_profit": 235.6,
+      "equity_capital": 182.59,
+      "reserves": 2113.98,
+      "borrowings_lt": 1606.16,
+      "borrowings_st": 192.59
+    },
+    "Dec 16": {
+      "net_profit": 186.73,
+      "equity_capital": 182.31,
+      "reserves": 1959.56,
+      "borrowings_lt": 861.22,
+      "borrowings_st": 148.26
+    },
+    "Dec 15": {
+      "net_profit": 147.53,
+      "equity_capital": 133.77,
+      "reserves": 275.91,
+      "borrowings_lt": 1503.06,
+      "borrowings_st": 68.1
+    },
+    "Dec 14": {
+      "net_profit": 35.4,
+      "equity_capital": 133.77,
+      "reserves": 120.28,
+      "borrowings_lt": 1491.53,
+      "borrowings_st": 326.07
+    },
+    "Dec 13": {
+      "net_profit": -16.5,
+      "equity_capital": 133.77,
+      "reserves": 88.6,
+      "borrowings_lt": 1488.81,
+      "borrowings_st": 203.25
+    },
+    "Dec 12": {
+      "net_profit": 45.44,
+      "equity_capital": 26.75,
+      "reserves": 172.1,
+      "borrowings_lt": 1201.34,
+      "borrowings_st": 229.04
+    },
+    "Dec 11": {
+      "net_profit": 8.68,
+      "equity_capital": 8,
+      "reserves": 106.01,
+      "borrowings_lt": 561.48,
+      "borrowings_st": 156.62
+    },
+    "Dec 10": {
+      "net_profit": 24.81,
+      "equity_capital": 8,
+      "reserves": 102.43,
+      "borrowings_lt": 563.16,
+      "borrowings_st": 0
+    }
+  }
+}

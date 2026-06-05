@@ -1,0 +1,166 @@
+{
+  "ticker": "TORNTPHARM",
+  "data": {
+    "Mar 26": {
+      "net_profit": 2191.59,
+      "equity_capital": 169.23,
+      "reserves": 8282.94,
+      "borrowings_lt": 11461.86,
+      "borrowings_st": 2702.19
+    },
+    "Mar 25": {
+      "net_profit": 1888.06,
+      "equity_capital": 169.23,
+      "reserves": 7423.27,
+      "borrowings_lt": 1020.59,
+      "borrowings_st": 1526.25
+    },
+    "Mar 24": {
+      "net_profit": 1357.08,
+      "equity_capital": 169.23,
+      "reserves": 6659.53,
+      "borrowings_lt": 1603.78,
+      "borrowings_st": 1729.18
+    },
+    "Mar 23": {
+      "net_profit": 1051.39,
+      "equity_capital": 169.23,
+      "reserves": 6286.73,
+      "borrowings_lt": 2331.78,
+      "borrowings_st": 2233.78
+    },
+    "Mar 22": {
+      "net_profit": 991.45,
+      "equity_capital": 84.62,
+      "reserves": 6260.8,
+      "borrowings_lt": 1971.6,
+      "borrowings_st": 1371.81
+    },
+    "Mar 21": {
+      "net_profit": 1137.85,
+      "equity_capital": 84.62,
+      "reserves": 5945.48,
+      "borrowings_lt": 2941.07,
+      "borrowings_st": 1443.36
+    },
+    "Mar 20": {
+      "net_profit": 938.51,
+      "equity_capital": 84.62,
+      "reserves": 5036.35,
+      "borrowings_lt": 3124.45,
+      "borrowings_st": 789.31
+    },
+    "Mar 19": {
+      "net_profit": 745.42,
+      "equity_capital": 84.62,
+      "reserves": 4930.65,
+      "borrowings_lt": 3739.99,
+      "borrowings_st": 726.6
+    },
+    "Mar 18": {
+      "net_profit": 482.04,
+      "equity_capital": 84.62,
+      "reserves": 4471.87,
+      "borrowings_lt": 4111.46,
+      "borrowings_st": 1040.2
+    },
+    "Mar 17": {
+      "net_profit": 854.22,
+      "equity_capital": 84.62,
+      "reserves": 4369.09,
+      "borrowings_lt": 2208.74,
+      "borrowings_st": 0
+    },
+    "Mar 16": {
+      "net_profit": 1742.99,
+      "equity_capital": 84.62,
+      "reserves": 3622.69,
+      "borrowings_lt": 1784.27,
+      "borrowings_st": 0
+    },
+    "Mar 15": {
+      "net_profit": 623.18,
+      "equity_capital": 84.62,
+      "reserves": 2620.97,
+      "borrowings_lt": 2185.22,
+      "borrowings_st": 100
+    },
+    "Mar 14": {
+      "net_profit": 762.34,
+      "equity_capital": 84.62,
+      "reserves": 2205.19,
+      "borrowings_lt": 744.46,
+      "borrowings_st": 210.34
+    },
+    "Mar 13": {
+      "net_profit": 546.42,
+      "equity_capital": 42.31,
+      "reserves": 1608.78,
+      "borrowings_lt": 454.54,
+      "borrowings_st": 124.62
+    },
+    "Mar 12": {
+      "net_profit": 311.25,
+      "equity_capital": 42.31,
+      "reserves": 1262.18,
+      "borrowings_lt": 322.06,
+      "borrowings_st": 138.12
+    },
+    "Mar 11": {
+      "net_profit": 290.86,
+      "equity_capital": 42.31,
+      "reserves": 1050.74,
+      "borrowings_lt": 293.04,
+      "borrowings_st": 99.57
+    },
+    "Mar 10": {
+      "net_profit": 207.37,
+      "equity_capital": 42.31,
+      "reserves": 838.54,
+      "borrowings_lt": 396.91,
+      "borrowings_st": 125.49
+    },
+    "Mar 09": {
+      "net_profit": 186.73,
+      "equity_capital": 42.31,
+      "reserves": 690.37,
+      "borrowings_lt": 407.06,
+      "borrowings_st": 75
+    },
+    "Mar 08": {
+      "net_profit": 155.52,
+      "equity_capital": 42.31,
+      "reserves": 542.94,
+      "borrowings_lt": 303.17,
+      "borrowings_st": 38.43
+    },
+    "Mar 07": {
+      "net_profit": 112.96,
+      "equity_capital": 42.31,
+      "reserves": 422.07,
+      "borrowings_lt": 260.9,
+      "borrowings_st": 18.08
+    },
+    "Mar 06": {
+      "net_profit": 65.83,
+      "equity_capital": 42.31,
+      "reserves": 340.21,
+      "borrowings_lt": 244.09,
+      "borrowings_st": 0
+    },
+    "Mar 05": {
+      "net_profit": 52.92,
+      "equity_capital": 21.16,
+      "reserves": 319.66,
+      "borrowings_lt": 191.25,
+      "borrowings_st": 19.67
+    },
+    "Mar 04": {
+      "net_profit": 64.17,
+      "equity_capital": 21.16,
+      "reserves": 286.03,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    }
+  }
+}

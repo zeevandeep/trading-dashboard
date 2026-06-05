@@ -1,0 +1,103 @@
+{
+  "ticker": "GUJGASLTD",
+  "data": {
+    "Mar 26": {
+      "net_profit": 2298.55,
+      "equity_capital": 187.64,
+      "reserves": 18329.49,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 25": {
+      "net_profit": 1145.51,
+      "equity_capital": 137.68,
+      "reserves": 8315.97,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 24": {
+      "net_profit": 1142.77,
+      "equity_capital": 137.68,
+      "reserves": 7551.58,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 23": {
+      "net_profit": 1525.47,
+      "equity_capital": 137.68,
+      "reserves": 6857.93,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 22": {
+      "net_profit": 1285.64,
+      "equity_capital": 137.68,
+      "reserves": 5461.62,
+      "borrowings_lt": 390.97,
+      "borrowings_st": 90.1
+    },
+    "Mar 21": {
+      "net_profit": 1275.5,
+      "equity_capital": 137.68,
+      "reserves": 4344.97,
+      "borrowings_lt": 769.95,
+      "borrowings_st": 0
+    },
+    "Mar 20": {
+      "net_profit": 1193.32,
+      "equity_capital": 137.68,
+      "reserves": 3152.94,
+      "borrowings_lt": 1834.36,
+      "borrowings_st": 0
+    },
+    "Mar 19": {
+      "net_profit": 417.03,
+      "equity_capital": 137.68,
+      "reserves": 2046.31,
+      "borrowings_lt": 2089.15,
+      "borrowings_st": 0
+    },
+    "Mar 18": {
+      "net_profit": 291.36,
+      "equity_capital": 137.68,
+      "reserves": 1708.73,
+      "borrowings_lt": 2212.99,
+      "borrowings_st": 1.28
+    },
+    "Mar 17": {
+      "net_profit": 219.5,
+      "equity_capital": 137.68,
+      "reserves": 1507.2,
+      "borrowings_lt": 2291.41,
+      "borrowings_st": 7.28
+    },
+    "Mar 16": {
+      "net_profit": 152.95,
+      "equity_capital": 137.68,
+      "reserves": 1965.1,
+      "borrowings_lt": 1707.56,
+      "borrowings_st": 0
+    },
+    "Mar 15": {
+      "net_profit": 443.58,
+      "equity_capital": 137.68,
+      "reserves": 1853.23,
+      "borrowings_lt": 1490.78,
+      "borrowings_st": 0
+    },
+    "Mar 14": {
+      "net_profit": 28.43,
+      "equity_capital": 137.68,
+      "reserves": 1498.12,
+      "borrowings_lt": 1592.43,
+      "borrowings_st": 3.69
+    },
+    "Mar 13": {
+      "net_profit": -3.87,
+      "equity_capital": 0.05,
+      "reserves": -3.87,
+      "borrowings_lt": 1500,
+      "borrowings_st": 0
+    }
+  }
+}

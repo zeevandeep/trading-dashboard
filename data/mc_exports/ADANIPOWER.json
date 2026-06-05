@@ -1,0 +1,159 @@
+{
+  "ticker": "ADANIPOWER",
+  "data": {
+    "Dec 25": {
+      "net_profit": 326.7,
+      "equity_capital": 23,
+      "reserves": 726.2,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 24": {
+      "net_profit": 413.5,
+      "equity_capital": 23,
+      "reserves": 837.6,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 23": {
+      "net_profit": 603.2,
+      "equity_capital": 23,
+      "reserves": 924.2,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 22": {
+      "net_profit": 620.6,
+      "equity_capital": 23,
+      "reserves": 1190.6,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 21": {
+      "net_profit": 944.4,
+      "equity_capital": 23,
+      "reserves": 2142.5,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 20": {
+      "net_profit": 477.6,
+      "equity_capital": 23,
+      "reserves": 2042,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 19": {
+      "net_profit": 414.2,
+      "equity_capital": 23,
+      "reserves": 2419.3,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 18": {
+      "net_profit": 380.6,
+      "equity_capital": 23,
+      "reserves": 2196.2,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 17": {
+      "net_profit": 326,
+      "equity_capital": 23,
+      "reserves": 2003.4,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 16": {
+      "net_profit": 297,
+      "equity_capital": 23,
+      "reserves": 1712.6,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 15": {
+      "net_profit": 321.49,
+      "equity_capital": 23.03,
+      "reserves": 1604.13,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 14": {
+      "net_profit": 263.61,
+      "equity_capital": 23.03,
+      "reserves": 1462.81,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 13": {
+      "net_profit": 265.18,
+      "equity_capital": 23.03,
+      "reserves": 1323.67,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 12": {
+      "net_profit": 176.66,
+      "equity_capital": 23.03,
+      "reserves": 1181.09,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 11": {
+      "net_profit": 191.18,
+      "equity_capital": 23.03,
+      "reserves": 1093.59,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 10": {
+      "net_profit": 230.75,
+      "equity_capital": 23.03,
+      "reserves": 991.12,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 09": {
+      "net_profit": 157.41,
+      "equity_capital": 23.03,
+      "reserves": 908.76,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 08": {
+      "net_profit": 166.2,
+      "equity_capital": 23.03,
+      "reserves": 806.07,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 07": {
+      "net_profit": 144.42,
+      "equity_capital": 23.03,
+      "reserves": 683.82,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 06": {
+      "net_profit": 169.29,
+      "equity_capital": 23.03,
+      "reserves": 585.18,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 05": {
+      "net_profit": 145.08,
+      "equity_capital": 23.03,
+      "reserves": 500.75,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 04": {
+      "net_profit": 148.5,
+      "equity_capital": 23.03,
+      "reserves": 398.8,
+      "borrowings_lt": 19.6,
+      "borrowings_st": 0
+    }
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "ticker": "TATACHEM",
+  "data": {
+    "Mar 26": {
+      "net_profit": 606,
+      "equity_capital": 255,
+      "reserves": 19053,
+      "borrowings_lt": 3471,
+      "borrowings_st": 16
+    },
+    "Mar 25": {
+      "net_profit": 557,
+      "equity_capital": 255,
+      "reserves": 17939,
+      "borrowings_lt": 1698,
+      "borrowings_st": 481
+    },
+    "Mar 24": {
+      "net_profit": 896,
+      "equity_capital": 255,
+      "reserves": 18470,
+      "borrowings_lt": 0,
+      "borrowings_st": 30
+    },
+    "Mar 23": {
+      "net_profit": 1027,
+      "equity_capital": 255,
+      "reserves": 15737,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 22": {
+      "net_profit": 801.56,
+      "equity_capital": 254.82,
+      "reserves": 15087.5,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 21": {
+      "net_profit": 479.11,
+      "equity_capital": 254.82,
+      "reserves": 13002.35,
+      "borrowings_lt": 4.85,
+      "borrowings_st": 0
+    },
+    "Mar 20": {
+      "net_profit": 6840.22,
+      "equity_capital": 254.82,
+      "reserves": 11722.5,
+      "borrowings_lt": 10.41,
+      "borrowings_st": 0
+    },
+    "Mar 19": {
+      "net_profit": 854.84,
+      "equity_capital": 254.82,
+      "reserves": 12110.15,
+      "borrowings_lt": 13.46,
+      "borrowings_st": 0.99
+    },
+    "Mar 18": {
+      "net_profit": 1766.96,
+      "equity_capital": 254.82,
+      "reserves": 11069.32,
+      "borrowings_lt": 681.07,
+      "borrowings_st": 0.61
+    },
+    "Mar 17": {
+      "net_profit": 692.71,
+      "equity_capital": 254.82,
+      "reserves": 8600.63,
+      "borrowings_lt": 1087.93,
+      "borrowings_st": 522.5
+    },
+    "Mar 16": {
+      "net_profit": 666.2,
+      "equity_capital": 254.82,
+      "reserves": 7831.43,
+      "borrowings_lt": 1540.56,
+      "borrowings_st": 1565.74
+    },
+    "Mar 15": {
+      "net_profit": 637.97,
+      "equity_capital": 254.82,
+      "reserves": 5788.45,
+      "borrowings_lt": 1739.4,
+      "borrowings_st": 976.46
+    },
+    "Mar 14": {
+      "net_profit": 436.07,
+      "equity_capital": 254.82,
+      "reserves": 5446.41,
+      "borrowings_lt": 1735.51,
+      "borrowings_st": 1299.18
+    },
+    "Mar 13": {
+      "net_profit": 643.32,
+      "equity_capital": 254.82,
+      "reserves": 5052.5,
+      "borrowings_lt": 1072.92,
+      "borrowings_st": 1384.14
+    },
+    "Mar 12": {
+      "net_profit": 586.6,
+      "equity_capital": 254.82,
+      "reserves": 4680.69,
+      "borrowings_lt": 2202.57,
+      "borrowings_st": 256.86
+    },
+    "Mar 11": {
+      "net_profit": 408.49,
+      "equity_capital": 254.82,
+      "reserves": 4485.86,
+      "borrowings_lt": 2586.45,
+      "borrowings_st": 122.74
+    },
+    "Mar 10": {
+      "net_profit": 434.78,
+      "equity_capital": 243.32,
+      "reserves": 4031.75,
+      "borrowings_lt": 715.15,
+      "borrowings_st": 2231.36
+    },
+    "Mar 09": {
+      "net_profit": 452.05,
+      "equity_capital": 235.23,
+      "reserves": 3386.68,
+      "borrowings_lt": 569.08,
+      "borrowings_st": 3107.02
+    },
+    "Mar 08": {
+      "net_profit": 949.18,
+      "equity_capital": 234,
+      "reserves": 3337.62,
+      "borrowings_lt": 321.69,
+      "borrowings_st": 2023.59
+    },
+    "Mar 07": {
+      "net_profit": 444.21,
+      "equity_capital": 215.16,
+      "reserves": 2177.68,
+      "borrowings_lt": 685.53,
+      "borrowings_st": 356.24
+    },
+    "Mar 06": {
+      "net_profit": 353.03,
+      "equity_capital": 215.16,
+      "reserves": 1952.54,
+      "borrowings_lt": 805.85,
+      "borrowings_st": 648.64
+    },
+    "Mar 05": {
+      "net_profit": 340.55,
+      "equity_capital": 215.16,
+      "reserves": 1782.68,
+      "borrowings_lt": 804.22,
+      "borrowings_st": 520
+    },
+    "Mar 04": {
+      "net_profit": 220.53,
+      "equity_capital": 180.7,
+      "reserves": 1820.18,
+      "borrowings_lt": 275.29,
+      "borrowings_st": 490.25
+    }
+  }
+}

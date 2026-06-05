@@ -1,0 +1,33 @@
+{
+  "ticker": "SBICARD",
+  "data": {
+    "Mar 26": {
+      "net_profit": 8.67,
+      "equity_capital": 4.75,
+      "reserves": 28.09,
+      "borrowings_lt": 0.37,
+      "borrowings_st": 2.39
+    },
+    "Mar 25": {
+      "net_profit": 2.65,
+      "equity_capital": 2,
+      "reserves": 6.31,
+      "borrowings_lt": 0.56,
+      "borrowings_st": 0.03
+    },
+    "Mar 24": {
+      "net_profit": 0.02,
+      "equity_capital": 2,
+      "reserves": 3.66,
+      "borrowings_lt": 1.96,
+      "borrowings_st": 0.01
+    },
+    "Mar 23": {
+      "net_profit": 0,
+      "equity_capital": 1.06,
+      "reserves": 1.76,
+      "borrowings_lt": 2.29,
+      "borrowings_st": 0
+    }
+  }
+}

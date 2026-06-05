@@ -1,0 +1,117 @@
+{
+  "ticker": "BANKINDIA",
+  "data": {
+    "Mar 26": {
+      "net_profit": 10527.15,
+      "equity_capital": 4553.41,
+      "reserves": 83436.81,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 25": {
+      "net_profit": 9219.02,
+      "equity_capital": 4553.41,
+      "reserves": 74048.03,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 24": {
+      "net_profit": 6317.92,
+      "equity_capital": 4553.41,
+      "reserves": 64327.26,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 23": {
+      "net_profit": 4022.94,
+      "equity_capital": 4104.31,
+      "reserves": 54866.31,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 22": {
+      "net_profit": 3404.7,
+      "equity_capital": 4104.31,
+      "reserves": 51026.93,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 21": {
+      "net_profit": 2160.3,
+      "equity_capital": 3277.66,
+      "reserves": 42407.93,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 20": {
+      "net_profit": -2956.89,
+      "equity_capital": 3277.66,
+      "reserves": 40538.65,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 19": {
+      "net_profit": -5546.9,
+      "equity_capital": 2760.03,
+      "reserves": 38921.13,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 18": {
+      "net_profit": -6043.71,
+      "equity_capital": 1743.72,
+      "reserves": 33796.93,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 17": {
+      "net_profit": -1558.31,
+      "equity_capital": 1055.43,
+      "reserves": 29709.72,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 16": {
+      "net_profit": -6089.21,
+      "equity_capital": 817.29,
+      "reserves": 30196.28,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 15": {
+      "net_profit": 1708.92,
+      "equity_capital": 665.65,
+      "reserves": 30781.09,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 14": {
+      "net_profit": 2729.27,
+      "equity_capital": 643,
+      "reserves": 29280.08,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 13": {
+      "net_profit": 2749.35,
+      "equity_capital": 596.64,
+      "reserves": 23321.51,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 12": {
+      "net_profit": 2677.52,
+      "equity_capital": 574.52,
+      "reserves": 20387.27,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    },
+    "Mar 11": {
+      "net_profit": 2488.71,
+      "equity_capital": 547.22,
+      "reserves": 16743.46,
+      "borrowings_lt": null,
+      "borrowings_st": null
+    }
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "ticker": "CASTROLIND",
+  "data": {
+    "Dec 25": {
+      "net_profit": 949.93,
+      "equity_capital": 494.56,
+      "reserves": 1405.74,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 24": {
+      "net_profit": 927.23,
+      "equity_capital": 494.56,
+      "reserves": 1783.81,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 24": {
+      "net_profit": 927.23,
+      "equity_capital": 494.56,
+      "reserves": 1783.81,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 23": {
+      "net_profit": 864.13,
+      "equity_capital": 494.56,
+      "reserves": 1627.13,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 22": {
+      "net_profit": 815.15,
+      "equity_capital": 494.56,
+      "reserves": 1391.47,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 21": {
+      "net_profit": 758.09,
+      "equity_capital": 494.56,
+      "reserves": 1150.95,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 20": {
+      "net_profit": 582.94,
+      "equity_capital": 494.56,
+      "reserves": 919.67,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 19": {
+      "net_profit": 827.37,
+      "equity_capital": 494.56,
+      "reserves": 872.39,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 18": {
+      "net_profit": 708.36,
+      "equity_capital": 494.56,
+      "reserves": 671.1,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 17": {
+      "net_profit": 691.81,
+      "equity_capital": 494.56,
+      "reserves": 525.59,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 16": {
+      "net_profit": 674.91,
+      "equity_capital": 247.28,
+      "reserves": 348.47,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 15": {
+      "net_profit": 615.26,
+      "equity_capital": 247.28,
+      "reserves": 328.33,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 14": {
+      "net_profit": 474.56,
+      "equity_capital": 247.28,
+      "reserves": 249.5,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 13": {
+      "net_profit": 508.57,
+      "equity_capital": 494.56,
+      "reserves": 256.86,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 12": {
+      "net_profit": 447.39,
+      "equity_capital": 494.56,
+      "reserves": 154.67,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 11": {
+      "net_profit": 481.03,
+      "equity_capital": 247.28,
+      "reserves": 356.92,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 10": {
+      "net_profit": 491.03,
+      "equity_capital": 247.28,
+      "reserves": 306.22,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 09": {
+      "net_profit": 381.06,
+      "equity_capital": 123.64,
+      "reserves": 371.36,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Dec 08": {
+      "net_profit": 262.37,
+      "equity_capital": 123.64,
+      "reserves": 351.93,
+      "borrowings_lt": 2.79,
+      "borrowings_st": 0
+    },
+    "Dec 07": {
+      "net_profit": 218.43,
+      "equity_capital": 123.64,
+      "reserves": 306.54,
+      "borrowings_lt": 2.79,
+      "borrowings_st": 0
+    },
+    "Dec 06": {
+      "net_profit": 154.49,
+      "equity_capital": 123.64,
+      "reserves": 294.02,
+      "borrowings_lt": 2.79,
+      "borrowings_st": 0
+    },
+    "Dec 05": {
+      "net_profit": 146.81,
+      "equity_capital": 123.64,
+      "reserves": 266.42,
+      "borrowings_lt": 2.79,
+      "borrowings_st": 0
+    },
+    "Dec 04": {
+      "net_profit": 127.46,
+      "equity_capital": 123.64,
+      "reserves": 236.43,
+      "borrowings_lt": 3.72,
+      "borrowings_st": 0
+    }
+  }
+}

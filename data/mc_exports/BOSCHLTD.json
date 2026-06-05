@@ -1,0 +1,117 @@
+{
+  "ticker": "BOSCHLTD",
+  "data": {
+    "Mar 26": {
+      "net_profit": 13.51,
+      "equity_capital": 50.17,
+      "reserves": 88.83,
+      "borrowings_lt": 20.18,
+      "borrowings_st": 114.58
+    },
+    "Mar 25": {
+      "net_profit": 11.39,
+      "equity_capital": 50.17,
+      "reserves": 74.88,
+      "borrowings_lt": 0.88,
+      "borrowings_st": 163.01
+    },
+    "Mar 24": {
+      "net_profit": 20.77,
+      "equity_capital": 50.17,
+      "reserves": 63.55,
+      "borrowings_lt": 28.51,
+      "borrowings_st": 102.23
+    },
+    "Mar 23": {
+      "net_profit": 13.88,
+      "equity_capital": 25.09,
+      "reserves": 67.86,
+      "borrowings_lt": 38.44,
+      "borrowings_st": 76.67
+    },
+    "Mar 22": {
+      "net_profit": 8.44,
+      "equity_capital": 25.09,
+      "reserves": 53.43,
+      "borrowings_lt": 50.62,
+      "borrowings_st": 84.63
+    },
+    "Mar 21": {
+      "net_profit": -30.4,
+      "equity_capital": 25.09,
+      "reserves": 44.94,
+      "borrowings_lt": 52.08,
+      "borrowings_st": 116.53
+    },
+    "Mar 20": {
+      "net_profit": 0.24,
+      "equity_capital": 25.09,
+      "reserves": 75.3,
+      "borrowings_lt": 18.16,
+      "borrowings_st": 85.64
+    },
+    "Mar 19": {
+      "net_profit": 15.75,
+      "equity_capital": 24.09,
+      "reserves": 56.06,
+      "borrowings_lt": 37.94,
+      "borrowings_st": 51.73
+    },
+    "Mar 18": {
+      "net_profit": 11.28,
+      "equity_capital": 24.09,
+      "reserves": 40.29,
+      "borrowings_lt": 15.93,
+      "borrowings_st": 32.09
+    },
+    "Mar 17": {
+      "net_profit": 5.74,
+      "equity_capital": 24.09,
+      "reserves": 29.9,
+      "borrowings_lt": 23.74,
+      "borrowings_st": 28.25
+    },
+    "Mar 16": {
+      "net_profit": 5.92,
+      "equity_capital": 24.09,
+      "reserves": 24.16,
+      "borrowings_lt": 16.18,
+      "borrowings_st": 29.54
+    },
+    "Mar 15": {
+      "net_profit": 5.74,
+      "equity_capital": 4,
+      "reserves": 10.89,
+      "borrowings_lt": 11.9,
+      "borrowings_st": 26.62
+    },
+    "Mar 14": {
+      "net_profit": 4.32,
+      "equity_capital": 4,
+      "reserves": 5.15,
+      "borrowings_lt": 18.75,
+      "borrowings_st": 19.28
+    },
+    "Mar 13": {
+      "net_profit": 0.83,
+      "equity_capital": 3,
+      "reserves": 0.83,
+      "borrowings_lt": 19.49,
+      "borrowings_st": 10.17
+    },
+    "Mar 12": {
+      "net_profit": 0,
+      "equity_capital": 0.05,
+      "reserves": 0,
+      "borrowings_lt": 3.69,
+      "borrowings_st": 0
+    },
+    "Mar 11": {
+      "net_profit": 0,
+      "equity_capital": 0.05,
+      "reserves": 0,
+      "borrowings_lt": 0,
+      "borrowings_st": 0.26
+    }
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "ticker": "FORTIS",
+  "data": {
+    "Mar 26": {
+      "net_profit": 230.34,
+      "equity_capital": 754.96,
+      "reserves": 8473.78,
+      "borrowings_lt": 1690.7,
+      "borrowings_st": 280.64
+    },
+    "Mar 25": {
+      "net_profit": 63.78,
+      "equity_capital": 754.96,
+      "reserves": 8319.04,
+      "borrowings_lt": 1738.19,
+      "borrowings_st": 40.4
+    },
+    "Mar 24": {
+      "net_profit": 199.45,
+      "equity_capital": 754.96,
+      "reserves": 8332.21,
+      "borrowings_lt": 254.05,
+      "borrowings_st": 61.55
+    },
+    "Mar 23": {
+      "net_profit": 96.24,
+      "equity_capital": 754.96,
+      "reserves": 8208.58,
+      "borrowings_lt": 281.58,
+      "borrowings_st": 88.2
+    },
+    "Mar 22": {
+      "net_profit": -13.25,
+      "equity_capital": 754.96,
+      "reserves": 8113.61,
+      "borrowings_lt": 585.52,
+      "borrowings_st": 56.81
+    },
+    "Mar 21": {
+      "net_profit": 4.2,
+      "equity_capital": 754.96,
+      "reserves": 8126.57,
+      "borrowings_lt": 663.78,
+      "borrowings_st": 85.35
+    },
+    "Mar 20": {
+      "net_profit": 513.33,
+      "equity_capital": 754.96,
+      "reserves": 8120.61,
+      "borrowings_lt": 621.35,
+      "borrowings_st": 83.76
+    },
+    "Mar 19": {
+      "net_profit": 123.08,
+      "equity_capital": 754.95,
+      "reserves": 7581.91,
+      "borrowings_lt": 319.72,
+      "borrowings_st": 1100.98
+    },
+    "Mar 18": {
+      "net_profit": -63.72,
+      "equity_capital": 518.66,
+      "reserves": 3708.16,
+      "borrowings_lt": 231.61,
+      "borrowings_st": 194.48
+    },
+    "Mar 17": {
+      "net_profit": -74.7,
+      "equity_capital": 517.73,
+      "reserves": 3754.14,
+      "borrowings_lt": 183.11,
+      "borrowings_st": 441.75
+    },
+    "Mar 16": {
+      "net_profit": -73.51,
+      "equity_capital": 463.13,
+      "reserves": 3145.14,
+      "borrowings_lt": 615.72,
+      "borrowings_st": 428.82
+    },
+    "Mar 15": {
+      "net_profit": -33.91,
+      "equity_capital": 462.81,
+      "reserves": 3216.7,
+      "borrowings_lt": 597.33,
+      "borrowings_st": 0
+    },
+    "Mar 14": {
+      "net_profit": 23.99,
+      "equity_capital": 462.79,
+      "reserves": 3246.8,
+      "borrowings_lt": 1251.66,
+      "borrowings_st": 0
+    },
+    "Mar 13": {
+      "net_profit": 17.25,
+      "equity_capital": 405.21,
+      "reserves": 2795.52,
+      "borrowings_lt": 697.43,
+      "borrowings_st": 300.56
+    },
+    "Mar 12": {
+      "net_profit": 201.39,
+      "equity_capital": 405.18,
+      "reserves": 2796.63,
+      "borrowings_lt": 679.78,
+      "borrowings_st": 422.66
+    },
+    "Mar 11": {
+      "net_profit": 141.81,
+      "equity_capital": 405.1,
+      "reserves": 2609.73,
+      "borrowings_lt": 445.87,
+      "borrowings_st": 0
+    },
+    "Mar 10": {
+      "net_profit": 30.15,
+      "equity_capital": 317.32,
+      "reserves": 1260.75,
+      "borrowings_lt": 342.06,
+      "borrowings_st": 900
+    },
+    "Mar 09": {
+      "net_profit": -7.15,
+      "equity_capital": 226.67,
+      "reserves": 561.36,
+      "borrowings_lt": 182.42,
+      "borrowings_st": 102.53
+    },
+    "Mar 08": {
+      "net_profit": 2.62,
+      "equity_capital": 226.67,
+      "reserves": 496.78,
+      "borrowings_lt": 138.74,
+      "borrowings_st": 43.87
+    },
+    "Mar 07": {
+      "net_profit": -48.69,
+      "equity_capital": 180.67,
+      "reserves": 235.99,
+      "borrowings_lt": 391.36,
+      "borrowings_st": 17.04
+    },
+    "Mar 06": {
+      "net_profit": -27.95,
+      "equity_capital": 170,
+      "reserves": -88.01,
+      "borrowings_lt": 440.12,
+      "borrowings_st": 15.24
+    },
+    "Mar 05": {
+      "net_profit": -8.37,
+      "equity_capital": 84.65,
+      "reserves": -60.34,
+      "borrowings_lt": 35.06,
+      "borrowings_st": 0
+    },
+    "Mar 04": {
+      "net_profit": -5.74,
+      "equity_capital": 74.91,
+      "reserves": -51.61,
+      "borrowings_lt": 34.4,
+      "borrowings_st": 0
+    }
+  }
+}

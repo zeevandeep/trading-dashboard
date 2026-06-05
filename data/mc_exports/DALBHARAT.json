@@ -1,0 +1,75 @@
+{
+  "ticker": "DALBHARAT",
+  "data": {
+    "Mar 26": {
+      "net_profit": 141,
+      "equity_capital": 38,
+      "reserves": 7837,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 25": {
+      "net_profit": 190,
+      "equity_capital": 38,
+      "reserves": 7800,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 24": {
+      "net_profit": 112,
+      "equity_capital": 38,
+      "reserves": 7762,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 23": {
+      "net_profit": 195,
+      "equity_capital": 37,
+      "reserves": 7799,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 22": {
+      "net_profit": 183,
+      "equity_capital": 37,
+      "reserves": 7935,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 21": {
+      "net_profit": 25,
+      "equity_capital": 37,
+      "reserves": 7223,
+      "borrowings_lt": 0,
+      "borrowings_st": 198
+    },
+    "Mar 20": {
+      "net_profit": 135,
+      "equity_capital": 39,
+      "reserves": 7592,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 19": {
+      "net_profit": 101,
+      "equity_capital": 39,
+      "reserves": 7527,
+      "borrowings_lt": 2,
+      "borrowings_st": 0
+    },
+    "Mar 18": {
+      "net_profit": 72,
+      "equity_capital": 0,
+      "reserves": 859,
+      "borrowings_lt": 2,
+      "borrowings_st": 0
+    },
+    "Mar 17": {
+      "net_profit": 40,
+      "equity_capital": 0,
+      "reserves": 809,
+      "borrowings_lt": 2,
+      "borrowings_st": 198
+    }
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "ticker": "JSL",
+  "data": {
+    "Mar 26": {
+      "net_profit": 2842.95,
+      "equity_capital": 164.79,
+      "reserves": 18702.42,
+      "borrowings_lt": 2573.06,
+      "borrowings_st": 1948.77
+    },
+    "Mar 25": {
+      "net_profit": 2711.19,
+      "equity_capital": 164.73,
+      "reserves": 16032.15,
+      "borrowings_lt": 2764.14,
+      "borrowings_st": 1589.58
+    },
+    "Mar 24": {
+      "net_profit": 2530.69,
+      "equity_capital": 164.69,
+      "reserves": 13525.78,
+      "borrowings_lt": 2599.98,
+      "borrowings_st": 1195.73
+    },
+    "Mar 23": {
+      "net_profit": 2014,
+      "equity_capital": 164.69,
+      "reserves": 11292.2,
+      "borrowings_lt": 2755.97,
+      "borrowings_st": 733.52
+    },
+    "Mar 22": {
+      "net_profit": 1674.45,
+      "equity_capital": 105.1,
+      "reserves": 4830.32,
+      "borrowings_lt": 1370.34,
+      "borrowings_st": 1424.09
+    },
+    "Mar 21": {
+      "net_profit": 427.92,
+      "equity_capital": 97.45,
+      "reserves": 3001.61,
+      "borrowings_lt": 2545.9,
+      "borrowings_st": 319.02
+    },
+    "Mar 20": {
+      "net_profit": 152.88,
+      "equity_capital": 97.45,
+      "reserves": 2559.87,
+      "borrowings_lt": 2715.57,
+      "borrowings_st": 397.56
+    },
+    "Mar 19": {
+      "net_profit": 139.04,
+      "equity_capital": 95.84,
+      "reserves": 2378.67,
+      "borrowings_lt": 2457.77,
+      "borrowings_st": 472.97
+    },
+    "Mar 18": {
+      "net_profit": 318.27,
+      "equity_capital": 95.84,
+      "reserves": 2255.78,
+      "borrowings_lt": 2944.4,
+      "borrowings_st": 765.54
+    },
+    "Mar 17": {
+      "net_profit": 58.34,
+      "equity_capital": 79.89,
+      "reserves": 1636.31,
+      "borrowings_lt": 3381.99,
+      "borrowings_st": 1738.13
+    },
+    "Mar 16": {
+      "net_profit": -387.81,
+      "equity_capital": 46.24,
+      "reserves": -634.91,
+      "borrowings_lt": 7323.27,
+      "borrowings_st": 2053.85
+    },
+    "Mar 15": {
+      "net_profit": 223.08,
+      "equity_capital": 45.28,
+      "reserves": -218.21,
+      "borrowings_lt": 8070.23,
+      "borrowings_st": 2333.14
+    },
+    "Mar 14": {
+      "net_profit": -1390.09,
+      "equity_capital": 43.08,
+      "reserves": 147.34,
+      "borrowings_lt": 8508.56,
+      "borrowings_st": 2402.98
+    },
+    "Mar 13": {
+      "net_profit": -820.82,
+      "equity_capital": 40.82,
+      "reserves": 1435.03,
+      "borrowings_lt": 8764.35,
+      "borrowings_st": 2023.12
+    },
+    "Mar 12": {
+      "net_profit": -103.91,
+      "equity_capital": 37.9,
+      "reserves": 2144.23,
+      "borrowings_lt": 7712.58,
+      "borrowings_st": 1531.45
+    },
+    "Mar 11": {
+      "net_profit": 318.34,
+      "equity_capital": 37.46,
+      "reserves": 2217.35,
+      "borrowings_lt": 7600.51,
+      "borrowings_st": 1079.21
+    },
+    "Mar 10": {
+      "net_profit": 378.48,
+      "equity_capital": 37.12,
+      "reserves": 1876.48,
+      "borrowings_lt": 6635.63,
+      "borrowings_st": 892.79
+    },
+    "Mar 09": {
+      "net_profit": -579.82,
+      "equity_capital": 32.43,
+      "reserves": 1257.91,
+      "borrowings_lt": 4948.47,
+      "borrowings_st": 691.29
+    },
+    "Mar 08": {
+      "net_profit": 240.98,
+      "equity_capital": 30.92,
+      "reserves": 1757.14,
+      "borrowings_lt": 3819.11,
+      "borrowings_st": 470.95
+    },
+    "Mar 07": {
+      "net_profit": 353.01,
+      "equity_capital": 27.64,
+      "reserves": 1374.13,
+      "borrowings_lt": 2529.34,
+      "borrowings_st": 126.98
+    },
+    "Mar 06": {
+      "net_profit": 159.73,
+      "equity_capital": 26.11,
+      "reserves": 983.1,
+      "borrowings_lt": 1979.9,
+      "borrowings_st": 213.92
+    },
+    "Mar 05": {
+      "net_profit": 245.85,
+      "equity_capital": 21.98,
+      "reserves": 770.79,
+      "borrowings_lt": 1266.65,
+      "borrowings_st": 80.05
+    },
+    "Mar 04": {
+      "net_profit": 164.28,
+      "equity_capital": 19.98,
+      "reserves": 537.25,
+      "borrowings_lt": 617.47,
+      "borrowings_st": 147.68
+    }
+  }
+}

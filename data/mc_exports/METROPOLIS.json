@@ -1,0 +1,96 @@
+{
+  "ticker": "METROPOLIS",
+  "data": {
+    "Mar 26": {
+      "net_profit": 157.48,
+      "equity_capital": 41.47,
+      "reserves": 1347.64,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 25": {
+      "net_profit": 124.8,
+      "equity_capital": 10.36,
+      "reserves": 1234.09,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 24": {
+      "net_profit": 115.89,
+      "equity_capital": 10.25,
+      "reserves": 1020.94,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 23": {
+      "net_profit": 138.95,
+      "equity_capital": 10.24,
+      "reserves": 918.43,
+      "borrowings_lt": 30.77,
+      "borrowings_st": 51.52
+    },
+    "Mar 22": {
+      "net_profit": 192.24,
+      "equity_capital": 10.23,
+      "reserves": 802.1,
+      "borrowings_lt": 158.68,
+      "borrowings_st": 99.87
+    },
+    "Mar 21": {
+      "net_profit": 197.56,
+      "equity_capital": 10.22,
+      "reserves": 690.18,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 20": {
+      "net_profit": 112.05,
+      "equity_capital": 10.13,
+      "reserves": 500.19,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 19": {
+      "net_profit": 101.46,
+      "equity_capital": 10.04,
+      "reserves": 402.78,
+      "borrowings_lt": 0,
+      "borrowings_st": 17.34
+    },
+    "Mar 18": {
+      "net_profit": 94.32,
+      "equity_capital": 9.54,
+      "reserves": 354.48,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 17": {
+      "net_profit": 88,
+      "equity_capital": 9.54,
+      "reserves": 258.5,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 16": {
+      "net_profit": 75.96,
+      "equity_capital": 9.54,
+      "reserves": 233.23,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 15": {
+      "net_profit": 43.05,
+      "equity_capital": 9.86,
+      "reserves": 296.34,
+      "borrowings_lt": 3.65,
+      "borrowings_st": 0
+    },
+    "Mar 14": {
+      "net_profit": 46.48,
+      "equity_capital": 9.86,
+      "reserves": 254.2,
+      "borrowings_lt": 9.9,
+      "borrowings_st": 0
+    }
+  }
+}

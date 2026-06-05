@@ -91,18 +91,22 @@ def score_value_quality(fundamentals: pd.DataFrame) -> pd.Series:
     # Compute Earnings Yield (inverse of P/E)
     df["earnings_yield"] = 1.0 / df["pe"]
 
-    # Keep only stocks with all required factors
-    required = ["earnings_yield", "roe", "de", "earnings_growth"]
-    df = df.dropna(subset=required)
+    # Keep only stocks with the 3 core factors (earnings_growth can be NaN
+    # at the standalone→consolidated splice boundary — score with 3 factors then)
+    core_required = ["earnings_yield", "roe", "de"]
+    df = df.dropna(subset=core_required)
 
     # Remove negative P/E (loss-making companies)
     df = df[df["pe"] > 0]
 
     # Remove extreme outliers (top/bottom 1%)
-    for col in required:
-        lower = df[col].quantile(0.01)
-        upper = df[col].quantile(0.99)
-        df = df[(df[col] >= lower) & (df[col] <= upper)]
+    for col in core_required + ["earnings_growth"]:
+        valid = df[col].dropna()
+        if len(valid) < 10:
+            continue
+        lower = valid.quantile(0.01)
+        upper = valid.quantile(0.99)
+        df = df[(df[col].isna()) | ((df[col] >= lower) & (df[col] <= upper))]
 
     if len(df) < 10:
         log.warning(f"Only {len(df)} stocks after filtering — too few for ranking")
@@ -114,12 +118,18 @@ def score_value_quality(fundamentals: pd.DataFrame) -> pd.Series:
     df["rank_ey"] = df["earnings_yield"].rank(pct=True)
     df["rank_roe"] = df["roe"].rank(pct=True)
     df["rank_de"] = (1.0 - df["de"].rank(pct=True))  # invert: low debt = high rank
-    df["rank_eg"] = df["earnings_growth"].rank(pct=True)
+    df["rank_eg"] = df["earnings_growth"].rank(pct=True)  # NaN → NaN rank, handled below
 
-    # Equal-weighted composite
-    df["composite"] = (
-        df["rank_ey"] + df["rank_roe"] + df["rank_de"] + df["rank_eg"]
+    # Equal-weighted composite; if earnings_growth is NaN, use 3-factor average
+    has_eg = df["rank_eg"].notna()
+    df.loc[has_eg, "composite"] = (
+        df.loc[has_eg, "rank_ey"] + df.loc[has_eg, "rank_roe"]
+        + df.loc[has_eg, "rank_de"] + df.loc[has_eg, "rank_eg"]
     ) / 4.0
+    df.loc[~has_eg, "composite"] = (
+        df.loc[~has_eg, "rank_ey"] + df.loc[~has_eg, "rank_roe"]
+        + df.loc[~has_eg, "rank_de"]
+    ) / 3.0
 
     scores = df["composite"].sort_values(ascending=False)
     log.info(f"Scored {len(scores)} stocks. Top 5: {list(scores.head().index)}")
@@ -135,6 +145,147 @@ REPORTING_LAG_MONTHS = 3  # Indian companies: March YE, results public by ~June
 
 # Screener.in values are in Crores (1 Cr = 10^7 Rs)
 _CR = 1e7
+
+# Source tags for splice detection
+_SRC_MC = "mc_standalone"
+_SRC_SCREENER = "screener_consolidated"
+
+
+# ── Moneycontrol offline loader ──────────────────────────────────────────────
+
+def load_mc_fundamentals(
+    mc_dir: Path,
+    earliest_year: int = 2009,
+) -> dict[str, pd.DataFrame]:
+    """Load pre-downloaded Moneycontrol JSON files (standalone, in Crores).
+
+    Parameters
+    ----------
+    mc_dir : directory containing {TICKER}.json files
+    earliest_year : discard data before this fiscal year-end
+
+    Returns dict[ticker, DataFrame] with columns:
+        net_income, equity, total_debt, shares, revenue, source
+    All values in Rupees (Crores × 1e7). source = "mc_standalone".
+    """
+    import json
+    from calendar import monthrange
+
+    month_map = {
+        "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "May": 5, "Jun": 6,
+        "Jul": 7, "Aug": 8, "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12,
+    }
+
+    result: dict[str, pd.DataFrame] = {}
+
+    for fpath in sorted(mc_dir.glob("*.json")):
+        if fpath.name.endswith("_ERROR.json"):
+            continue
+        raw = json.loads(fpath.read_text())
+        ticker = raw.get("ticker", fpath.stem)
+        data = raw.get("data", {})
+        if not data:
+            continue
+
+        rows = []
+        for period, vals in data.items():
+            parts = period.strip().split()
+            if len(parts) != 2 or parts[0] not in month_map:
+                continue
+            try:
+                yr_short = int(parts[1])
+            except ValueError:
+                continue
+            year = yr_short + 2000 if yr_short < 100 else yr_short
+            if year < earliest_year:
+                continue
+
+            month = month_map[parts[0]]
+            _, last_day = monthrange(year, month)
+            dt = pd.Timestamp(year=year, month=month, day=last_day)
+
+            ni = vals.get("net_profit")
+            eq_cap = vals.get("equity_capital")
+            res = vals.get("reserves")
+            lt = vals.get("borrowings_lt")
+            st = vals.get("borrowings_st")
+
+            equity_cr = None
+            if eq_cap is not None and res is not None:
+                equity_cr = eq_cap + res
+
+            shares = None
+            if eq_cap is not None and eq_cap > 0:
+                shares = eq_cap * _CR / 10.0  # face value default = 10
+
+            rows.append({
+                "date": dt,
+                "net_income": ni * _CR if ni is not None else np.nan,
+                "equity": equity_cr * _CR if equity_cr is not None else np.nan,
+                "total_debt": ((lt or 0) + (st or 0)) * _CR,
+                "shares": shares if shares is not None else np.nan,
+                "revenue": np.nan,
+                "source": _SRC_MC,
+            })
+
+        if len(rows) >= 2:
+            df = pd.DataFrame(rows).set_index("date").sort_index()
+            result[ticker] = df
+
+    log.info(f"Loaded MC standalone fundamentals for {len(result)} tickers from {mc_dir}")
+    return result
+
+
+def merge_fundamentals(
+    mc_data: dict[str, pd.DataFrame],
+    screener_data: dict[str, pd.DataFrame],
+) -> dict[str, pd.DataFrame]:
+    """Merge MC standalone (deep history) with Screener consolidated (recent).
+
+    Per ticker:
+    - Screener data is used from its earliest date onwards (consolidated, more accurate).
+    - MC standalone fills years BEFORE Screener's earliest date.
+    - A 'source' column tags each row for splice detection.
+    """
+    all_tickers = set(mc_data.keys()) | set(screener_data.keys())
+    result: dict[str, pd.DataFrame] = {}
+
+    for ticker in all_tickers:
+        mc_df = mc_data.get(ticker)
+        scr_df = screener_data.get(ticker)
+
+        # Tag Screener rows if not already tagged
+        if scr_df is not None and "source" not in scr_df.columns:
+            scr_df = scr_df.copy()
+            scr_df["source"] = _SRC_SCREENER
+
+        if mc_df is None and scr_df is None:
+            continue
+        if mc_df is None:
+            result[ticker] = scr_df
+            continue
+        if scr_df is None:
+            result[ticker] = mc_df
+            continue
+
+        # MC standalone for years before Screener's earliest; Screener for the rest
+        screener_start = scr_df.index.min()
+        older_mc = mc_df[mc_df.index < screener_start]
+
+        if older_mc.empty:
+            result[ticker] = scr_df
+        else:
+            merged = pd.concat([older_mc, scr_df]).sort_index()
+            merged = merged[~merged.index.duplicated(keep="last")]
+            result[ticker] = merged
+
+    log.info(
+        f"Merged fundamentals: {len(result)} tickers "
+        f"(MC-only: {sum(1 for t in result if t not in screener_data)}, "
+        f"Screener-only: {sum(1 for t in result if t not in mc_data)}, "
+        f"both: {sum(1 for t in result if t in mc_data and t in screener_data)})"
+    )
+    return result
 
 
 def _parse_screener_section(soup, section_name: str) -> dict[str, dict[str, float | None]]:
@@ -178,6 +329,16 @@ def _parse_face_value(soup) -> float:
     return 10.0  # default face value for most Indian companies
 
 
+_SCREENER_COOKIES: dict[str, str] | None = None
+
+
+def set_screener_cookies(csrftoken: str, sessionid: str) -> None:
+    """Set Screener.in auth cookies for authenticated fetching (no rate limits)."""
+    global _SCREENER_COOKIES
+    _SCREENER_COOKIES = {"csrftoken": csrftoken, "sessionid": sessionid}
+    log.info("Screener.in cookies set — authenticated mode enabled")
+
+
 def _extract_from_screener(ticker: str) -> pd.DataFrame | None:
     """Fetch 10-15 years of annual fundamentals from Screener.in.
 
@@ -196,7 +357,8 @@ def _extract_from_screener(ticker: str) -> pd.DataFrame | None:
         try:
             resp = requests.get(
                 url,
-                headers={"User-Agent": "Mozilla/5.0 (compatible; JDQuant/1.0)"},
+                headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"},
+                cookies=_SCREENER_COOKIES,
                 timeout=15,
             )
             if resp.status_code != 200:
@@ -313,10 +475,17 @@ def _mc_search(ticker: str) -> dict | None:
             desc = r.get("pdt_dis_nm", "")
             if f", {ticker}," in desc or f", {ticker}<" in desc:
                 url = r["link_src"]
-                parts = url.split("/")
-                sector = parts[5] if len(parts) > 5 else ""
-                company = parts[6] if len(parts) > 6 else ""
-                return {"sc_id": r["sc_id"], "sector": sector, "company": company}
+                parts = [p for p in url.split("/") if p]
+                # Moneycontrol's financials URLs use the trailing code from
+                # link_src, which is NOT always the same as r["sc_id"]
+                # (e.g. NMDC: sc_id "NMD01" vs link code "NMD02"; AMBUJACEM:
+                # "GAC" vs "AC18"). Using sc_id silently returns a blank page
+                # with no financial tables for those tickers, dropping ~5% of
+                # the universe. Always use the link_src trailing segment.
+                code = parts[-1] if parts else r["sc_id"]
+                company = parts[-2] if len(parts) >= 2 else ""
+                sector = parts[-3] if len(parts) >= 3 else ""
+                return {"sc_id": code, "sector": sector, "company": company}
     except Exception:
         pass
     return None
@@ -503,67 +672,103 @@ def _extract_from_moneycontrol(ticker: str) -> pd.DataFrame | None:
 
 
 def _extract_fundamentals(ticker: str) -> pd.DataFrame | None:
-    """Try Screener.in first, fall back to Moneycontrol."""
-    df = _extract_from_screener(ticker)
-    if df is not None and len(df) >= 2:
-        return df
-    df = _extract_from_moneycontrol(ticker)
-    return df
+    """Get maximum history by merging Screener.in + Moneycontrol.
+
+    Screener.in (fast with auth): 12 years (2015-2026).
+    Moneycontrol (slower, 5 pages): up to 23 years (2004-2026).
+    Merge both: Screener for recent, Moneycontrol extends backwards.
+    """
+    screener_df = _extract_from_screener(ticker)
+    mc_df = _extract_from_moneycontrol(ticker)
+
+    if screener_df is None and mc_df is None:
+        return None
+    if screener_df is None:
+        return mc_df
+    if mc_df is None:
+        return screener_df
+
+    # Merge: Screener data where available, older years from Moneycontrol
+    screener_start = screener_df.index.min()
+    older_mc = mc_df[mc_df.index < screener_start]
+
+    if older_mc.empty:
+        return screener_df
+
+    merged = pd.concat([older_mc, screener_df]).sort_index()
+    merged = merged[~merged.index.duplicated(keep="last")]
+    return merged
+
+
+def _load_screener_cache(cache_file: Path) -> dict[str, pd.DataFrame]:
+    """Load Screener consolidated data from parquet cache."""
+    all_df = pd.read_parquet(cache_file)
+    result = {}
+    for ticker in all_df["ticker"].unique():
+        tdf = all_df[all_df["ticker"] == ticker].drop(columns=["ticker"]).set_index("date")
+        if "source" not in tdf.columns:
+            tdf["source"] = _SRC_SCREENER
+        result[ticker] = tdf
+    return result
 
 
 def fetch_historical_fundamentals(
     tickers: list[str],
     max_workers: int = 10,
     cache_dir: Path | None = None,
+    mc_dir: Path | None = None,
 ) -> dict[str, pd.DataFrame]:
-    """Fetch annual financial statements for all tickers from Screener.in.
+    """Load historical fundamentals from offline sources (MC + Screener cache).
 
-    Returns {ticker: DataFrame} where each DataFrame has columns:
-    net_income, equity, total_debt, shares, revenue — indexed by fiscal year-end.
-    Typically provides 10-15 years of data (vs ~5 from yfinance).
+    Data sources (in priority order):
+    1. Screener.in parquet cache (consolidated, ~2015-2026)
+    2. Moneycontrol JSON exports (standalone, ~2009-2026) — fills pre-2015 years
 
-    Results are cached to parquet if cache_dir is provided.
+    Returns {ticker: DataFrame} with columns:
+    net_income, equity, total_debt, shares, revenue, source — indexed by fiscal year-end.
     """
+    # Default MC dir: data/mc_exports/ relative to repo root
+    if mc_dir is None:
+        mc_dir = Path(__file__).resolve().parents[3] / "data" / "mc_exports"
+
+    screener_data: dict[str, pd.DataFrame] = {}
+    mc_data: dict[str, pd.DataFrame] = {}
+
+    # Load Screener cache (consolidated)
     if cache_dir is not None:
         cache_dir.mkdir(parents=True, exist_ok=True)
         cache_file = cache_dir / "historical_fundamentals.parquet"
         if cache_file.exists():
-            log.info(f"Loading cached historical fundamentals from {cache_file}")
-            all_df = pd.read_parquet(cache_file)
-            result = {}
-            for ticker in all_df["ticker"].unique():
-                result[ticker] = all_df[all_df["ticker"] == ticker].drop(columns=["ticker"]).set_index("date")
-            # Check if cache has sufficient history (>8 years for most tickers)
-            avg_years = sum(len(df) for df in result.values()) / max(len(result), 1)
-            if avg_years >= 8:
-                log.info(f"Loaded cached fundamentals for {len(result)} tickers (~{avg_years:.0f} years avg)")
-                return result
-            else:
-                log.info(f"Cache has only ~{avg_years:.0f} years avg — refetching from Screener.in")
+            screener_data = _load_screener_cache(cache_file)
+            log.info(f"Loaded Screener cache: {len(screener_data)} tickers")
 
-    result: dict[str, pd.DataFrame] = {}
+    # Load MC offline JSONs (standalone, deep history)
+    if mc_dir.exists() and any(mc_dir.glob("*.json")):
+        mc_data = load_mc_fundamentals(mc_dir, earliest_year=2009)
 
-    import time
+    if not screener_data and not mc_data:
+        # Fall back to live scraping
+        log.warning("No offline data found — falling back to live scraping")
+        result: dict[str, pd.DataFrame] = {}
+        import time
+        sleep_time = 0.1 if _SCREENER_COOKIES else 0.5
+        log.info(f"Fetching historical fundamentals for {len(tickers)} tickers...")
+        for i, ticker in enumerate(tickers):
+            if (i + 1) % 25 == 0:
+                log.info(f"  {i + 1}/{len(tickers)} fetched ({len(result)} OK)...")
+            df = _extract_fundamentals(ticker)
+            if df is not None and len(df) >= 2:
+                result[ticker] = df
+            time.sleep(sleep_time)
+        log.info(f"Got historical fundamentals for {len(result)}/{len(tickers)} tickers")
+        return result
 
-    log.info(f"Fetching historical fundamentals for {len(tickers)} tickers (Screener.in → Moneycontrol fallback)...")
-    for i, ticker in enumerate(tickers):
-        if (i + 1) % 25 == 0:
-            log.info(f"  {i + 1}/{len(tickers)} fetched ({len(result)} OK)...")
-        df = _extract_fundamentals(ticker)
-        if df is not None and len(df) >= 2:
-            result[ticker] = df
-        time.sleep(0.5)
+    # Merge: MC standalone for pre-2015, Screener consolidated for 2015+
+    merged = merge_fundamentals(mc_data, screener_data)
 
-    log.info(f"Got historical fundamentals for {len(result)}/{len(tickers)} tickers")
-
-    if cache_dir is not None and result:
-        frames = []
-        for ticker, df in result.items():
-            tmp = df.reset_index()
-            tmp["ticker"] = ticker
-            frames.append(tmp)
-        pd.concat(frames, ignore_index=True).to_parquet(cache_file)
-        log.info(f"Cached to {cache_file}")
+    # Filter to requested tickers only
+    result = {t: merged[t] for t in tickers if t in merged and len(merged[t]) >= 2}
+    log.info(f"Historical fundamentals ready: {len(result)}/{len(tickers)} tickers")
 
     return result
 
@@ -642,7 +847,17 @@ def compute_historical_scores(
             pe = price / eps
             roe = ni / eq
             de = (debt / eq) if pd.notna(debt) else 0.0
-            eg = (ni - ni_prev) / abs(ni_prev) if pd.notna(ni_prev) and abs(ni_prev) > 0 else np.nan
+
+            # Earnings growth: skip if latest and prev come from different
+            # data sources (standalone vs consolidated splice boundary)
+            splice = (
+                "source" in available.columns
+                and latest.get("source") != prev.get("source")
+            )
+            if splice:
+                eg = np.nan
+            else:
+                eg = (ni - ni_prev) / abs(ni_prev) if pd.notna(ni_prev) and abs(ni_prev) > 0 else np.nan
 
             fund_snapshot[ticker] = {
                 "pe": pe, "roe": roe, "de": de, "earnings_growth": eg,

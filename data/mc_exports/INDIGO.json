@@ -1,0 +1,166 @@
+{
+  "ticker": "INDIGO",
+  "data": {
+    "Mar 26": {
+      "net_profit": -24.09,
+      "equity_capital": 135.32,
+      "reserves": -147.68,
+      "borrowings_lt": 191.8,
+      "borrowings_st": 38.97
+    },
+    "Mar 25": {
+      "net_profit": -30.86,
+      "equity_capital": 135.32,
+      "reserves": -125.22,
+      "borrowings_lt": 133.3,
+      "borrowings_st": 48.82
+    },
+    "Mar 24": {
+      "net_profit": -54.05,
+      "equity_capital": 135.32,
+      "reserves": -94.64,
+      "borrowings_lt": 127.34,
+      "borrowings_st": 56.24
+    },
+    "Mar 23": {
+      "net_profit": 19.2,
+      "equity_capital": 135.32,
+      "reserves": -43.13,
+      "borrowings_lt": 134.54,
+      "borrowings_st": 43.53
+    },
+    "Mar 22": {
+      "net_profit": -76.07,
+      "equity_capital": 135.32,
+      "reserves": -62.5,
+      "borrowings_lt": 165.61,
+      "borrowings_st": 43.39
+    },
+    "Mar 21": {
+      "net_profit": 6.26,
+      "equity_capital": 135.32,
+      "reserves": 13.41,
+      "borrowings_lt": 170.6,
+      "borrowings_st": 9.42
+    },
+    "Mar 20": {
+      "net_profit": 10.71,
+      "equity_capital": 135.32,
+      "reserves": 6.65,
+      "borrowings_lt": 158.48,
+      "borrowings_st": 29.22
+    },
+    "Mar 19": {
+      "net_profit": 11.6,
+      "equity_capital": 135.32,
+      "reserves": -3.45,
+      "borrowings_lt": 173.04,
+      "borrowings_st": 15.26
+    },
+    "Mar 18": {
+      "net_profit": 8.84,
+      "equity_capital": 135.32,
+      "reserves": -15.05,
+      "borrowings_lt": 162.57,
+      "borrowings_st": 29.13
+    },
+    "Mar 17": {
+      "net_profit": 23.35,
+      "equity_capital": 135.32,
+      "reserves": -37.33,
+      "borrowings_lt": 119.11,
+      "borrowings_st": 15.33
+    },
+    "Mar 16": {
+      "net_profit": 20.62,
+      "equity_capital": 135.32,
+      "reserves": -59.74,
+      "borrowings_lt": 18.09,
+      "borrowings_st": 18.84
+    },
+    "Mar 15": {
+      "net_profit": -14.98,
+      "equity_capital": 135.32,
+      "reserves": -80.35,
+      "borrowings_lt": 0,
+      "borrowings_st": 15.07
+    },
+    "Mar 14": {
+      "net_profit": 11.32,
+      "equity_capital": 135.32,
+      "reserves": -60.95,
+      "borrowings_lt": 0,
+      "borrowings_st": 24.83
+    },
+    "Mar 13": {
+      "net_profit": 4.17,
+      "equity_capital": 135.32,
+      "reserves": -72.27,
+      "borrowings_lt": 3.27,
+      "borrowings_st": 35.46
+    },
+    "Mar 12": {
+      "net_profit": 0.32,
+      "equity_capital": 135.32,
+      "reserves": -76.44,
+      "borrowings_lt": 6.95,
+      "borrowings_st": 11.61
+    },
+    "Mar 11": {
+      "net_profit": 0.36,
+      "equity_capital": 131.32,
+      "reserves": -98.48,
+      "borrowings_lt": 42.19,
+      "borrowings_st": 10.08
+    },
+    "Mar 10": {
+      "net_profit": 32.08,
+      "equity_capital": 131.32,
+      "reserves": -98.83,
+      "borrowings_lt": 79.36,
+      "borrowings_st": 39.09
+    },
+    "Mar 09": {
+      "net_profit": -41.3,
+      "equity_capital": 131.32,
+      "reserves": -130.92,
+      "borrowings_lt": 82.5,
+      "borrowings_st": 94.65
+    },
+    "Mar 08": {
+      "net_profit": -7.33,
+      "equity_capital": 131.32,
+      "reserves": -90.12,
+      "borrowings_lt": 136.32,
+      "borrowings_st": 19.8
+    },
+    "Mar 07": {
+      "net_profit": -12.93,
+      "equity_capital": 125.32,
+      "reserves": -82.79,
+      "borrowings_lt": 164.93,
+      "borrowings_st": 22.36
+    },
+    "Mar 06": {
+      "net_profit": -11.02,
+      "equity_capital": 125.32,
+      "reserves": -69.86,
+      "borrowings_lt": 158.94,
+      "borrowings_st": 12.58
+    },
+    "Mar 05": {
+      "net_profit": 35.2,
+      "equity_capital": 125.32,
+      "reserves": -58.84,
+      "borrowings_lt": 155.95,
+      "borrowings_st": 20.52
+    },
+    "Mar 04": {
+      "net_profit": 5.2,
+      "equity_capital": 124.01,
+      "reserves": -94.43,
+      "borrowings_lt": 151.87,
+      "borrowings_st": 36.3
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "ticker": "LAURUSLABS",
+  "data": {
+    "Mar 26": {
+      "net_profit": -34.37,
+      "equity_capital": 24.13,
+      "reserves": 9.56,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 25": {
+      "net_profit": -6.66,
+      "equity_capital": 23.86,
+      "reserves": 43.26,
+      "borrowings_lt": 0,
+      "borrowings_st": 0
+    },
+    "Mar 24": {
+      "net_profit": -8.01,
+      "equity_capital": 22.65,
+      "reserves": 39.95,
+      "borrowings_lt": 0,
+      "borrowings_st": 1.97
+    },
+    "Mar 23": {
+      "net_profit": -4.3,
+      "equity_capital": 22.5,
+      "reserves": 46.42,
+      "borrowings_lt": 0,
+      "borrowings_st": 1.62
+    }
+  }
+}

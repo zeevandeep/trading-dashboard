@@ -1,0 +1,68 @@
+{
+  "ticker": "HONAUT",
+  "data": {
+    "Mar 14": {
+      "net_profit": -17.59,
+      "equity_capital": 15.98,
+      "reserves": 20.95,
+      "borrowings_lt": 45.2,
+      "borrowings_st": 0
+    },
+    "Mar 13": {
+      "net_profit": 1.1,
+      "equity_capital": 14.76,
+      "reserves": 34.22,
+      "borrowings_lt": 49.59,
+      "borrowings_st": 0
+    },
+    "Mar 12": {
+      "net_profit": 3.01,
+      "equity_capital": 14.76,
+      "reserves": 33.12,
+      "borrowings_lt": 43.31,
+      "borrowings_st": 0
+    },
+    "Mar 11": {
+      "net_profit": 2.75,
+      "equity_capital": 11.07,
+      "reserves": 10.55,
+      "borrowings_lt": 35.21,
+      "borrowings_st": 0
+    },
+    "Mar 10": {
+      "net_profit": 1.78,
+      "equity_capital": 8.58,
+      "reserves": 10.29,
+      "borrowings_lt": 22.15,
+      "borrowings_st": 0
+    },
+    "Mar 09": {
+      "net_profit": 1.14,
+      "equity_capital": 2.12,
+      "reserves": 6.3,
+      "borrowings_lt": 17.4,
+      "borrowings_st": 0
+    },
+    "Mar 08": {
+      "net_profit": 0.72,
+      "equity_capital": 2,
+      "reserves": 0.98,
+      "borrowings_lt": 12.79,
+      "borrowings_st": 0
+    },
+    "Mar 07": {
+      "net_profit": 0.15,
+      "equity_capital": 0.4,
+      "reserves": 0.26,
+      "borrowings_lt": 4.23,
+      "borrowings_st": 0
+    },
+    "Mar 06": {
+      "net_profit": 0.11,
+      "equity_capital": 0.2,
+      "reserves": 0.12,
+      "borrowings_lt": 2.12,
+      "borrowings_st": 0
+    }
+  }
+}

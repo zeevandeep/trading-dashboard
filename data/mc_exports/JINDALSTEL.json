@@ -1,0 +1,166 @@
+{
+  "ticker": "JINDALSTEL",
+  "data": {
+    "Mar 26": {
+      "net_profit": 3073.62,
+      "equity_capital": 101.75,
+      "reserves": 53027.85,
+      "borrowings_lt": 5464.43,
+      "borrowings_st": 2206.13
+    },
+    "Mar 25": {
+      "net_profit": 3621.18,
+      "equity_capital": 101.18,
+      "reserves": 49661.69,
+      "borrowings_lt": 4894.23,
+      "borrowings_st": 2023.6
+    },
+    "Mar 24": {
+      "net_profit": 5273.3,
+      "equity_capital": 100.24,
+      "reserves": 45393.36,
+      "borrowings_lt": 6156.26,
+      "borrowings_st": 4963.99
+    },
+    "Mar 23": {
+      "net_profit": 2426.83,
+      "equity_capital": 100.5,
+      "reserves": 40456.35,
+      "borrowings_lt": 7081.75,
+      "borrowings_st": 4793.63
+    },
+    "Mar 22": {
+      "net_profit": 8283.42,
+      "equity_capital": 101.07,
+      "reserves": 40259.41,
+      "borrowings_lt": 8364.95,
+      "borrowings_st": 4960.88
+    },
+    "Mar 21": {
+      "net_profit": 7154.31,
+      "equity_capital": 102,
+      "reserves": 32540.11,
+      "borrowings_lt": 13959.75,
+      "borrowings_st": 2750.57
+    },
+    "Mar 20": {
+      "net_profit": 617.67,
+      "equity_capital": 102,
+      "reserves": 23607.07,
+      "borrowings_lt": 12029.62,
+      "borrowings_st": 3175.47
+    },
+    "Mar 19": {
+      "net_profit": -262.9,
+      "equity_capital": 96.79,
+      "reserves": 22446.97,
+      "borrowings_lt": 12338,
+      "borrowings_st": 5257.37
+    },
+    "Mar 18": {
+      "net_profit": -361.61,
+      "equity_capital": 96.79,
+      "reserves": 22690.97,
+      "borrowings_lt": 14411.05,
+      "borrowings_st": 6910.19
+    },
+    "Mar 17": {
+      "net_profit": -986.45,
+      "equity_capital": 91.5,
+      "reserves": 21674.7,
+      "borrowings_lt": 16403.88,
+      "borrowings_st": 7759.46
+    },
+    "Mar 16": {
+      "net_profit": -1418.53,
+      "equity_capital": 91.49,
+      "reserves": 22974.18,
+      "borrowings_lt": 16411.57,
+      "borrowings_st": 7503.47
+    },
+    "Mar 15": {
+      "net_profit": -310.68,
+      "equity_capital": 91.49,
+      "reserves": 12419.72,
+      "borrowings_lt": 18507.42,
+      "borrowings_st": 7607.63
+    },
+    "Mar 14": {
+      "net_profit": 1291.95,
+      "equity_capital": 91.49,
+      "reserves": 12972.84,
+      "borrowings_lt": 13520.78,
+      "borrowings_st": 9146.13
+    },
+    "Mar 13": {
+      "net_profit": 1592.55,
+      "equity_capital": 93.48,
+      "reserves": 12254.59,
+      "borrowings_lt": 11860.92,
+      "borrowings_st": 7640.02
+    },
+    "Mar 12": {
+      "net_profit": 2110.65,
+      "equity_capital": 93.48,
+      "reserves": 10751.93,
+      "borrowings_lt": 8493.92,
+      "borrowings_st": 5878.54
+    },
+    "Mar 11": {
+      "net_profit": 2064.12,
+      "equity_capital": 93.43,
+      "reserves": 8595.91,
+      "borrowings_lt": 7359.71,
+      "borrowings_st": 4081.99
+    },
+    "Mar 10": {
+      "net_profit": 1479.68,
+      "equity_capital": 93.12,
+      "reserves": 6652.88,
+      "borrowings_lt": 5698.91,
+      "borrowings_st": 2684.35
+    },
+    "Mar 09": {
+      "net_profit": 1536.48,
+      "equity_capital": 15.47,
+      "reserves": 5399.85,
+      "borrowings_lt": 4195.63,
+      "borrowings_st": 767.02
+    },
+    "Mar 08": {
+      "net_profit": 1236.96,
+      "equity_capital": 15.4,
+      "reserves": 3740.98,
+      "borrowings_lt": 3389.74,
+      "borrowings_st": 473.61
+    },
+    "Mar 07": {
+      "net_profit": 702.99,
+      "equity_capital": 15.4,
+      "reserves": 2481.33,
+      "borrowings_lt": 2650.31,
+      "borrowings_st": 857.41
+    },
+    "Mar 06": {
+      "net_profit": 572.94,
+      "equity_capital": 15.4,
+      "reserves": 1829.31,
+      "borrowings_lt": 2238.25,
+      "borrowings_st": 507.12
+    },
+    "Mar 05": {
+      "net_profit": 515.7,
+      "equity_capital": 15.4,
+      "reserves": 1302.98,
+      "borrowings_lt": 1361.95,
+      "borrowings_st": 133.91
+    },
+    "Mar 04": {
+      "net_profit": 305.46,
+      "equity_capital": 15.4,
+      "reserves": 839.8,
+      "borrowings_lt": 933.89,
+      "borrowings_st": 92.06
+    }
+  }
+}
