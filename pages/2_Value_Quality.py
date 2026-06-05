@@ -1,0 +1,349 @@
+"""Strategy 2 — Value + Quality."""
+
+from __future__ import annotations
+
+import json
+from datetime import datetime
+
+import pandas as pd
+import plotly.graph_objects as go
+import streamlit as st
+
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+from dashboard_shared import (
+    DATA_DIR,
+    OUTPUTS_DIR,
+    PAPER_DIR,
+    apply_plotly_style,
+    inject_css,
+    list_runs,
+    load_series,
+    load_summary,
+    monthly_table,
+    render_disclaimer,
+)
+
+st.set_page_config(page_title="JD Quant — Value + Quality", page_icon="", layout="wide", initial_sidebar_state="collapsed")
+inject_css()
+
+# ─── Data ─────────────────────────────────────────────────────────────────────
+
+runs = list_runs()
+vq_runs = [p for p in OUTPUTS_DIR.iterdir() if p.is_dir() and "value_quality" in p.name and (p / "summary.json").exists()] if OUTPUTS_DIR.exists() else []
+vq_run = sorted(vq_runs, key=lambda p: p.name, reverse=True)[0] if vq_runs else None
+
+vq_summary = vq_equity = vq_returns = None
+if vq_run:
+    vq_summary = load_summary(str(vq_run))
+    try:
+        vq_equity = load_series(str(vq_run), "equity_curve.csv")
+        vq_returns = load_series(str(vq_run), "returns.csv")
+    except Exception:
+        pass
+
+# Paper state for overlap analysis
+paper_state = None
+paper_dir = PAPER_DIR / "smallcap_momentum_v2"
+if (paper_dir / "state.json").exists():
+    paper_state = json.loads((paper_dir / "state.json").read_text())
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  RENDER
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ── Navbar
+st.markdown(f"""
+<div class="navbar">
+    <div class="logo">
+        <div class="logo-mark">JD</div>
+        JD Quant
+    </div>
+    <div class="nav-status">Quarterly rebalance</div>
+</div>
+""", unsafe_allow_html=True)
+
+st.page_link("dashboard.py", label="← Back to Home")
+
+# ── Hero
+st.markdown("""
+<div class="hero-v2">
+    <div class="eyebrow">Strategy 2 &middot; Quarterly Rebalance</div>
+    <h1>Value + <span>Quality</span></h1>
+    <div class="tagline">
+        Buys cheap, high-quality stocks — low P/E, high ROE, low debt, growing earnings.
+        Designed to complement the momentum strategy with uncorrelated returns.
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# ── Stats Bar
+if vq_summary:
+    vq_cagr = vq_summary.get("cagr", 0)
+    vq_sharpe = vq_summary.get("sharpe", 0)
+    vq_max_dd = vq_summary.get("max_drawdown", 0)
+    vq_win_rate = vq_summary.get("win_rate_monthly", 0)
+    vq_vol = vq_summary.get("annual_vol", 0)
+    vq_sortino = vq_summary.get("sortino", 0)
+    vq_final_eq = vq_summary.get("final_equity", 1)
+
+    cagr_color = "green" if vq_cagr >= 0 else "red"
+    st.markdown(f"""
+    <div class="stat-row">
+        <div class="stat-cell">
+            <div class="val" style="color:var(--{cagr_color})">{vq_cagr*100:.1f}%</div>
+            <div class="lbl">CAGR</div>
+        </div>
+        <div class="stat-cell">
+            <div class="val gold">{vq_final_eq:.0f}x</div>
+            <div class="lbl">Total Return</div>
+        </div>
+        <div class="stat-cell">
+            <div class="val" style="color:var(--red)">{vq_max_dd*100:.1f}%</div>
+            <div class="lbl">Max Drawdown</div>
+        </div>
+        <div class="stat-cell">
+            <div class="val purple">{vq_win_rate*100:.0f}%</div>
+            <div class="lbl">Win Rate</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+# ── Fetch V+Q live scores
+from trading.data.universe import smallcap_universe  # noqa: E402
+from trading.signals.value_quality import fetch_fundamentals, score_value_quality  # noqa: E402
+
+@st.cache_data(ttl=6*3600, show_spinner="Scoring stocks on fundamentals...")
+def get_vq_data():
+    tickers = smallcap_universe()
+    fund = fetch_fundamentals(tickers, max_workers=15)
+    scores = score_value_quality(fund)
+    return fund, scores
+
+try:
+    vq_fund, vq_scores = get_vq_data()
+    has_live_scores = not vq_scores.empty
+except Exception:
+    vq_fund, vq_scores = pd.DataFrame(), pd.Series(dtype=float)
+    has_live_scores = False
+
+# ── Two Columns
+vq_l, vq_r = st.columns([3, 2], gap="large")
+
+with vq_l:
+    # Equity Curve
+    if vq_equity is not None:
+        st.markdown("""
+        <div class="card-v2">
+            <div class="card-header">
+                <div class="card-title">Performance</div>
+                <div class="card-badge" style="background:var(--purple-dim);color:var(--purple);">Backtest</div>
+            </div>
+            <div class="card-desc">Growth of Rs. 1. Quarterly rebalance, top 15 equal weight.</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        fig_vq = go.Figure()
+        fig_vq.add_trace(go.Scatter(
+            x=vq_equity.index, y=vq_equity.values, mode="lines",
+            line=dict(color="#a78bfa", width=2),
+            fill="tozeroy", fillcolor="rgba(167,139,250,0.06)",
+            hovertemplate="%{x|%b %Y}: Rs. %{y:.3f}<extra></extra>",
+        ))
+        apply_plotly_style(fig_vq, height=280, showlegend=False, yaxis_tickprefix="Rs. ")
+        st.plotly_chart(fig_vq, use_container_width=True)
+
+    # Drawdown
+    if vq_equity is not None and vq_summary:
+        vq_peak = vq_equity.cummax()
+        vq_dd = vq_equity / vq_peak - 1
+        st.markdown(f"""
+        <div class="card-v2">
+            <div class="card-header">
+                <div class="card-title">Drawdown</div>
+                <div class="card-badge" style="background:var(--red-dim);color:var(--red);">Max {vq_max_dd*100:.1f}%</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        fig_vq_dd = go.Figure()
+        fig_vq_dd.add_trace(go.Scatter(
+            x=vq_dd.index, y=vq_dd.values, mode="lines",
+            line=dict(color="#ef4444", width=1.5),
+            fill="tozeroy", fillcolor="rgba(239,68,68,0.08)",
+            hovertemplate="%{x|%b %Y}: %{y:.1%}<extra></extra>",
+        ))
+        apply_plotly_style(fig_vq_dd, height=180, showlegend=False, yaxis_tickformat=".0%")
+        st.plotly_chart(fig_vq_dd, use_container_width=True)
+
+    # Monthly Heatmap
+    if vq_returns is not None:
+        st.markdown("""
+        <div class="card-v2">
+            <div class="card-header">
+                <div class="card-title">Monthly Returns</div>
+                <div class="card-badge" style="background:var(--purple-dim);color:var(--purple);">%</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        try:
+            mr = monthly_table(vq_returns) * 100
+            years = [str(y) for y in mr.index.tolist()]
+            months = mr.columns.tolist()
+
+            fig_hm = go.Figure()
+            fig_hm.add_trace(go.Heatmap(
+                z=mr.values, x=months, y=years,
+                colorscale=[[0,"#991b1b"],[0.35,"#450a0a"],[0.5,"#0d1117"],[0.65,"#052e16"],[1,"#166534"]],
+                zmid=0, showscale=False,
+                hovertemplate="%{y} %{x}: %{z:.1f}%<extra></extra>",
+                xgap=2, ygap=2,
+            ))
+            for i, yr in enumerate(years):
+                for j, mo in enumerate(months):
+                    v = mr.values[i][j]
+                    if pd.notna(v):
+                        fig_hm.add_annotation(x=mo, y=yr, text=f"{v:.1f}", showarrow=False,
+                                              font=dict(size=9, color="#e2e8f0"))
+            fig_hm.update_layout(
+                paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(family="DM Sans, sans-serif", color="#94a3b8", size=11),
+                margin=dict(l=50, r=20, t=30, b=10),
+                height=max(420, len(mr) * 28),
+            )
+            fig_hm.update_xaxes(side="top", dtick=1, tickfont=dict(size=10),
+                                gridcolor="rgba(0,0,0,0)", linecolor="rgba(0,0,0,0)", zeroline=False)
+            fig_hm.update_yaxes(autorange="reversed", dtick=1, tickfont=dict(size=10),
+                                gridcolor="rgba(0,0,0,0)", linecolor="rgba(0,0,0,0)", zeroline=False)
+            st.plotly_chart(fig_hm, use_container_width=True)
+        except Exception as e:
+            st.warning(f"Heatmap error: {e}")
+
+    # V+Q Portfolio table (live picks)
+    if has_live_scores:
+        top_15 = vq_scores.head(15)
+        vq_rows = ""
+        for i, (ticker, score) in enumerate(top_15.items(), 1):
+            row = vq_fund.loc[ticker]
+            pe = row.get("pe", 0)
+            roe = row.get("roe", 0) * 100
+            de = row.get("de", 0)
+            eg = row.get("earnings_growth", 0) * 100
+            eg_color = "var(--green)" if eg > 0 else "var(--red)"
+            vq_rows += (
+                f'<tr>'
+                f'<td class="idx">{i}</td>'
+                f'<td class="sym">{ticker}</td>'
+                f'<td style="font-family:JetBrains Mono,monospace;font-size:0.8rem;color:var(--text-secondary)">{pe:.1f}</td>'
+                f'<td style="font-family:JetBrains Mono,monospace;font-size:0.8rem;color:var(--green)">{roe:.1f}%</td>'
+                f'<td style="font-family:JetBrains Mono,monospace;font-size:0.8rem;color:var(--text-secondary)">{de:.1f}</td>'
+                f'<td style="font-family:JetBrains Mono,monospace;font-size:0.8rem;color:{eg_color}">{eg:+.0f}%</td>'
+                f'<td class="wt">{score:.3f}</td>'
+                f'</tr>'
+            )
+
+        st.markdown(f"""
+        <div class="card-v2">
+            <div class="card-header">
+                <div class="card-title">Value + Quality Picks</div>
+                <div class="card-badge" style="background:var(--purple-dim);color:var(--purple);">Top 15</div>
+            </div>
+            <div class="card-desc">Ranked by composite score: Earnings Yield + ROE + Low Debt + Earnings Growth. Updated live.</div>
+            <table class="htable">
+                <thead><tr><th>#</th><th>Ticker</th><th>P/E</th><th>ROE</th><th>D/E</th><th>EPS Gr.</th><th>Score</th></tr></thead>
+                <tbody>{vq_rows}</tbody>
+            </table>
+        </div>
+        """, unsafe_allow_html=True)
+
+with vq_r:
+    # Overlap analysis
+    if has_live_scores:
+        top_15 = vq_scores.head(15)
+        momentum_holdings = set(paper_state.get("holdings", {}).keys()) if paper_state else set()
+        vq_holdings = set(top_15.index)
+        overlap = momentum_holdings & vq_holdings
+        only_momentum = momentum_holdings - vq_holdings
+        only_vq = vq_holdings - momentum_holdings
+
+        st.markdown(f"""
+        <div class="card-v2">
+            <div class="card-header">
+                <div class="card-title">Strategy Overlap</div>
+            </div>
+            <div class="card-desc">Stocks appearing in both strategies have the strongest conviction.</div>
+            <table class="kstats">
+                <tr><td>Momentum-only stocks</td><td>{len(only_momentum)}</td></tr>
+                <tr><td>Value+Quality-only stocks</td><td>{len(only_vq)}</td></tr>
+                <tr><td>Both strategies</td><td style="color:var(--green)">{len(overlap)}</td></tr>
+            </table>
+        </div>
+        """, unsafe_allow_html=True)
+
+        if overlap:
+            overlap_list = ", ".join(sorted(overlap))
+            st.markdown(f"""
+            <div class="card-v2">
+                <div class="card-header">
+                    <div class="card-title">High Conviction</div>
+                    <div class="card-badge" style="background:var(--green-dim);color:var(--green);">Both Signals</div>
+                </div>
+                <div class="card-desc">These stocks rank highly on BOTH momentum and fundamentals:</div>
+                <div style="color:var(--text-primary);font-weight:600;font-size:0.95rem;line-height:1.8;">
+                    {overlap_list}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+    # Key Numbers
+    if vq_summary:
+        st.markdown(f"""
+        <div class="card-v2">
+            <div class="card-header">
+                <div class="card-title">Key Numbers</div>
+                <div class="card-badge" style="background:var(--purple-dim);color:var(--purple);">Backtest</div>
+            </div>
+            <table class="kstats">
+                <tr><td>Period</td><td style="color:var(--text-tertiary)">{vq_summary.get('start_date','')[:7]} — {vq_summary.get('end_date','')[:7]}</td></tr>
+                <tr><td>Annual return</td><td style="color:{'var(--green)' if vq_cagr>=0 else 'var(--red)'}">{vq_cagr*100:.1f}%</td></tr>
+                <tr><td>Volatility</td><td>{vq_vol*100:.1f}%</td></tr>
+                <tr><td>Sharpe</td><td>{vq_sharpe:.2f}</td></tr>
+                <tr><td>Sortino</td><td>{vq_sortino:.2f}</td></tr>
+                <tr><td>Max drawdown</td><td style="color:var(--red)">{vq_max_dd*100:.1f}%</td></tr>
+                <tr><td>Win rate</td><td>{vq_win_rate*100:.0f}%</td></tr>
+            </table>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # How It Works
+    st.markdown("""
+    <div class="card-v2">
+        <div class="card-header">
+            <div class="card-title">How It Works</div>
+        </div>
+        <div class="process">
+            <div class="proc-step">
+                <div class="num" style="background:var(--purple-dim);color:var(--purple);">1</div>
+                <div class="txt"><strong>Earnings Yield</strong><br><span>Inverse of P/E. Cheaper stocks score higher.</span></div>
+            </div>
+            <div class="proc-step">
+                <div class="num" style="background:var(--purple-dim);color:var(--purple);">2</div>
+                <div class="txt"><strong>Return on Equity</strong><br><span>Higher ROE = better capital efficiency.</span></div>
+            </div>
+            <div class="proc-step">
+                <div class="num" style="background:var(--purple-dim);color:var(--purple);">3</div>
+                <div class="txt"><strong>Low Debt</strong><br><span>Lower debt/equity = safer balance sheet.</span></div>
+            </div>
+            <div class="proc-step">
+                <div class="num" style="background:var(--purple-dim);color:var(--purple);">4</div>
+                <div class="txt"><strong>Earnings Growth</strong><br><span>Growing profits confirm the value isn't a trap.</span></div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+render_disclaimer()
