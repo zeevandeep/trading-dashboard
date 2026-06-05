@@ -29,6 +29,12 @@ from trading.reporting.plots import (
     plot_rolling_sharpe,
 )
 from trading.signals.momentum import absolute_trend_filter, momentum_n_m
+from trading.signals.value_quality import (
+    compute_historical_scores,
+    fetch_historical_fundamentals,
+    score_value_quality,
+    fetch_fundamentals,
+)
 from trading.utils.logging import setup_logging
 
 
@@ -140,17 +146,42 @@ def backtest(config: str, smoke: bool, force_refresh: bool, survivorship_free: b
 
         # Signal
         sig_cfg = cfg.get("signal", {})
-        lookback = sig_cfg.get("lookback_months", 12)
-        skip = sig_cfg.get("skip_months", 1)
-        scores = momentum_n_m(prices, lookback_months=lookback, skip_months=skip)
-        log.info(f"Momentum: {lookback}m-{skip}m computed")
+        signal_type = sig_cfg.get("type", "momentum_n_m")
 
         # Portfolio
         port_cfg = cfg.get("portfolio", {})
         top_n = port_cfg.get("top_n", 15)
         freq = port_cfg.get("rebalance_freq", "ME")
 
-        daily_weights = top_n_equal_weight(scores, top_n=top_n, risk_on=risk_on)
+        if signal_type == "value_quality":
+            # V+Q: fetch historical fundamentals and compute scores at each rebalance date
+            from trading.config import CACHE_DIR
+            cache_dir = CACHE_DIR / "fundamentals"
+            hist_fund = fetch_historical_fundamentals(tickers, max_workers=15, cache_dir=cache_dir)
+
+            # Generate quarterly rebalance dates from price index
+            rebal_dates = prices.resample(freq).last().index
+            scores = compute_historical_scores(hist_fund, prices, rebal_dates)
+
+            if scores.empty:
+                raise click.ClickException("No valid V+Q scores — insufficient fundamental data")
+            log.info(f"V+Q scores: {len(scores)} rebalance dates")
+
+            # Trim prices to start from the first valid scoring date
+            # (avoids 10+ years of flat equity from missing fundamental data)
+            first_score_date = scores.index[0]
+            trim_start = first_score_date - pd.DateOffset(months=1)
+            prices = prices.loc[trim_start:]
+            log.info(f"Trimmed prices to {prices.index[0].date()} — {prices.index[-1].date()}")
+
+            # For V+Q, scores are already at rebalance dates — build weights directly
+            daily_weights = top_n_equal_weight(scores, top_n=top_n, risk_on=risk_on)
+        else:
+            lookback = sig_cfg.get("lookback_months", 12)
+            skip = sig_cfg.get("skip_months", 1)
+            scores = momentum_n_m(prices, lookback_months=lookback, skip_months=skip)
+            log.info(f"Momentum: {lookback}m-{skip}m computed")
+            daily_weights = top_n_equal_weight(scores, top_n=top_n, risk_on=risk_on)
         rebal_weights = resample_to_rebalance_dates(daily_weights, frequency=freq)
         log.info(f"Target weights built: top-{top_n} equal-weight, rebalance={freq}")
 
@@ -249,10 +280,12 @@ def paper(config: str, force_refresh: bool, dry_run: bool) -> None:
         raise click.BadParameter(f"Unknown universe mode: {universe_mode}")
     log.info(f"Universe: {len(tickers)} tickers")
 
-    # Fetch recent data — need enough history for momentum signal
+    # Signal type
     sig_cfg = cfg.get("signal", {})
+    signal_type = sig_cfg.get("type", "momentum_n_m")
+
+    # Fetch recent data — need enough history for signal
     lookback = sig_cfg.get("lookback_months", 12)
-    # Need lookback_months + 1 month of buffer for the signal calc
     history_months = lookback + 2
     start_date = pd.Timestamp.now() - pd.DateOffset(months=history_months)
     start = start_date.strftime("%Y-%m-%d")
@@ -281,14 +314,20 @@ def paper(config: str, force_refresh: bool, dry_run: bool) -> None:
         log.info(f"Trend filter: {'RISK-ON' if latest_risk else 'RISK-OFF'}")
 
     # Signal
-    skip = sig_cfg.get("skip_months", 1)
-    scores = momentum_n_m(prices, lookback_months=lookback, skip_months=skip)
-
-    # Latest signal scores
-    latest_scores = scores.iloc[-1].dropna()
-    if latest_scores.empty:
-        log.error("No valid momentum scores — insufficient price history?")
-        raise click.Abort()
+    if signal_type == "value_quality":
+        # V+Q: use current fundamentals for paper trading picks
+        fund = fetch_fundamentals(tickers, max_workers=15)
+        latest_scores = score_value_quality(fund)
+        if latest_scores.empty:
+            log.error("No valid V+Q scores — insufficient fundamental data?")
+            raise click.Abort()
+    else:
+        skip = sig_cfg.get("skip_months", 1)
+        scores = momentum_n_m(prices, lookback_months=lookback, skip_months=skip)
+        latest_scores = scores.iloc[-1].dropna()
+        if latest_scores.empty:
+            log.error("No valid momentum scores — insufficient price history?")
+            raise click.Abort()
 
     # Portfolio target
     port_cfg = cfg.get("portfolio", {})

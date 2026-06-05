@@ -649,6 +649,51 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# Load V+Q backtest data
+vq_runs = [p for p in OUTPUTS_DIR.iterdir() if p.is_dir() and "value_quality" in p.name and (p / "summary.json").exists()] if OUTPUTS_DIR.exists() else []
+vq_run = sorted(vq_runs, key=lambda p: p.name, reverse=True)[0] if vq_runs else None
+
+vq_summary = vq_equity = vq_returns = None
+if vq_run:
+    vq_summary = load_summary(str(vq_run))
+    try:
+        vq_equity = load_series(str(vq_run), "equity_curve.csv")
+        vq_returns = load_series(str(vq_run), "returns.csv")
+    except Exception:
+        pass
+
+# V+Q Stats Bar
+if vq_summary:
+    vq_cagr = vq_summary.get("cagr", 0)
+    vq_sharpe = vq_summary.get("sharpe", 0)
+    vq_max_dd = vq_summary.get("max_drawdown", 0)
+    vq_win_rate = vq_summary.get("win_rate_monthly", 0)
+    vq_vol = vq_summary.get("annual_vol", 0)
+    vq_sortino = vq_summary.get("sortino", 0)
+    vq_final_eq = vq_summary.get("final_equity", 1)
+
+    cagr_color = "green" if vq_cagr >= 0 else "red"
+    st.markdown(f"""
+    <div class="stat-row">
+        <div class="stat-cell">
+            <div class="val" style="color:var(--{cagr_color})">{vq_cagr*100:.1f}%</div>
+            <div class="lbl">CAGR</div>
+        </div>
+        <div class="stat-cell">
+            <div class="val accent">{vq_sharpe:.2f}</div>
+            <div class="lbl">Sharpe Ratio</div>
+        </div>
+        <div class="stat-cell">
+            <div class="val" style="color:var(--red)">{vq_max_dd*100:.1f}%</div>
+            <div class="lbl">Max Drawdown</div>
+        </div>
+        <div class="stat-cell">
+            <div class="val purple">{vq_win_rate*100:.0f}%</div>
+            <div class="lbl">Win Rate</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
 # Fetch V+Q scores (cached for 6 hours)
 from trading.data.universe import smallcap_universe  # noqa: E402
 from trading.signals.value_quality import fetch_fundamentals, score_value_quality  # noqa: E402
@@ -669,6 +714,51 @@ try:
         vq_l, vq_r = st.columns([3, 2], gap="large")
 
         with vq_l:
+            # V+Q Equity Curve
+            if vq_equity is not None:
+                st.markdown("""
+                <div class="card-v2">
+                    <div class="card-header">
+                        <div class="card-title">Performance</div>
+                        <div class="card-badge" style="background:var(--purple-dim);color:var(--purple);">Backtest</div>
+                    </div>
+                    <div class="card-desc">Growth of Rs. 1. Quarterly rebalance, top 15 equal weight.</div>
+                </div>
+                """, unsafe_allow_html=True)
+
+                fig_vq = go.Figure()
+                fig_vq.add_trace(go.Scatter(
+                    x=vq_equity.index, y=vq_equity.values, mode="lines",
+                    line=dict(color="#a78bfa", width=2),
+                    fill="tozeroy", fillcolor="rgba(167,139,250,0.06)",
+                    hovertemplate="%{x|%b %Y}: Rs. %{y:.3f}<extra></extra>",
+                ))
+                apply_plotly_style(fig_vq, height=280, showlegend=False, yaxis_tickprefix="Rs. ")
+                st.plotly_chart(fig_vq, use_container_width=True)
+
+            # V+Q Drawdown
+            if vq_equity is not None:
+                vq_peak = vq_equity.cummax()
+                vq_dd = vq_equity / vq_peak - 1
+                st.markdown(f"""
+                <div class="card-v2">
+                    <div class="card-header">
+                        <div class="card-title">Drawdown</div>
+                        <div class="card-badge" style="background:var(--red-dim);color:var(--red);">Max {vq_max_dd*100:.1f}%</div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+
+                fig_vq_dd = go.Figure()
+                fig_vq_dd.add_trace(go.Scatter(
+                    x=vq_dd.index, y=vq_dd.values, mode="lines",
+                    line=dict(color="#ef4444", width=1.5),
+                    fill="tozeroy", fillcolor="rgba(239,68,68,0.08)",
+                    hovertemplate="%{x|%b %Y}: %{y:.1%}<extra></extra>",
+                ))
+                apply_plotly_style(fig_vq_dd, height=180, showlegend=False, yaxis_tickformat=".0%")
+                st.plotly_chart(fig_vq_dd, use_container_width=True)
+
             # V+Q Portfolio table
             vq_rows = ""
             for i, (ticker, score) in enumerate(top_15.items(), 1):
@@ -738,6 +828,26 @@ try:
                     <div style="color:var(--text-primary);font-weight:600;font-size:0.95rem;line-height:1.8;">
                         {overlap_list}
                     </div>
+                </div>
+                """, unsafe_allow_html=True)
+
+            # V+Q Key Numbers
+            if vq_summary:
+                st.markdown(f"""
+                <div class="card-v2">
+                    <div class="card-header">
+                        <div class="card-title">Key Numbers</div>
+                        <div class="card-badge" style="background:var(--purple-dim);color:var(--purple);">Backtest</div>
+                    </div>
+                    <table class="kstats">
+                        <tr><td>Period</td><td style="color:var(--text-tertiary)">{vq_summary.get('start_date','')[:7]} — {vq_summary.get('end_date','')[:7]}</td></tr>
+                        <tr><td>Annual return</td><td style="color:{'var(--green)' if vq_cagr>=0 else 'var(--red)'}">{vq_cagr*100:.1f}%</td></tr>
+                        <tr><td>Volatility</td><td>{vq_vol*100:.1f}%</td></tr>
+                        <tr><td>Sharpe</td><td>{vq_sharpe:.2f}</td></tr>
+                        <tr><td>Sortino</td><td>{vq_sortino:.2f}</td></tr>
+                        <tr><td>Max drawdown</td><td style="color:var(--red)">{vq_max_dd*100:.1f}%</td></tr>
+                        <tr><td>Win rate</td><td>{vq_win_rate*100:.0f}%</td></tr>
+                    </table>
                 </div>
                 """, unsafe_allow_html=True)
 
