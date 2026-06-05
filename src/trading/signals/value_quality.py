@@ -83,6 +83,9 @@ def score_value_quality(fundamentals: pd.DataFrame) -> pd.Series:
     Returns a Series of scores indexed by ticker, higher = better.
     Stocks with missing data on key factors are dropped.
     """
+    if fundamentals.empty:
+        return pd.Series(dtype=float)
+
     df = fundamentals.copy()
 
     # Compute Earnings Yield (inverse of P/E)
