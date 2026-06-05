@@ -416,12 +416,12 @@ st.markdown(f"""
         <div class="lbl">CAGR</div>
     </div>
     <div class="stat-cell">
-        <div class="val accent">{sharpe:.2f}</div>
-        <div class="lbl">Sharpe Ratio</div>
-    </div>
-    <div class="stat-cell">
         <div class="val gold">{final_eq:.0f}x</div>
         <div class="lbl">Total Return</div>
+    </div>
+    <div class="stat-cell">
+        <div class="val" style="color:var(--red)">{max_dd*100:.1f}%</div>
+        <div class="lbl">Max Drawdown</div>
     </div>
     <div class="stat-cell">
         <div class="val purple">{win_rate*100:.0f}%</div>
@@ -680,8 +680,8 @@ if vq_summary:
             <div class="lbl">CAGR</div>
         </div>
         <div class="stat-cell">
-            <div class="val accent">{vq_sharpe:.2f}</div>
-            <div class="lbl">Sharpe Ratio</div>
+            <div class="val gold">{vq_final_eq:.0f}x</div>
+            <div class="lbl">Total Return</div>
         </div>
         <div class="stat-cell">
             <div class="val" style="color:var(--red)">{vq_max_dd*100:.1f}%</div>
