@@ -359,14 +359,6 @@ if mom_equity is not None and vq_equity is not None:
 
         # Paper trading status
         if ascent_paper or bedrock_paper:
-            st.markdown("""
-            <div class="card-v2">
-                <div class="card-header">
-                    <div class="card-title">Paper Trading</div>
-                    <div class="card-badge" style="background:var(--gold-dim);color:var(--gold);">Live Tracking</div>
-                </div>
-            """, unsafe_allow_html=True)
-
             rows_html = ""
             for name, state in [("Ascent", ascent_paper), ("Bedrock", bedrock_paper)]:
                 if state:
@@ -390,6 +382,11 @@ if mom_equity is not None and vq_equity is not None:
                     </tr>"""
 
             st.markdown(f"""
+            <div class="card-v2">
+                <div class="card-header">
+                    <div class="card-title">Paper Trading</div>
+                    <div class="card-badge" style="background:var(--gold-dim);color:var(--gold);">Live Tracking</div>
+                </div>
                 <table class="kstats">
                     <tr>
                         <td style="color:var(--text-tertiary)">Strategy</td>
