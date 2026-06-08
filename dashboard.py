@@ -156,10 +156,15 @@ st.markdown("""
 </a>
 """, unsafe_allow_html=True)
 
+# ── About link
+st.markdown("")
+st.page_link("pages/4_About.py", label="About — Philosophy & Approach →")
+
 # ── Disclaimer
 st.markdown("""
 <div class="disc">
-    <strong>Disclaimer:</strong> This is not financial advice. Past performance does not guarantee future results.
+    <strong>Disclaimer:</strong> This is not investment advice. JD Quant is a personal quantitative research project,
+    not a registered investment adviser or research analyst. Past performance does not guarantee future results.
     The strategies shown are based on historical backtesting which has inherent limitations including
     survivorship bias. Always do your own research before investing.
 </div>
