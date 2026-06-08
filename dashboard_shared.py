@@ -364,6 +364,93 @@ div[data-testid="stMetric"] label {
 div[data-testid="stMetric"] [data-testid="stMetricValue"] {
     font-size: 1.2rem !important; font-weight: 700 !important;
 }
+
+/* ═══════════════════════════════════════════ */
+/*  MOBILE RESPONSIVE                         */
+/* ═══════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .block-container { padding-top: 1rem; padding-left: 1rem; padding-right: 1rem; }
+
+    /* Navbar: stack logo + links + status */
+    .navbar {
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        padding: 0 0 1.2rem 0;
+        margin-bottom: 1.5rem;
+    }
+    .navbar .logo { font-size: 1rem; }
+    .navbar .logo-mark { width: 24px; height: 24px; font-size: 0.65rem; }
+    .navbar .nav-links { gap: 1rem; order: 3; width: 100%; }
+    .navbar .nav-links a { font-size: 0.78rem; }
+    .navbar .nav-status { font-size: 0.7rem; }
+
+    /* Hero: smaller text */
+    .hero-v2 { padding: 0 0 1.5rem 0; }
+    .hero-v2 h1 { font-size: 1.8rem; }
+    .hero-v2 .tagline { font-size: 0.88rem; }
+
+    /* Stat row: 2x2 grid instead of horizontal */
+    .stat-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border-radius: 12px;
+        margin: 1.2rem 0;
+    }
+    .stat-cell { padding: 1rem; }
+    .stat-cell .val { font-size: 1.3rem; }
+    .stat-cell .lbl { font-size: 0.58rem; }
+
+    /* Strategy cards */
+    .strat-card { padding: 1.4rem; border-radius: 12px; }
+    .strat-card .strat-name { font-size: 1.15rem; }
+    .strat-card .strat-desc { font-size: 0.78rem; margin-bottom: 1rem; }
+    .strat-card .strat-stats { flex-wrap: wrap; gap: 1rem; }
+    .strat-card .strat-stat .val { font-size: 1.1rem; }
+    .strat-card .strat-cta { margin-top: 1rem; padding-top: 0.8rem; font-size: 0.78rem; }
+
+    /* Cards */
+    .card-v2 { padding: 1.2rem; border-radius: 12px; margin-bottom: 0.8rem; }
+    .card-v2 .card-title { font-size: 0.8rem; }
+    .card-v2 .card-desc { font-size: 0.72rem; }
+
+    /* Tables: horizontal scroll */
+    .htable, .kstats { font-size: 0.75rem; }
+    .htable td, .kstats td { padding: 0.4rem 0.4rem; }
+    .htable th { font-size: 0.55rem; padding: 0 0.4rem 0.4rem; }
+
+    /* Process steps */
+    .proc-step { padding: 0.6rem 0.8rem; }
+    .proc-step .num { min-width: 22px; height: 22px; font-size: 0.6rem; }
+    .proc-step .txt { font-size: 0.78rem; }
+
+    /* Countdown */
+    .cdown { padding: 1.2rem; }
+    .cdown .big { font-size: 2rem; }
+
+    /* PnL */
+    .pnl .big { font-size: 1.4rem; }
+
+    /* Disclaimer */
+    .disc { font-size: 0.62rem; padding: 0.8rem 1rem; }
+
+    /* Streamlit columns: force stack on mobile */
+    [data-testid="stHorizontalBlock"] {
+        flex-direction: column !important;
+    }
+    [data-testid="stHorizontalBlock"] > div {
+        width: 100% !important;
+        flex: none !important;
+    }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+    .hero-v2 h1 { font-size: 1.5rem; }
+    .stat-cell .val { font-size: 1.1rem; }
+    .strat-card .strat-stats { gap: 0.8rem; }
+    .strat-card .strat-stat .val { font-size: 0.95rem; }
+}
 </style>
 """
 
