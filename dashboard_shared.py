@@ -530,6 +530,7 @@ def render_navbar(active: str = ""):
         <div class="nav-links">
             <a href="/About" target="_self"{_cls("about")}>About</a>
             <a href="/Portfolio" target="_self"{_cls("strategies")}>Strategies</a>
+            <a href="/Feedback" target="_self"{_cls("feedback")}>Feedback</a>
         </div>
         <div class="nav-status">
             <div class="live-dot"></div>
