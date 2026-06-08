@@ -1,9 +1,8 @@
-"""Feedback — Collect user feedback via embedded Google Form."""
+"""Feedback — Link to Google Form for user feedback."""
 
 from __future__ import annotations
 
 import streamlit as st
-import streamlit.components.v1 as components
 
 import sys
 from pathlib import Path
@@ -27,19 +26,42 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-components.html(
-    """
-    <iframe
-        src="https://docs.google.com/forms/d/e/1FAIpQLScpLCCgwiLqtGmm-A-p-t02P38qTpSXhMkas2L-FSsahmw24w/viewform?embedded=true"
-        width="100%"
-        height="1400"
-        frameborder="0"
-        marginheight="0"
-        marginwidth="0"
-        style="background:transparent;"
-    >Loading…</iframe>
-    """,
-    height=1420,
-)
+st.markdown("""
+<a href="https://docs.google.com/forms/d/e/1FAIpQLScpLCCgwiLqtGmm-A-p-t02P38qTpSXhMkas2L-FSsahmw24w/viewform" target="_blank" style="text-decoration:none;color:inherit;display:block;">
+<div class="strat-card" style="text-align:center;max-width:600px;margin:2rem auto;">
+    <div class="strat-name" style="font-size:1.2rem;">Take the 2-Minute Survey</div>
+    <div class="strat-desc" style="margin:0.8rem auto 1.2rem;max-width:400px;">
+        Tell us what you think, what features you'd like, and whether you'd use a premium research service.
+    </div>
+    <div class="strat-cta">Open Feedback Form &rarr;</div>
+</div>
+</a>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<div class="card-v2" style="max-width:600px;margin:0 auto;">
+    <div class="card-header">
+        <div class="card-title">What We're Asking</div>
+    </div>
+    <div class="process">
+        <div class="proc-step">
+            <div class="num">1</div>
+            <div class="txt"><strong>Your impression</strong><br><span>What do you think of JD Quant?</span></div>
+        </div>
+        <div class="proc-step">
+            <div class="num">2</div>
+            <div class="txt"><strong>Feature requests</strong><br><span>What would you like us to build next?</span></div>
+        </div>
+        <div class="proc-step">
+            <div class="num">3</div>
+            <div class="txt"><strong>Investment intent</strong><br><span>Would you invest using these strategies?</span></div>
+        </div>
+        <div class="proc-step">
+            <div class="num">4</div>
+            <div class="txt"><strong>Premium interest</strong><br><span>Would you pay for a research service like this?</span></div>
+        </div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 render_disclaimer()
