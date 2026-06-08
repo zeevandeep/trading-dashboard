@@ -5,8 +5,6 @@ Run with:  streamlit run dashboard.py
 
 from __future__ import annotations
 
-from datetime import datetime
-
 import streamlit as st
 
 from dashboard_shared import (
@@ -14,6 +12,7 @@ from dashboard_shared import (
     inject_css,
     list_runs,
     load_summary,
+    render_navbar,
 )
 
 st.set_page_config(page_title="JD Quant", page_icon="", layout="wide", initial_sidebar_state="collapsed")
@@ -36,19 +35,7 @@ vq = load_summary(str(vq_run)) if vq_run else {}
 #  RENDER
 # ═══════════════════════════════════════════════════════════════════════════════
 
-# ── Navbar
-st.markdown(f"""
-<div class="navbar">
-    <div class="logo">
-        <div class="logo-mark">JD</div>
-        JD Quant
-    </div>
-    <div class="nav-status">
-        <div class="live-dot"></div>
-        Strategies Active &middot; {datetime.now().strftime("%d %b %Y")}
-    </div>
-</div>
-""", unsafe_allow_html=True)
+render_navbar(active="home")
 
 # ── Hero
 st.markdown("""
@@ -140,25 +127,6 @@ with col2:
     </div>
     </a>
     """, unsafe_allow_html=True)
-
-# ── Combined Portfolio Link
-st.markdown("")
-st.markdown("""
-<a href="/Portfolio" style="text-decoration:none;color:inherit;display:block;">
-<div class="strat-card" style="text-align:center;padding:1.4rem;">
-    <div class="strat-num" style="color:var(--green);">Combined View</div>
-    <div class="strat-name" style="font-size:1.1rem;">Ascent + Bedrock Portfolio</div>
-    <div class="strat-desc" style="margin:0 auto;">
-        See how both strategies work together — correlation, blended returns, diversification benefit.
-    </div>
-    <div class="strat-cta">View Combined Portfolio &rarr;</div>
-</div>
-</a>
-""", unsafe_allow_html=True)
-
-# ── About link
-st.markdown("")
-st.page_link("pages/4_About.py", label="About — Philosophy & Approach →")
 
 # ── Disclaimer
 st.markdown("""

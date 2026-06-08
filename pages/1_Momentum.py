@@ -25,6 +25,7 @@ from dashboard_shared import (
     load_summary,
     monthly_table,
     render_disclaimer,
+    render_navbar,
 )
 
 st.set_page_config(page_title="JD Quant — Ascent", page_icon="", layout="wide", initial_sidebar_state="collapsed")
@@ -59,21 +60,7 @@ sortino = summary.get("sortino", 0)
 #  RENDER
 # ═══════════════════════════════════════════════════════════════════════════════
 
-# ── Navbar
-st.markdown(f"""
-<div class="navbar">
-    <div class="logo">
-        <div class="logo-mark">JD</div>
-        JD Quant
-    </div>
-    <div class="nav-status">
-        <div class="live-dot"></div>
-        Strategy Active &middot; Updated {datetime.now().strftime("%d %b %Y")}
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-st.page_link("dashboard.py", label="← Back to Home")
+render_navbar(active="ascent")
 
 # ── Hero
 st.markdown("""

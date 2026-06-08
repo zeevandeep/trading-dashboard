@@ -422,6 +422,38 @@ def monthly_table(rets):
     return p
 
 
+def render_navbar(active: str = ""):
+    """Render the site-wide navbar with navigation links.
+
+    active: one of "home", "ascent", "bedrock", "portfolio", "about"
+    """
+    from datetime import datetime as _dt
+
+    def _cls(page):
+        return ' class="active"' if page == active else ""
+
+    st.markdown(f"""
+    <div class="navbar">
+        <a href="/" target="_self" style="text-decoration:none;color:inherit;">
+        <div class="logo">
+            <div class="logo-mark">JD</div>
+            JD Quant
+        </div>
+        </a>
+        <div class="nav-links">
+            <a href="/Momentum"{_cls("ascent")}>Ascent</a>
+            <a href="/Value_Quality"{_cls("bedrock")}>Bedrock</a>
+            <a href="/Portfolio"{_cls("portfolio")}>Portfolio</a>
+            <a href="/About"{_cls("about")}>About</a>
+        </div>
+        <div class="nav-status">
+            <div class="live-dot"></div>
+            {_dt.now().strftime("%d %b %Y")}
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
 def render_disclaimer():
     st.markdown("""
     <div class="disc">

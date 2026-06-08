@@ -11,23 +11,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from dashboard_shared import inject_css, render_disclaimer
+from dashboard_shared import inject_css, render_disclaimer, render_navbar
 
 st.set_page_config(page_title="JD Quant — About", page_icon="", layout="wide", initial_sidebar_state="collapsed")
 inject_css()
 
-# ── Navbar
-st.markdown(f"""
-<div class="navbar">
-    <div class="logo">
-        <div class="logo-mark">JD</div>
-        JD Quant
-    </div>
-    <div class="nav-status">{datetime.now().strftime("%d %b %Y")}</div>
-</div>
-""", unsafe_allow_html=True)
-
-st.page_link("dashboard.py", label="← Back to Home")
+render_navbar(active="about")
 
 # ── Hero
 st.markdown("""

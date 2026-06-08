@@ -25,6 +25,7 @@ from dashboard_shared import (
     load_series,
     load_summary,
     render_disclaimer,
+    render_navbar,
 )
 
 st.set_page_config(page_title="JD Quant — Portfolio", page_icon="", layout="wide", initial_sidebar_state="collapsed")
@@ -62,18 +63,7 @@ if (bedrock_paper_dir / "state.json").exists():
 #  RENDER
 # ═══════════════════════════════════════════════════════════════════════════════
 
-# ── Navbar
-st.markdown(f"""
-<div class="navbar">
-    <div class="logo">
-        <div class="logo-mark">JD</div>
-        JD Quant
-    </div>
-    <div class="nav-status">Combined View</div>
-</div>
-""", unsafe_allow_html=True)
-
-st.page_link("dashboard.py", label="← Back to Home")
+render_navbar(active="portfolio")
 
 # ── Hero
 st.markdown("""
