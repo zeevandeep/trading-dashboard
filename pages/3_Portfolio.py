@@ -359,44 +359,20 @@ if mom_equity is not None and vq_equity is not None:
 
         # Paper trading status
         if ascent_paper or bedrock_paper:
-            rows_html = ""
-            for name, state in [("Ascent", ascent_paper), ("Bedrock", bedrock_paper)]:
-                if state:
-                    eq = state.get("equity", 1.0)
-                    pnl = (eq - 1.0) * 100
-                    color = "var(--green)" if pnl >= 0 else "var(--red)"
-                    sign = "+" if pnl >= 0 else ""
-                    since = state.get("created", "")[:10]
-                    rows_html += f"""
-                    <tr>
-                        <td style="font-weight:600">{name}</td>
-                        <td style="text-align:right;color:{color};font-weight:600">{sign}{pnl:.2f}%</td>
-                        <td style="text-align:right;color:var(--text-tertiary)">{since}</td>
-                    </tr>"""
+            paper_rows = []
+            for sname, sstate in [("Ascent", ascent_paper), ("Bedrock", bedrock_paper)]:
+                if sstate:
+                    seq = sstate.get("equity", 1.0)
+                    spnl = (seq - 1.0) * 100
+                    scolor = "#10b981" if spnl >= 0 else "#ef4444"
+                    ssign = "+" if spnl >= 0 else ""
+                    ssince = sstate.get("created", "")[:10]
+                    paper_rows.append(f'<tr><td style="font-weight:600">{sname}</td><td style="text-align:right;color:{scolor};font-weight:600">{ssign}{spnl:.2f}%</td><td style="text-align:right;color:#64748b">{ssince}</td></tr>')
                 else:
-                    rows_html += f"""
-                    <tr>
-                        <td style="font-weight:600">{name}</td>
-                        <td style="text-align:right;color:var(--text-tertiary)">—</td>
-                        <td style="text-align:right;color:var(--text-tertiary)">Not started</td>
-                    </tr>"""
+                    paper_rows.append(f'<tr><td style="font-weight:600">{sname}</td><td style="text-align:right;color:#64748b">—</td><td style="text-align:right;color:#64748b">Not started</td></tr>')
 
-            st.markdown(f"""
-            <div class="card-v2">
-                <div class="card-header">
-                    <div class="card-title">Paper Trading</div>
-                    <div class="card-badge" style="background:var(--gold-dim);color:var(--gold);">Live Tracking</div>
-                </div>
-                <table class="kstats">
-                    <tr>
-                        <td style="color:var(--text-tertiary)">Strategy</td>
-                        <td style="text-align:right;color:var(--text-tertiary)">P&L</td>
-                        <td style="text-align:right;color:var(--text-tertiary)">Since</td>
-                    </tr>
-                    {rows_html}
-                </table>
-            </div>
-            """, unsafe_allow_html=True)
+            paper_html = "\n".join(paper_rows)
+            st.markdown(f'<div class="card-v2"><div class="card-header"><div class="card-title">Paper Trading</div><div class="card-badge" style="background:rgba(245,158,11,0.10);color:#f59e0b;">Live Tracking</div></div><table class="kstats"><tr><td style="color:#64748b">Strategy</td><td style="text-align:right;color:#64748b">P&L</td><td style="text-align:right;color:#64748b">Since</td></tr>{paper_html}</table></div>', unsafe_allow_html=True)
 
 else:
     st.warning("Need both Ascent and Bedrock backtest data for combined analysis.")
