@@ -441,10 +441,10 @@ def render_navbar(active: str = ""):
         </div>
         </a>
         <div class="nav-links">
+            <a href="/About"{_cls("about")}>About</a>
             <a href="/Momentum"{_cls("ascent")}>Ascent</a>
             <a href="/Value_Quality"{_cls("bedrock")}>Bedrock</a>
             <a href="/Portfolio"{_cls("portfolio")}>Portfolio</a>
-            <a href="/About"{_cls("about")}>About</a>
         </div>
         <div class="nav-status">
             <div class="live-dot"></div>
