@@ -67,10 +67,12 @@ if vq_cache_path.exists():
 
 st.markdown(f"""
 <div class="navbar">
+    <a href="/" target="_self" style="text-decoration:none;color:inherit;">
     <div class="logo">
         <div class="logo-mark">JD</div>
         JD Quant
     </div>
+    </a>
     <div class="nav-status">
         <div class="live-dot"></div>
         Alpha View &middot; {datetime.now().strftime("%d %b %Y")}
