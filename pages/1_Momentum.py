@@ -211,8 +211,8 @@ with col_r:
 
     st.markdown("")
 
-    # Current Portfolio
-    if paper_state and paper_state.get("holdings"):
+    # Current Portfolio (hidden on public page — visible on /alpha)
+    if False and paper_state and paper_state.get("holdings"):
         holdings = paper_state["holdings"]
         last_r = paper_state.get("last_rebalance", "-")
         sh = sorted(holdings.items(), key=lambda x: -x[1])

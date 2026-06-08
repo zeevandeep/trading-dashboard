@@ -220,8 +220,8 @@ with vq_l:
         except Exception as e:
             st.warning(f"Heatmap error: {e}")
 
-    # V+Q Portfolio table (pre-computed picks)
-    if has_live_scores:
+    # V+Q Portfolio table (hidden on public page — visible on /alpha)
+    if False and has_live_scores:
         top_15 = vq_scores.head(15)
         vq_rows = ""
         for i, (ticker, score) in enumerate(top_15.items(), 1):
@@ -260,8 +260,8 @@ with vq_l:
         """, unsafe_allow_html=True)
 
 with vq_r:
-    # Overlap analysis
-    if has_live_scores:
+    # Overlap analysis (hidden on public page — visible on /alpha)
+    if False and has_live_scores:
         top_15 = vq_scores.head(15)
         momentum_holdings = set(paper_state.get("holdings", {}).keys()) if paper_state else set()
         vq_holdings = set(top_15.index)
