@@ -72,12 +72,13 @@ with col1:
     m_wr = mom.get("win_rate_monthly", 0) * 100
 
     st.markdown(f"""
+    <a href="/Momentum" target="_self" style="text-decoration:none;color:inherit;display:block;">
     <div class="strat-card">
         <div class="strat-num" style="color:var(--accent);">Strategy 1</div>
-        <div class="strat-name">Momentum</div>
+        <div class="strat-name">Ascent</div>
         <div class="strat-desc">
-            12-month cross-sectional momentum on NSE 500 ex Nifty 50.
-            Monthly rebalance, top 15 equal weight. Pure price-based signal.
+            Captures persistent price trends across Indian mid &amp; smallcaps.
+            Monthly rebalance, concentrated portfolio. Pure price-based signal.
         </div>
         <div class="strat-stats">
             <div class="strat-stat">
@@ -97,10 +98,10 @@ with col1:
                 <div class="lbl">Win Rate</div>
             </div>
         </div>
+        <div class="strat-cta">View Ascent Strategy &rarr;</div>
     </div>
+    </a>
     """, unsafe_allow_html=True)
-
-    st.page_link("pages/1_Momentum.py", label="View Strategy 1 →", icon="📈")
 
 with col2:
     v_cagr = vq.get("cagr", 0) * 100
@@ -109,12 +110,13 @@ with col2:
     v_wr = vq.get("win_rate_monthly", 0) * 100
 
     st.markdown(f"""
+    <a href="/Value_Quality" target="_self" style="text-decoration:none;color:inherit;display:block;">
     <div class="strat-card">
         <div class="strat-num" style="color:var(--purple);">Strategy 2</div>
-        <div class="strat-name">Value + Quality</div>
+        <div class="strat-name">Bedrock</div>
         <div class="strat-desc">
-            Buys cheap, high-quality stocks — low P/E, high ROE, low debt,
-            growing earnings. Quarterly rebalance, top 15 equal weight.
+            Identifies undervalued, high-quality businesses with strong fundamentals.
+            Quarterly rebalance, concentrated portfolio. Multi-factor scoring.
         </div>
         <div class="strat-stats">
             <div class="strat-stat">
@@ -134,10 +136,10 @@ with col2:
                 <div class="lbl">Win Rate</div>
             </div>
         </div>
+        <div class="strat-cta">View Bedrock Strategy &rarr;</div>
     </div>
+    </a>
     """, unsafe_allow_html=True)
-
-    st.page_link("pages/2_Value_Quality.py", label="View Strategy 2 →", icon="💎")
 
 # ── Disclaimer
 st.markdown("""

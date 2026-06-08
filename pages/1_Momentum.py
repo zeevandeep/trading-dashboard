@@ -27,7 +27,7 @@ from dashboard_shared import (
     render_disclaimer,
 )
 
-st.set_page_config(page_title="JD Quant — Momentum", page_icon="", layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="JD Quant — Ascent", page_icon="", layout="wide", initial_sidebar_state="collapsed")
 inject_css()
 
 # ─── Data ─────────────────────────────────────────────────────────────────────
@@ -79,10 +79,10 @@ st.page_link("dashboard.py", label="← Back to Home")
 st.markdown("""
 <div class="hero-v2">
     <div class="eyebrow">Strategy 1 &middot; Monthly Rebalance</div>
-    <h1>Smallcap <span>Momentum</span></h1>
+    <h1><span>Ascent</span></h1>
     <div class="tagline">
-        12-month cross-sectional momentum on NSE 500 ex Nifty 50.
-        Pure price-based signal. Monthly rebalance, top 15 equal weight.
+        Captures persistent price trends across Indian mid &amp; smallcaps.
+        Pure price-based signal. Monthly rebalance, concentrated portfolio.
     </div>
 </div>
 """, unsafe_allow_html=True)

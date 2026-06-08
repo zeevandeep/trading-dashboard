@@ -241,6 +241,19 @@ code, .mono { font-family: 'JetBrains Mono', monospace !important; }
     color: var(--text-tertiary); font-size: 0.6rem; font-weight: 600;
     text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.2rem;
 }
+.strat-card .strat-cta {
+    margin-top: 1.4rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    color: var(--accent);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-align: center;
+    transition: color 0.2s;
+}
+.strat-card:hover .strat-cta {
+    color: var(--text-primary);
+}
 
 /* ── Holdings Table ─────────────────────── */
 .htable { width: 100%; border-collapse: collapse; }
