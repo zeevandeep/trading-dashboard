@@ -20,9 +20,13 @@ echo "=== Daily mark started at $(date) ===" >> "$LOG_FILE"
 # Live trading mark-to-market
 .venv/bin/python scripts/daily_live_mark.py 2>&1 >> "$LOG_FILE"
 
+# Refresh Bedrock (V+Q) scores for dashboard
+echo "Refreshing V+Q scores..." >> "$LOG_FILE"
+.venv/bin/python -m scripts.refresh_vq_scores 2>&1 >> "$LOG_FILE"
+
 # Push updated data to GitHub so jdquant.in stays fresh
 echo "Pushing to GitHub..." >> "$LOG_FILE"
-git add data/paper/ data/live/ 2>&1 >> "$LOG_FILE"
+git add data/paper/ data/live/ data/vq_scores_latest.json 2>&1 >> "$LOG_FILE"
 if git diff --cached --quiet; then
     echo "No data changes to push." >> "$LOG_FILE"
 else
