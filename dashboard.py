@@ -141,6 +141,21 @@ with col2:
     </a>
     """, unsafe_allow_html=True)
 
+# ── Combined Portfolio Link
+st.markdown("")
+st.markdown("""
+<a href="/Portfolio" style="text-decoration:none;color:inherit;display:block;">
+<div class="strat-card" style="text-align:center;padding:1.4rem;">
+    <div class="strat-num" style="color:var(--green);">Combined View</div>
+    <div class="strat-name" style="font-size:1.1rem;">Ascent + Bedrock Portfolio</div>
+    <div class="strat-desc" style="margin:0 auto;">
+        See how both strategies work together — correlation, blended returns, diversification benefit.
+    </div>
+    <div class="strat-cta">View Combined Portfolio &rarr;</div>
+</div>
+</a>
+""", unsafe_allow_html=True)
+
 # ── Disclaimer
 st.markdown("""
 <div class="disc">
