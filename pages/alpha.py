@@ -112,22 +112,28 @@ st.markdown("""
 p1, p2, p3, p4 = st.columns(4)
 
 if ascent_paper:
-    a_eq = ascent_paper.get("equity", 1.0)
-    a_pnl = (a_eq - 1.0) * 100
-    a_days = 0
     a_eq_path = ascent_paper_dir / "equity.csv"
     if a_eq_path.exists():
-        a_days = len(pd.read_csv(a_eq_path))
+        _a_eq_df = pd.read_csv(a_eq_path)
+        a_days = len(_a_eq_df)
+        a_eq = _a_eq_df["equity"].iloc[-1] if not _a_eq_df.empty else 1.0
+    else:
+        a_days = 0
+        a_eq = ascent_paper.get("equity", 1.0)
+    a_pnl = (a_eq - 1.0) * 100
     p1.metric("Ascent P&L", f"{a_pnl:+.2f}%")
     p2.metric("Ascent Days", f"{a_days}/90")
 
 if bedrock_paper:
-    b_eq = bedrock_paper.get("equity", 1.0)
-    b_pnl = (b_eq - 1.0) * 100
-    b_days = 0
     b_eq_path = bedrock_paper_dir / "equity.csv"
     if b_eq_path.exists():
-        b_days = len(pd.read_csv(b_eq_path))
+        _b_eq_df = pd.read_csv(b_eq_path)
+        b_days = len(_b_eq_df)
+        b_eq = _b_eq_df["equity"].iloc[-1] if not _b_eq_df.empty else 1.0
+    else:
+        b_days = 0
+        b_eq = bedrock_paper.get("equity", 1.0)
+    b_pnl = (b_eq - 1.0) * 100
     p3.metric("Bedrock P&L", f"{b_pnl:+.2f}%")
     p4.metric("Bedrock Days", f"{b_days}/90")
 

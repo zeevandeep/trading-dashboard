@@ -512,7 +512,7 @@ def monthly_table(rets):
 def render_navbar(active: str = ""):
     """Render the site-wide navbar with navigation links.
 
-    active: one of "home", "ascent", "bedrock", "portfolio", "about"
+    active: one of "home", "about", "strategies", "feedback"
     """
     from datetime import datetime as _dt
 
