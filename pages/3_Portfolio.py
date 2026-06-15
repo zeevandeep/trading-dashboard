@@ -357,12 +357,17 @@ if mom_equity is not None and vq_equity is not None:
                 </div>
                 """, unsafe_allow_html=True)
 
-        # Paper trading status
+        # Paper trading status — read latest equity from equity.csv, not state.json
         if ascent_paper or bedrock_paper:
             paper_rows = []
-            for sname, sstate in [("Ascent", ascent_paper), ("Bedrock", bedrock_paper)]:
+            for sname, sstate, sdir in [("Ascent", ascent_paper, ascent_paper_dir), ("Bedrock", bedrock_paper, bedrock_paper_dir)]:
                 if sstate:
-                    seq = sstate.get("equity", 1.0)
+                    _eq_path = sdir / "equity.csv"
+                    if _eq_path.exists():
+                        _eq_df = pd.read_csv(_eq_path)
+                        seq = _eq_df["equity"].iloc[-1] if not _eq_df.empty else 1.0
+                    else:
+                        seq = sstate.get("equity", 1.0)
                     spnl = (seq - 1.0) * 100
                     scolor = "#10b981" if spnl >= 0 else "#ef4444"
                     ssign = "+" if spnl >= 0 else ""

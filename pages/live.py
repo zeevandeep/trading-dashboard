@@ -319,7 +319,7 @@ if (paper_dir / "state.json").exists():
             )
 
             days_tracked = len(eq_df)
-            paper_equity = paper_state.get("equity", 1.0)
+            paper_equity = eq_df["equity"].iloc[-1] if not eq_df.empty else paper_state.get("equity", 1.0)
             paper_pnl = (paper_equity - 1.0) * 100
 
             p1, p2, p3, p4 = st.columns(4)

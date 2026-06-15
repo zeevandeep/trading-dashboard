@@ -268,11 +268,16 @@ with col_r:
     </div>
     """, unsafe_allow_html=True)
 
-    # Paper PnL
+    # Paper PnL — read latest equity from equity.csv (updated daily), not state.json (only on rebalance)
     if paper_state:
         eq_path = paper_dir / "equity.csv"
-        dtrk = len(pd.read_csv(eq_path)) if eq_path.exists() else 0
-        peq = paper_state.get("equity", 1.0)
+        if eq_path.exists():
+            _eq_df = pd.read_csv(eq_path)
+            dtrk = len(_eq_df)
+            peq = _eq_df["equity"].iloc[-1] if not _eq_df.empty else 1.0
+        else:
+            dtrk = 0
+            peq = paper_state.get("equity", 1.0)
         ppnl = (peq - 1.0) * 100
         cls = "up" if ppnl >= 0 else "dn"
         sgn = "+" if ppnl >= 0 else ""
