@@ -52,6 +52,12 @@ paper_dir = PAPER_DIR / "smallcap_momentum_v2"
 if (paper_dir / "state.json").exists():
     paper_state = json.loads((paper_dir / "state.json").read_text())
 
+# Bedrock paper state
+bedrock_paper = None
+bedrock_paper_dir = PAPER_DIR / "value_quality_v1"
+if (bedrock_paper_dir / "state.json").exists():
+    bedrock_paper = json.loads((bedrock_paper_dir / "state.json").read_text())
+
 # ═══════════════════════════════════════════════════════════════════════════════
 #  RENDER
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -334,5 +340,33 @@ with vq_r:
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+    # Paper Trading
+    if bedrock_paper:
+        _eq_path = bedrock_paper_dir / "equity.csv"
+        if _eq_path.exists():
+            _eq_df = pd.read_csv(_eq_path)
+            dtrk = len(_eq_df)
+            peq = _eq_df["equity"].iloc[-1] if not _eq_df.empty else 1.0
+        else:
+            dtrk = 0
+            peq = bedrock_paper.get("equity", 1.0)
+        ppnl = (peq - 1.0) * 100
+        cls = "up" if ppnl >= 0 else "dn"
+        sgn = "+" if ppnl >= 0 else ""
+
+        st.markdown(f"""
+        <div class="card-v2">
+            <div class="card-header">
+                <div class="card-title">Paper Trading</div>
+                <div class="card-badge" style="background:var(--gold-dim);color:var(--gold);">Simulation</div>
+            </div>
+            <div class="card-desc">Running since {bedrock_paper.get('created','')[:10]}. {dtrk} days tracked.</div>
+            <div class="pnl">
+                <div class="big {cls}">{sgn}{ppnl:.2f}%</div>
+                <div class="sub">Paper P&amp;L</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
 render_disclaimer()
