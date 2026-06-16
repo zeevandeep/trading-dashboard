@@ -1,0 +1,41 @@
+name: Bedrock Quarterly Paper Rebalance
+
+on:
+  schedule:
+    # 13:30 UTC = 7:00 PM IST, on 28th of Mar/Jun/Sep/Dec
+    - cron: "30 13 28 3,6,9,12 *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  rebalance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Bedrock paper rebalance
+        run: python main.py paper -c configs/value_quality_v1.yaml
+
+      - name: Push updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/paper/ || true
+          if git diff --cached --quiet; then
+            echo "No data changes to push."
+          else
+            git commit -m "Bedrock quarterly paper rebalance $(date +%Y-%m-%d)"
+            git push
+          fi

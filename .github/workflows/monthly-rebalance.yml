@@ -1,0 +1,41 @@
+name: Ascent Monthly Paper Rebalance
+
+on:
+  schedule:
+    # 13:00 UTC = 6:30 PM IST, on the 28th of every month
+    - cron: "0 13 28 * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  rebalance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Ascent paper rebalance
+        run: python main.py paper -c configs/smallcap_momentum_v2.yaml
+
+      - name: Push updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/paper/ || true
+          if git diff --cached --quiet; then
+            echo "No data changes to push."
+          else
+            git commit -m "Ascent monthly paper rebalance $(date +%Y-%m-%d)"
+            git push
+          fi
