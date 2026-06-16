@@ -39,3 +39,22 @@ jobs:
             git commit -m "Bedrock quarterly paper rebalance $(date +%Y-%m-%d)"
             git push
           fi
+
+      - name: Notify Telegram
+        if: always()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          python -c "
+          import os, urllib.request, urllib.parse
+          status = os.environ['JOB_STATUS']
+          icon = '🟢' if status == 'success' else '🔴'
+          msg = f'{icon} Bedrock quarterly rebalance: {status.upper()}'
+          token = os.environ['TELEGRAM_BOT_TOKEN']
+          chat_id = os.environ['TELEGRAM_CHAT_ID']
+          url = f'https://api.telegram.org/bot{token}/sendMessage'
+          data = urllib.parse.urlencode({'chat_id': chat_id, 'text': msg}).encode()
+          urllib.request.urlopen(urllib.request.Request(url, data=data))
+          "
