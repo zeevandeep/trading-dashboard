@@ -37,6 +37,7 @@ jobs:
             echo "No data changes to push."
           else
             git commit -m "Ascent monthly paper rebalance $(date +%Y-%m-%d)"
+            git pull --rebase
             git push
           fi
 
