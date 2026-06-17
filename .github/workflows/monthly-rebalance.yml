@@ -32,6 +32,15 @@ jobs:
       - name: Run Ascent paper rebalance
         run: python main.py paper -c configs/smallcap_momentum_v2.yaml
 
+      - name: Generate factsheet
+        run: python scripts/generate_factsheet.py smallcap_momentum_v2
+
+      - name: Upload factsheet
+        uses: actions/upload-artifact@v4
+        with:
+          name: ascent-factsheet
+          path: outputs/factsheets/ascent_*.pdf
+
       - name: Push updated data
         run: |
           git config user.name "github-actions[bot]"
@@ -54,13 +63,34 @@ jobs:
           JOB_STATUS: ${{ job.status }}
         run: |
           python -c "
-          import os, urllib.request, urllib.parse
+          import glob, os, urllib.request, urllib.parse
+          token = os.environ['TELEGRAM_BOT_TOKEN']
+          chat_id = os.environ['TELEGRAM_CHAT_ID']
           status = os.environ['JOB_STATUS']
           icon = '🟢' if status == 'success' else '🔴'
           msg = f'{icon} Ascent monthly rebalance: {status.upper()}'
-          token = os.environ['TELEGRAM_BOT_TOKEN']
-          chat_id = os.environ['TELEGRAM_CHAT_ID']
+          # Send text
           url = f'https://api.telegram.org/bot{token}/sendMessage'
           data = urllib.parse.urlencode({'chat_id': chat_id, 'text': msg}).encode()
           urllib.request.urlopen(urllib.request.Request(url, data=data))
+          # Send PDF if exists
+          pdfs = glob.glob('outputs/factsheets/ascent_*.pdf')
+          if pdfs and status == 'success':
+              import http.client, mimetypes, uuid
+              boundary = uuid.uuid4().hex
+              pdf_path = pdfs[0]
+              with open(pdf_path, 'rb') as f:
+                  pdf_data = f.read()
+              fname = os.path.basename(pdf_path)
+              body = (
+                  f'--{boundary}\r\nContent-Disposition: form-data; name=\"chat_id\"\r\n\r\n{chat_id}\r\n'
+                  f'--{boundary}\r\nContent-Disposition: form-data; name=\"document\"; filename=\"{fname}\"\r\n'
+                  f'Content-Type: application/pdf\r\n\r\n'
+              ).encode() + pdf_data + f'\r\n--{boundary}--\r\n'.encode()
+              req = urllib.request.Request(
+                  f'https://api.telegram.org/bot{token}/sendDocument',
+                  data=body,
+                  headers={'Content-Type': f'multipart/form-data; boundary={boundary}'}
+              )
+              urllib.request.urlopen(req)
           "
