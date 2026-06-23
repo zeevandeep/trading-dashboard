@@ -1,28 +1,28 @@
 {
-  "updated_at": "2026-06-22T17:17:02.025069",
+  "updated_at": "2026-06-23T15:36:48.312067",
   "n_scored": 116,
   "n_universe": 168,
   "top_15": [
     {
       "ticker": "GESHIP",
       "score": 0.8161,
-      "pe": 7.16,
+      "pe": 7.15,
       "roe": 0.1885,
       "de": 6.41,
       "earnings_growth": 1.875
     },
     {
       "ticker": "MCX",
-      "score": 0.7907,
-      "pe": 55.04,
+      "score": 0.7928,
+      "pe": 54.19,
       "roe": 0.3788,
       "de": 0.11,
       "earnings_growth": 2.912
     },
     {
       "ticker": "OFSS",
-      "score": 0.7705,
-      "pe": 32.26,
+      "score": 0.7662,
+      "pe": 32.69,
       "roe": 0.3261,
       "de": 0.41,
       "earnings_growth": 0.306
@@ -30,7 +30,7 @@
     {
       "ticker": "IEX",
       "score": 0.7648,
-      "pe": 22.69,
+      "pe": 22.53,
       "roe": 0.3942,
       "de": 0.82,
       "earnings_growth": 0.098
@@ -38,15 +38,15 @@
     {
       "ticker": "GNFC",
       "score": 0.7501,
-      "pe": 10.58,
+      "pe": 10.19,
       "roe": 0.0914,
       "de": 0.07,
       "earnings_growth": 0.871
     },
     {
       "ticker": "NATIONALUM",
-      "score": 0.738,
-      "pe": 11.31,
+      "score": 0.7423,
+      "pe": 10.62,
       "roe": 0.2942,
       "de": 0.28,
       "earnings_growth": -0.167
@@ -54,7 +54,7 @@
     {
       "ticker": "NMDC",
       "score": 0.7368,
-      "pe": 10.41,
+      "pe": 10.05,
       "roe": 0.2336,
       "de": 18.8,
       "earnings_growth": 0.377
@@ -62,7 +62,7 @@
     {
       "ticker": "LUPIN",
       "score": 0.7331,
-      "pe": 20.1,
+      "pe": 20.23,
       "roe": 0.2691,
       "de": 29.39,
       "earnings_growth": 0.89
@@ -70,15 +70,15 @@
     {
       "ticker": "CHAMBLFERT",
       "score": 0.7314,
-      "pe": 9.99,
+      "pe": 9.85,
       "roe": 0.2045,
       "de": 10.27,
       "earnings_growth": 0.302
     },
     {
       "ticker": "HINDCOPPER",
-      "score": 0.7079,
-      "pe": 53.71,
+      "score": 0.7101,
+      "pe": 52.66,
       "roe": 0.306,
       "de": 3.32,
       "earnings_growth": 1.366
@@ -86,42 +86,42 @@
     {
       "ticker": "MUTHOOTFIN",
       "score": 0.6927,
-      "pe": 12.19,
+      "pe": 11.83,
       "roe": 0.3041,
       "de": 379.71,
       "earnings_growth": 1.267
     },
     {
-      "ticker": "PETRONET",
-      "score": 0.6834,
-      "pe": 10.99,
-      "roe": 0.1856,
-      "de": 10.51,
-      "earnings_growth": 0.253
-    },
-    {
       "ticker": "VEDL",
       "score": 0.6815,
-      "pe": 17.06,
+      "pe": 15.69,
       "roe": 0.204,
       "de": 48.04,
       "earnings_growth": 0.922
     },
     {
+      "ticker": "PETRONET",
+      "score": 0.6813,
+      "pe": 10.93,
+      "roe": 0.1856,
+      "de": 10.51,
+      "earnings_growth": 0.253
+    },
+    {
       "ticker": "GLAXO",
       "score": 0.6581,
-      "pe": 38.68,
+      "pe": 39.16,
       "roe": 0.4911,
       "de": 1.47,
       "earnings_growth": 0.057
     },
     {
-      "ticker": "IRCTC",
-      "score": 0.6568,
-      "pe": 29.97,
-      "roe": 0.3496,
-      "de": 1.87,
-      "earnings_growth": -0.089
+      "ticker": "AMBUJACEM",
+      "score": 0.6571,
+      "pe": 21.78,
+      "roe": 0.083,
+      "de": 1.21,
+      "earnings_growth": 0.749
     }
   ]
 }
