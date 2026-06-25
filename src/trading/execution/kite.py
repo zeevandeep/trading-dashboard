@@ -25,10 +25,14 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 import pandas as pd
-from kiteconnect import KiteConnect
 
 from trading.config import DATA_DIR, Secrets
 from trading.utils.logging import setup_logging
+
+
+def _import_kite():
+    from kiteconnect import KiteConnect
+    return KiteConnect
 
 log = setup_logging("kite")
 
@@ -89,11 +93,13 @@ class _CallbackHandler(BaseHTTPRequestHandler):
         pass  # suppress HTTP logs
 
 
-def login(api_key: str | None = None, api_secret: str | None = None) -> KiteConnect:
+def login(api_key: str | None = None, api_secret: str | None = None):
     """Authenticate with Kite Connect. Returns a ready-to-use KiteConnect instance.
 
     Tries cached session first, falls back to browser OAuth flow.
     """
+    KiteConnect = _import_kite()
+
     if not api_key:
         secrets = Secrets.from_env()
         api_key = secrets.kite_api_key
@@ -161,7 +167,7 @@ def login(api_key: str | None = None, api_secret: str | None = None) -> KiteConn
     return kite
 
 
-def get_holdings(kite: KiteConnect) -> dict[str, dict]:
+def get_holdings(kite) -> dict[str, dict]:
     """Get current holdings as {tradingsymbol: {quantity, average_price, last_price, pnl}}."""
     raw = kite.holdings()
     holdings = {}
@@ -178,7 +184,7 @@ def get_holdings(kite: KiteConnect) -> dict[str, dict]:
     return holdings
 
 
-def get_ltp(kite: KiteConnect | None, symbols: list[str], exchange: str = "NSE") -> dict[str, float]:
+def get_ltp(kite, symbols: list[str], exchange: str = "NSE") -> dict[str, float]:
     """Get last traded prices for a list of symbols.
 
     Uses yfinance as the primary source (free, no Kite Quote subscription needed).
@@ -324,7 +330,7 @@ def compute_orders(
 
 
 def place_orders(
-    kite: KiteConnect,
+    kite,
     orders: list[dict],
     prices: dict[str, float] | None = None,
     exchange: str = "NSE",
@@ -341,6 +347,7 @@ def place_orders(
     prices: {symbol: ltp} — used to set limit price. If None, fetches via yfinance.
     limit_buffer_pct: buffer above/below LTP for limit price (default 0.5%).
     """
+    KiteConnect = _import_kite()
     results = []
 
     if prices is None:
