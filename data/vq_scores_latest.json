@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-25T15:25:54.594308",
+  "updated_at": "2026-06-26T15:13:10.495099",
   "n_scored": 116,
   "n_universe": 168,
   "top_15": [
@@ -14,7 +14,7 @@
     {
       "ticker": "MCX",
       "score": 0.7928,
-      "pe": 54.17,
+      "pe": 54.4,
       "roe": 0.3788,
       "de": 0.11,
       "earnings_growth": 2.912
@@ -22,7 +22,7 @@
     {
       "ticker": "IEX",
       "score": 0.7648,
-      "pe": 22.6,
+      "pe": 22.56,
       "roe": 0.3942,
       "de": 0.82,
       "earnings_growth": 0.098
@@ -30,14 +30,14 @@
     {
       "ticker": "OFSS",
       "score": 0.7532,
-      "pe": 36.27,
+      "pe": 36.3,
       "roe": 0.3261,
       "de": 0.41,
       "earnings_growth": 0.306
     },
     {
       "ticker": "GNFC",
-      "score": 0.7501,
+      "score": 0.7522,
       "pe": 9.95,
       "roe": 0.0914,
       "de": 0.07,
@@ -45,8 +45,8 @@
     },
     {
       "ticker": "NATIONALUM",
-      "score": 0.7466,
-      "pe": 9.94,
+      "score": 0.7444,
+      "pe": 9.96,
       "roe": 0.2942,
       "de": 0.28,
       "earnings_growth": -0.167
@@ -54,7 +54,7 @@
     {
       "ticker": "LUPIN",
       "score": 0.7331,
-      "pe": 20.12,
+      "pe": 20.16,
       "roe": 0.2691,
       "de": 29.39,
       "earnings_growth": 0.89
@@ -62,7 +62,7 @@
     {
       "ticker": "NMDC",
       "score": 0.7325,
-      "pe": 10.03,
+      "pe": 10.0,
       "roe": 0.2336,
       "de": 18.8,
       "earnings_growth": 0.377
@@ -78,7 +78,7 @@
     {
       "ticker": "HINDCOPPER",
       "score": 0.7101,
-      "pe": 51.78,
+      "pe": 51.69,
       "roe": 0.306,
       "de": 3.32,
       "earnings_growth": 1.366
@@ -86,7 +86,7 @@
     {
       "ticker": "MUTHOOTFIN",
       "score": 0.6949,
-      "pe": 11.47,
+      "pe": 11.46,
       "roe": 0.3041,
       "de": 379.71,
       "earnings_growth": 1.267
@@ -102,7 +102,7 @@
     {
       "ticker": "PETRONET",
       "score": 0.6834,
-      "pe": 10.82,
+      "pe": 10.81,
       "roe": 0.1856,
       "de": 10.51,
       "earnings_growth": 0.253
@@ -110,15 +110,15 @@
     {
       "ticker": "GLAXO",
       "score": 0.6603,
-      "pe": 38.57,
+      "pe": 38.65,
       "roe": 0.4911,
       "de": 1.47,
       "earnings_growth": 0.057
     },
     {
       "ticker": "IRCTC",
-      "score": 0.6568,
-      "pe": 29.51,
+      "score": 0.6589,
+      "pe": 29.49,
       "roe": 0.3496,
       "de": 1.87,
       "earnings_growth": -0.089
