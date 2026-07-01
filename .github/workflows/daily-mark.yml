@@ -30,10 +30,10 @@ jobs:
         run: pip install -e .
 
       - name: Paper trading mark-to-market
-        run: python scripts/daily_mark.py || echo "::warning::Paper mark failed"
+        run: python scripts/daily_mark.py
 
       - name: Live trading mark-to-market
-        run: python scripts/daily_live_mark.py || echo "::warning::Live mark failed"
+        run: python scripts/daily_live_mark.py
 
       - name: Refresh V+Q scores
         run: python scripts/refresh_vq_scores.py || echo "::warning::V+Q refresh failed"
