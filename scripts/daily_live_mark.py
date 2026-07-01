@@ -99,26 +99,22 @@ def fetch_historical_closes(symbols: list[str], start: str) -> pd.DataFrame:
 
 
 def find_missing_dates(equity_path: Path, first_order_date: str) -> list[str]:
-    """Find trading days with no mark since the last recorded mark.
+    """Find all trading days with no mark, including gaps in the middle.
 
-    If no equity file exists, backfills from the first order date.
+    Scans from the first order date to today and returns any business day
+    that doesn't have a mark — both mid-history gaps and new dates.
     """
     today = datetime.now().date()
+    start = pd.Timestamp(first_order_date).date()
 
     if equity_path.exists():
         eq_df = pd.read_csv(equity_path)
-        if not eq_df.empty:
-            marked_dates = set(eq_df["date"].values)
-            last_marked = pd.Timestamp(eq_df["date"].iloc[-1]).date()
-        else:
-            marked_dates = set()
-            last_marked = pd.Timestamp(first_order_date).date() - timedelta(days=1)
+        marked_dates = set(eq_df["date"].values) if not eq_df.empty else set()
     else:
         marked_dates = set()
-        last_marked = pd.Timestamp(first_order_date).date() - timedelta(days=1)
 
-    # Generate all business days from day after last mark to today
-    bdays = pd.bdate_range(start=last_marked + timedelta(days=1), end=today)
+    # All business days from first order to today
+    bdays = pd.bdate_range(start=start, end=today)
     missing = [d.strftime("%Y-%m-%d") for d in bdays if d.strftime("%Y-%m-%d") not in marked_dates]
 
     return missing
@@ -248,6 +244,14 @@ def mark_live_strategy(strategy: str) -> None:
 
         if mark_single_day(strategy, holdings, close_prices, date_str, equity_path, positions_path):
             marked += 1
+
+    # Sort files by date to keep them clean after backfills
+    if marked > 0:
+        for fpath in [equity_path, positions_path]:
+            if fpath.exists():
+                df = pd.read_csv(fpath)
+                df = df.sort_values("date").drop_duplicates(subset=["date"] if fpath == equity_path else ["date", "symbol"])
+                df.to_csv(fpath, index=False)
 
     if marked > 0:
         # Log summary for the latest mark
