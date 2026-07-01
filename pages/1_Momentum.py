@@ -19,6 +19,7 @@ from dashboard_shared import (
     PAPER_DIR,
     apply_plotly_style,
     days_to_rebal,
+    extend_returns_with_paper,
     inject_css,
     list_runs,
     load_series,
@@ -154,7 +155,8 @@ with col_l:
     """, unsafe_allow_html=True)
 
     try:
-        mr = monthly_table(returns) * 100
+        extended = extend_returns_with_paper(returns, "smallcap_momentum_v2")
+        mr = monthly_table(extended) * 100
         years = [str(y) for y in mr.index.tolist()]
         months = mr.columns.tolist()
 

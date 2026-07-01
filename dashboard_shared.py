@@ -500,6 +500,33 @@ def days_to_rebal():
     return max(0, (date(t.year, t.month, ld) - t).days)
 
 
+def extend_returns_with_paper(backtest_returns: pd.Series, paper_strategy: str) -> pd.Series:
+    """Append paper trading daily returns after the backtest period.
+
+    Computes daily returns from the paper equity.csv and concatenates them
+    to the backtest returns so the monthly heatmap stays up to date.
+    """
+    eq_path = PAPER_DIR / paper_strategy / "equity.csv"
+    if not eq_path.exists():
+        return backtest_returns
+
+    eq_df = pd.read_csv(eq_path, parse_dates=["date"], index_col="date")
+    if eq_df.empty or "equity" not in eq_df.columns:
+        return backtest_returns
+
+    paper_ret = eq_df["equity"].pct_change().dropna()
+    paper_ret.index = pd.DatetimeIndex(paper_ret.index)
+
+    # Only keep paper returns after the backtest ends
+    cutoff = backtest_returns.index[-1]
+    paper_ret = paper_ret[paper_ret.index > cutoff]
+
+    if paper_ret.empty:
+        return backtest_returns
+
+    return pd.concat([backtest_returns, paper_ret])
+
+
 def monthly_table(rets):
     m = (1 + rets).resample("ME").prod() - 1
     t = m.to_frame("r")

@@ -19,6 +19,7 @@ from dashboard_shared import (
     OUTPUTS_DIR,
     PAPER_DIR,
     apply_plotly_style,
+    extend_returns_with_paper,
     inject_css,
     list_runs,
     load_series,
@@ -184,7 +185,8 @@ with vq_l:
         """, unsafe_allow_html=True)
 
         try:
-            mr = monthly_table(vq_returns) * 100
+            extended = extend_returns_with_paper(vq_returns, "value_quality_v1")
+            mr = monthly_table(extended) * 100
             years = [str(y) for y in mr.index.tolist()]
             months = mr.columns.tolist()
 
