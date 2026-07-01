@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from dashboard_shared import inject_css, render_disclaimer, render_navbar
 
-st.set_page_config(page_title="JD Quant — About", page_icon="", layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="About — Philosophy & Approach | JD Quant", page_icon="", layout="wide", initial_sidebar_state="collapsed")
 inject_css()
 
 render_navbar(active="about")

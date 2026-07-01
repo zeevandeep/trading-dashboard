@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /alpha
+Disallow: /live
+
+Sitemap: https://jdquant.in/app/static/sitemap.xml

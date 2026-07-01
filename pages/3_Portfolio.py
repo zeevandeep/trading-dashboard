@@ -28,7 +28,7 @@ from dashboard_shared import (
     render_navbar,
 )
 
-st.set_page_config(page_title="JD Quant — Strategies", page_icon="", layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Combined Portfolio — Ascent + Bedrock | JD Quant", page_icon="", layout="wide", initial_sidebar_state="collapsed")
 inject_css()
 
 # ─── Data ─────────────────────────────────────────────────────────────────────

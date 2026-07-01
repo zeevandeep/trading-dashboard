@@ -455,7 +455,48 @@ div[data-testid="stMetric"] [data-testid="stMetricValue"] {
 """
 
 
+_SEO_META = """
+<meta name="description" content="JD Quant — systematic quantitative strategies for Indian equities. Two rules-based, fully automated strategies capturing momentum and value-quality anomalies in NSE mid &amp; smallcaps.">
+<meta name="keywords" content="quantitative trading, Indian equities, momentum strategy, value investing, systematic investing, NSE, smallcap, quant, algo trading India">
+<meta name="author" content="JD Quant">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://jdquant.in">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="JD Quant — Systematic Edge in Indian Equities">
+<meta property="og:description" content="Two quantitative strategies that systematically identify high-conviction opportunities in Indian equities. Fully automated, rules-based, zero discretion.">
+<meta property="og:url" content="https://jdquant.in">
+<meta property="og:image" content="https://jdquant.in/app/static/og-image.svg">
+<meta property="og:site_name" content="JD Quant">
+<meta property="og:locale" content="en_IN">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="JD Quant — Systematic Edge in Indian Equities">
+<meta name="twitter:description" content="Two quantitative strategies for Indian equities. Momentum + Value-Quality. Rules-based, fully automated.">
+<meta name="twitter:image" content="https://jdquant.in/app/static/og-image.svg">
+
+<link rel="icon" type="image/svg+xml" href="app/static/favicon.svg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "JD Quant",
+  "url": "https://jdquant.in",
+  "description": "Systematic quantitative strategies for Indian equities. Momentum and Value-Quality factor-based investing in NSE mid & smallcaps.",
+  "author": {
+    "@type": "Person",
+    "name": "JD Quant"
+  }
+}
+</script>
+"""
+
+
 def inject_css():
+    st.markdown(_SEO_META, unsafe_allow_html=True)
     st.markdown(SHARED_CSS, unsafe_allow_html=True)
 
 
