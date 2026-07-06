@@ -126,28 +126,37 @@ def login(api_key: str | None = None, api_secret: str | None = None):
 
     # Browser login flow
     login_url = kite.login_url()
-    log.info(f"Opening browser for Kite login...")
-    log.info(f"If browser doesn't open, visit: {login_url}")
 
-    # Start local callback server
+    # Start local callback server (serve_forever so it handles favicon/preflight too)
     _CallbackHandler.request_token = None
     server = HTTPServer(("127.0.0.1", REDIRECT_PORT), _CallbackHandler)
-    server_thread = threading.Thread(target=server.handle_request, daemon=True)
+    server_thread = threading.Thread(target=server.serve_forever, daemon=True)
     server_thread.start()
 
-    webbrowser.open(login_url)
+    # Try to open browser
+    log.info(f"Opening browser for Kite login...")
+    try:
+        import subprocess
+        subprocess.run(["open", login_url], check=True)
+    except Exception:
+        webbrowser.open(login_url)
 
-    # Wait for callback (up to 120 seconds)
-    log.info("Waiting for login callback...")
-    for _ in range(120):
+    print(f"\n{'='*60}")
+    print(f"  LOGIN URL (open in browser if it didn't open):")
+    print(f"  {login_url}")
+    print(f"{'='*60}\n")
+
+    # Wait for callback (up to 300 seconds)
+    log.info("Waiting for login callback (5 min timeout)...")
+    for _ in range(300):
         if _CallbackHandler.request_token:
             break
         time.sleep(1)
 
-    server.server_close()
+    server.shutdown()
 
     if not _CallbackHandler.request_token:
-        raise TimeoutError("Kite login timed out — no callback received within 120s.")
+        raise TimeoutError("Kite login timed out — no callback received within 5 minutes.")
 
     # Exchange request_token for access_token
     session_data = kite.generate_session(
@@ -400,6 +409,68 @@ def place_orders(
         except Exception as e:
             log.error(f"  Order FAILED: {e}")
             results.append({**order, "order_id": None, "status": f"failed: {e}", "limit_price": limit_price})
+
+    return results
+
+
+def place_orders_remote(
+    access_token: str,
+    api_key: str,
+    orders: list[dict],
+    prices: dict[str, float],
+    proxy_url: str,
+    proxy_api_key: str,
+    exchange: str = "NSE",
+    limit_buffer_pct: float = 0.5,
+) -> list[dict]:
+    """Place orders via the Render proxy (fixed IP).
+
+    Same interface as place_orders() but routes through the remote proxy
+    so Kite sees Render's whitelisted IP instead of the local machine's.
+    """
+    import requests
+
+    payload = {
+        "kite_api_key": api_key,
+        "access_token": access_token,
+        "orders": [
+            {"symbol": o["symbol"], "side": o["side"], "quantity": o["quantity"],
+             "estimated_value": o.get("estimated_value", 0)}
+            for o in orders
+        ],
+        "prices": prices,
+        "exchange": exchange,
+        "limit_buffer_pct": limit_buffer_pct,
+    }
+
+    url = f"{proxy_url.rstrip('/')}/api/place-orders"
+    log.info(f"Sending {len(orders)} orders to proxy at {proxy_url}")
+
+    resp = requests.post(
+        url,
+        json=payload,
+        headers={"Authorization": f"Bearer {proxy_api_key}"},
+        timeout=60,
+    )
+
+    if resp.status_code != 200:
+        raise RuntimeError(f"Proxy returned {resp.status_code}: {resp.text}")
+
+    remote_results = resp.json()
+    results = []
+    for r in remote_results:
+        results.append({
+            "symbol": r["symbol"],
+            "side": r["side"],
+            "quantity": r["quantity"],
+            "order_id": r.get("order_id"),
+            "status": r["status"],
+            "limit_price": r.get("limit_price", 0),
+        })
+        if r["status"] == "placed":
+            log.info(f"  {r['side']} {r['quantity']} x {r['symbol']} — placed (order_id={r['order_id']})")
+        else:
+            log.error(f"  {r['side']} {r['quantity']} x {r['symbol']} — {r['status']}")
 
     return results
 

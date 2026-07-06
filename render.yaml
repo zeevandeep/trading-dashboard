@@ -1,4 +1,5 @@
 services:
+  # Dashboard (existing)
   - type: web
     name: trading-dashboard
     runtime: docker
@@ -7,3 +8,15 @@ services:
     envVars:
       - key: STREAMLIT_SERVER_HEADLESS
         value: "true"
+
+  # Order proxy — fixed IP for Kite API calls
+  - type: web
+    name: jdquant-proxy
+    runtime: docker
+    plan: free
+    autoDeploy: true
+    dockerCommand: uvicorn order_proxy:app --host 0.0.0.0 --port 8501
+    healthCheckPath: /api/health
+    envVars:
+      - key: PROXY_API_KEY
+        sync: false

@@ -23,6 +23,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -37,7 +38,7 @@ from trading.data.loader import fetch_many, to_price_panel, fetch_benchmark
 from trading.data.universe import smallcap_universe
 from trading.signals.momentum import momentum_n_m
 from trading.execution.kite import (
-    login, get_holdings, get_ltp, place_orders, log_orders,
+    login, get_holdings, get_ltp, place_orders, place_orders_remote, log_orders,
 )
 from trading.utils.logging import setup_logging
 
@@ -52,6 +53,7 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Show orders without placing them")
     parser.add_argument("--capital", type=float, default=DEFAULT_CAPITAL, help="Total capital in INR")
     parser.add_argument("--force-refresh", action="store_true", help="Re-download all price data")
+    parser.add_argument("--remote", action="store_true", help="Place orders via Render proxy (fixed IP)")
     args = parser.parse_args()
 
     ensure_dirs()
@@ -92,6 +94,18 @@ def main():
 
     if latest_scores.empty:
         log.error("No valid momentum scores.")
+        return
+
+    if len(latest_scores) < top_n:
+        log.error(
+            f"Only {len(latest_scores)} valid scores, need at least {top_n}. "
+            f"This usually means stale cached price data. "
+            f"Re-run with --force-refresh to fix."
+        )
+        print(f"\n{'!'*60}")
+        print(f"  ABORTING: only {len(latest_scores)}/{top_n} valid momentum scores.")
+        print(f"  This would cause incorrect sells. Re-run with --force-refresh.")
+        print(f"{'!'*60}\n")
         return
 
     picks = latest_scores.nlargest(top_n)
@@ -198,7 +212,25 @@ def main():
 
     # ── Place orders
     print(f"\nPlacing {len(orders)} orders...")
-    results = place_orders(kite, orders, prices=live_prices, exchange="NSE", dry_run=False)
+    if args.remote:
+        secrets = __import__("trading.config", fromlist=["Secrets"]).Secrets.from_env()
+        proxy_url = os.environ.get("PROXY_URL", "https://jdquant-proxy.onrender.com")
+        proxy_api_key = os.environ.get("PROXY_API_KEY", "")
+        if not proxy_api_key:
+            print("ERROR: PROXY_API_KEY not set in .env")
+            return
+        access_token = kite.access_token
+        results = place_orders_remote(
+            access_token=access_token,
+            api_key=secrets.kite_api_key,
+            orders=orders,
+            prices=live_prices,
+            proxy_url=proxy_url,
+            proxy_api_key=proxy_api_key,
+            exchange="NSE",
+        )
+    else:
+        results = place_orders(kite, orders, prices=live_prices, exchange="NSE", dry_run=False)
 
     # ── Log
     log_path = DATA_DIR / "live" / strategy_name / "orders.csv"
