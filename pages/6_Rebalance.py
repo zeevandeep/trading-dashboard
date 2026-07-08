@@ -263,11 +263,10 @@ if live_orders.empty:
 else:
     live_holdings = compute_live_holdings(live_orders)
 
-    # Paper top-5 from Ascent (live strategy tracks top 5)
+    # Paper holdings from Ascent (live strategy tracks same positions)
     if ascent_state and ascent_state.get("holdings"):
         paper_holdings = ascent_state["holdings"]
-        paper_top5 = sorted(paper_holdings.items(), key=lambda x: -x[1])[:5]
-        paper_top5_tickers = set(t for t, _ in paper_top5)
+        paper_top5_tickers = set(paper_holdings.keys())
     else:
         paper_top5_tickers = set()
 
