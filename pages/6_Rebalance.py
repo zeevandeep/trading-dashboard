@@ -325,24 +325,4 @@ if not live_equity.empty:
     </div>
     """, unsafe_allow_html=True)
 
-# ── Execute Commands ──────────────────────────────────────────────────────────
-
-if not live_orders.empty:
-    last_date = live_orders["timestamp"].max()[:10] if "timestamp" in live_orders.columns else "—"
-    st.markdown(f"""
-    <div class="card-v2" style="margin-top:1rem;">
-        <div class="card-header">
-            <div class="card-title">Execute</div>
-            <div class="card-badge" style="background:var(--accent-dim);color:var(--accent);">Last: {last_date}</div>
-        </div>
-        <div class="card-desc">Run during market hours (9:15 AM - 3:30 PM IST):</div>
-        <pre style="background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:1rem;color:#e2e8f0;font-size:0.85rem;overflow-x:auto;">
-# Step 1: Preview orders
-python scripts/monthly_live_rebalance.py --capital 100000 --dry-run
-
-# Step 2: Execute
-python scripts/monthly_live_rebalance.py --capital 100000</pre>
-    </div>
-    """, unsafe_allow_html=True)
-
 render_disclaimer()
