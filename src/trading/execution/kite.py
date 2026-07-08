@@ -338,6 +338,15 @@ def compute_orders(
     return orders
 
 
+def _nse_tick_size(price: float) -> float:
+    """Return NSE tick size for a given price level."""
+    if price >= 5000:
+        return 0.50
+    if price >= 1000:
+        return 0.10
+    return 0.05
+
+
 def place_orders(
     kite,
     orders: list[dict],
@@ -371,8 +380,7 @@ def place_orders(
         )
 
         ltp = prices.get(order["symbol"], 0)
-        # NSE tick size: 0.05 for most stocks, 0.10 for price >= 1000
-        tick = 0.10 if ltp >= 1000 else 0.05
+        tick = _nse_tick_size(ltp)
         if order["side"] == "BUY":
             raw_price = ltp * (1 + limit_buffer_pct / 100)
             # Round UP to nearest tick for buys (ensures fill)

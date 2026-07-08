@@ -87,7 +87,7 @@ def place_orders(
     results = []
     for order in req.orders:
         ltp = req.prices.get(order.symbol, 0)
-        tick = 0.10 if ltp >= 1000 else 0.05
+        tick = 0.50 if ltp >= 5000 else (0.10 if ltp >= 1000 else 0.05)
 
         if order.side == "BUY":
             raw_price = ltp * (1 + req.limit_buffer_pct / 100)
