@@ -263,98 +263,42 @@ if live_orders.empty:
 else:
     live_holdings = compute_live_holdings(live_orders)
 
-    # Paper holdings from Ascent (live strategy tracks same positions)
-    if ascent_state and ascent_state.get("holdings"):
-        paper_holdings = ascent_state["holdings"]
-        paper_top5_tickers = set(paper_holdings.keys())
-    else:
-        paper_top5_tickers = set()
-
-    live_tickers = set(live_holdings.keys())
-
-    to_sell = live_tickers - paper_top5_tickers
-    to_buy = paper_top5_tickers - live_tickers
-    to_hold = live_tickers & paper_top5_tickers
-
-    if not to_sell and not to_buy:
-        st.markdown("""
-        <div style="padding:1rem;color:var(--green);font-weight:600;">
-            Portfolio is in sync with paper top-5. No action needed.
+    if live_holdings:
+        # Show current live holdings
+        hold_rows = ""
+        for sym in sorted(live_holdings.keys()):
+            qty = live_holdings[sym]
+            hold_rows += f'<tr><td style="color:var(--text-tertiary);font-weight:600;">HOLD</td><td class="sym">{sym}</td><td style="text-align:right">{qty} shares</td></tr>'
+        st.markdown(f"""
+        <div class="card-v2">
+            <div class="card-header">
+                <div class="card-title">Current Holdings ({len(live_holdings)} positions)</div>
+            </div>
+            <table class="htable">{hold_rows}</table>
         </div>
         """, unsafe_allow_html=True)
-    else:
-        col_s, col_h, col_buy = st.columns(3, gap="large")
 
-        with col_s:
-            if to_sell:
-                sell_rows = ""
-                for sym in sorted(to_sell):
-                    qty = live_holdings.get(sym, 0)
-                    sell_rows += f'<tr><td style="color:var(--red);font-weight:600;">SELL</td><td class="sym">{sym}</td><td style="text-align:right">{qty} shares</td></tr>'
-                st.markdown(f"""
-                <div class="card-v2" style="border-color:var(--red);">
-                    <div class="card-header">
-                        <div class="card-title" style="color:var(--red);">Sell</div>
-                    </div>
-                    <table class="htable">{sell_rows}</table>
-                </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.markdown("""
-                <div class="card-v2">
-                    <div class="card-desc">No sells needed.</div>
-                </div>
-                """, unsafe_allow_html=True)
-
-        with col_h:
-            if to_hold:
-                hold_rows = ""
-                for sym in sorted(to_hold):
-                    qty = live_holdings.get(sym, 0)
-                    hold_rows += f'<tr><td style="color:var(--text-tertiary);font-weight:600;">HOLD</td><td class="sym">{sym}</td><td style="text-align:right">{qty} shares</td></tr>'
-                st.markdown(f"""
-                <div class="card-v2">
-                    <div class="card-header">
-                        <div class="card-title">Hold</div>
-                    </div>
-                    <table class="htable">{hold_rows}</table>
-                </div>
-                """, unsafe_allow_html=True)
-
-        with col_buy:
-            if to_buy:
-                buy_rows = ""
-                for sym in sorted(to_buy):
-                    buy_rows += f'<tr><td style="color:var(--green);font-weight:600;">BUY</td><td class="sym">{sym}</td><td style="text-align:right">—</td></tr>'
-                st.markdown(f"""
-                <div class="card-v2" style="border-color:var(--green);">
-                    <div class="card-header">
-                        <div class="card-title" style="color:var(--green);">Buy</div>
-                    </div>
-                    <div class="card-desc">Quantities computed at rebalance time based on Rs 10K capital.</div>
-                    <table class="htable">{buy_rows}</table>
-                </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.markdown("""
-                <div class="card-v2">
-                    <div class="card-desc">No buys needed.</div>
-                </div>
-                """, unsafe_allow_html=True)
-
-        # Command to run
+        # Last rebalance date from orders
+        last_date = live_orders["timestamp"].max()[:10] if "timestamp" in live_orders.columns else "—"
         st.markdown(f"""
         <div class="card-v2" style="margin-top:1rem;">
             <div class="card-header">
                 <div class="card-title">Execute</div>
+                <div class="card-badge" style="background:var(--accent-dim);color:var(--accent);">Last: {last_date}</div>
             </div>
             <div class="card-desc">Run during market hours (9:15 AM - 3:30 PM IST):</div>
             <pre style="background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:1rem;color:#e2e8f0;font-size:0.85rem;overflow-x:auto;">
 # Step 1: Preview orders
-python scripts/monthly_live_rebalance.py --dry-run
+python scripts/monthly_live_rebalance.py --capital 100000 --dry-run
 
 # Step 2: Execute
-python scripts/monthly_live_rebalance.py</pre>
+python scripts/monthly_live_rebalance.py --capital 100000</pre>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown("""
+        <div style="padding:1rem;color:var(--green);font-weight:600;">
+            No active holdings.
         </div>
         """, unsafe_allow_html=True)
 
