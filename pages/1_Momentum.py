@@ -276,11 +276,13 @@ with col_r:
         _live_eq = pd.read_csv(_live_eq_path)
         if not _live_eq.empty:
             _latest = _live_eq.iloc[-1]
+            _nav = _latest.get("nav", 1.0)
+            _nav_ret = (_nav - 1.0) * 100
             _pnl = _latest.get("pnl", 0)
-            _pnl_pct = _latest.get("pnl_pct", 0)
             _mark_date = _latest.get("date", "—")
-            _cls = "up" if _pnl >= 0 else "dn"
-            _sgn = "+" if _pnl >= 0 else ""
+            _cls = "up" if _nav_ret >= 0 else "dn"
+            _sgn = "+" if _nav_ret >= 0 else ""
+            _pnl_sgn = "+" if _pnl >= 0 else ""
 
             st.markdown(f"""
             <div class="card-v2">
@@ -289,8 +291,8 @@ with col_r:
                     <div class="card-badge" style="background:var(--gold-dim);color:var(--gold);">{_mark_date}</div>
                 </div>
                 <div class="pnl">
-                    <div class="big {_cls}">{_sgn}{_pnl_pct:.2f}%</div>
-                    <div class="sub">Rs. {_sgn}{abs(_pnl):,.0f}</div>
+                    <div class="big {_cls}">{_sgn}{_nav_ret:.2f}%</div>
+                    <div class="sub">{_pnl_sgn}Rs. {abs(_pnl):,.0f}</div>
                 </div>
             </div>
             """, unsafe_allow_html=True)

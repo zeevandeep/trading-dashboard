@@ -159,6 +159,23 @@ def mark_single_day(
     total_pnl = current_value - total_cost
     total_pnl_pct = (total_pnl / total_cost * 100) if total_cost > 0 else 0
 
+    # Compute NAV (time-weighted, unaffected by deposits/withdrawals)
+    nav = 1.0
+    if equity_path.exists():
+        prev_eq = pd.read_csv(equity_path)
+        if not prev_eq.empty:
+            prev_row = prev_eq.iloc[-1]
+            prev_nav = prev_row.get("nav", 1.0)
+            prev_mv = prev_row["market_value"]
+            prev_inv = prev_row["invested"]
+            cash_flow = total_cost - prev_inv
+            if abs(cash_flow) > 1:  # capital added/removed (rebalance day)
+                adjusted_start = prev_mv + cash_flow
+                daily_ret = (current_value / adjusted_start) - 1 if adjusted_start > 0 else 0
+            else:
+                daily_ret = (current_value / prev_mv) - 1 if prev_mv > 0 else 0
+            nav = prev_nav * (1 + daily_ret)
+
     # Append to equity.csv
     row = pd.DataFrame([{
         "date": mark_date,
@@ -167,6 +184,7 @@ def mark_single_day(
         "pnl": round(total_pnl, 2),
         "pnl_pct": round(total_pnl_pct, 2),
         "n_positions": len(holdings),
+        "nav": round(nav, 6),
     }])
     if equity_path.exists():
         row.to_csv(equity_path, mode="a", header=False, index=False)

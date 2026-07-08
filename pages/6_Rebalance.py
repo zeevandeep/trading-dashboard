@@ -291,10 +291,13 @@ else:
 if not live_equity.empty:
     latest = live_equity.iloc[-1]
     pnl = latest.get("pnl", 0)
-    pnl_pct = latest.get("pnl_pct", 0)
+    nav = latest.get("nav", 1.0)
+    nav_ret = (nav - 1.0) * 100
     invested = latest.get("invested", 0)
     mkt_val = latest.get("market_value", 0)
     mark_date = latest.get("date", "—")
+    nav_color = "var(--green)" if nav_ret >= 0 else "var(--red)"
+    nav_sign = "+" if nav_ret >= 0 else ""
     pnl_color = "var(--green)" if pnl >= 0 else "var(--red)"
     pnl_sign = "+" if pnl >= 0 else ""
 
@@ -306,20 +309,20 @@ if not live_equity.empty:
         </div>
         <div class="stat-row">
             <div class="stat-cell">
-                <div class="val" style="color:var(--text-secondary)">Rs. {invested:,.0f}</div>
-                <div class="lbl">Invested</div>
-            </div>
-            <div class="stat-cell">
-                <div class="val" style="color:var(--text-secondary)">Rs. {mkt_val:,.0f}</div>
-                <div class="lbl">Market Value</div>
+                <div class="val" style="color:{nav_color}">{nav_sign}{nav_ret:.2f}%</div>
+                <div class="lbl">Strategy Return</div>
             </div>
             <div class="stat-cell">
                 <div class="val" style="color:{pnl_color}">{pnl_sign}Rs. {abs(pnl):,.0f}</div>
                 <div class="lbl">P&L</div>
             </div>
             <div class="stat-cell">
-                <div class="val" style="color:{pnl_color}">{pnl_sign}{pnl_pct:.2f}%</div>
-                <div class="lbl">Return</div>
+                <div class="val" style="color:var(--text-secondary)">Rs. {invested:,.0f}</div>
+                <div class="lbl">Invested</div>
+            </div>
+            <div class="stat-cell">
+                <div class="val" style="color:var(--text-secondary)">Rs. {mkt_val:,.0f}</div>
+                <div class="lbl">Market Value</div>
             </div>
         </div>
     </div>
