@@ -570,6 +570,9 @@ def extend_returns_with_paper(backtest_returns: pd.Series, paper_strategy: str) 
 
 def monthly_table(rets):
     m = (1 + rets).resample("ME").prod() - 1
+    # Drop incomplete current month (partial data is misleading)
+    if not m.empty and m.index[-1].month == pd.Timestamp.now().month and m.index[-1].year == pd.Timestamp.now().year:
+        m = m.iloc[:-1]
     t = m.to_frame("r")
     t["y"], t["m"] = t.index.year, t.index.month
     p = t.pivot(index="y", columns="m", values="r").sort_index(ascending=False)

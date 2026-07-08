@@ -270,32 +270,29 @@ with col_r:
     </div>
     """, unsafe_allow_html=True)
 
-    # Paper PnL — read latest equity from equity.csv (updated daily), not state.json (only on rebalance)
-    if paper_state:
-        eq_path = paper_dir / "equity.csv"
-        if eq_path.exists():
-            _eq_df = pd.read_csv(eq_path)
-            dtrk = len(_eq_df)
-            peq = _eq_df["equity"].iloc[-1] if not _eq_df.empty else 1.0
-        else:
-            dtrk = 0
-            peq = paper_state.get("equity", 1.0)
-        ppnl = (peq - 1.0) * 100
-        cls = "up" if ppnl >= 0 else "dn"
-        sgn = "+" if ppnl >= 0 else ""
+    # Live PnL from live equity.csv
+    _live_eq_path = DATA_DIR / "live" / "smallcap_momentum_v2_live" / "equity.csv"
+    if _live_eq_path.exists():
+        _live_eq = pd.read_csv(_live_eq_path)
+        if not _live_eq.empty:
+            _latest = _live_eq.iloc[-1]
+            _pnl = _latest.get("pnl", 0)
+            _pnl_pct = _latest.get("pnl_pct", 0)
+            _mark_date = _latest.get("date", "—")
+            _cls = "up" if _pnl >= 0 else "dn"
+            _sgn = "+" if _pnl >= 0 else ""
 
-        st.markdown(f"""
-        <div class="card-v2">
-            <div class="card-header">
-                <div class="card-title">Paper Trading</div>
-                <div class="card-badge" style="background:var(--gold-dim);color:var(--gold);">Simulation</div>
+            st.markdown(f"""
+            <div class="card-v2">
+                <div class="card-header">
+                    <div class="card-title">Live P&L</div>
+                    <div class="card-badge" style="background:var(--gold-dim);color:var(--gold);">{_mark_date}</div>
+                </div>
+                <div class="pnl">
+                    <div class="big {_cls}">{_sgn}{_pnl_pct:.2f}%</div>
+                    <div class="sub">Rs. {_sgn}{abs(_pnl):,.0f}</div>
+                </div>
             </div>
-            <div class="card-desc">Running since {paper_state.get('created','')[:10]}. {dtrk} days tracked.</div>
-            <div class="pnl">
-                <div class="big {cls}">{sgn}{ppnl:.2f}%</div>
-                <div class="sub">Paper P&amp;L</div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
 
 render_disclaimer()
