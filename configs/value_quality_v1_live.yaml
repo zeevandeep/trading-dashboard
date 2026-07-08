@@ -1,0 +1,35 @@
+# Strategy: Value + Quality v1 — LIVE (top 15, Rs 1L)
+#
+# Buys cheap, high-quality stocks — low P/E, high ROE, low debt,
+# growing earnings. 15 equal-weight positions for a Rs 1,00,000
+# live allocation on AngelOne.
+#
+# Quarterly rebalance via AngelOne SmartAPI CNC orders.
+
+name: value_quality_v1_live
+
+data:
+  start: "2010-01-01"
+  end: null
+
+universe:
+  mode: nse500_ex_nifty50
+
+signal:
+  type: value_quality
+
+portfolio:
+  top_n: 15
+  rebalance_freq: "QE"
+  weighting: equal
+
+benchmark:
+  symbol: "^NSEI"
+  name: "Nifty 50"
+
+costs:
+  slippage_per_side: 0.003
+
+risk_free_rate: 0.06
+
+initial_capital: 1.0

@@ -130,7 +130,7 @@ def place_orders(
         ltp = prices.get(symbol, 0)
 
         # NSE tick size
-        tick = 0.05
+        tick = 0.50 if ltp >= 5000 else (0.10 if ltp >= 1000 else 0.05)
         if order["side"] == "BUY":
             limit_price = round(round(ltp * (1 + limit_buffer_pct / 100) / tick) * tick, 2)
         else:
