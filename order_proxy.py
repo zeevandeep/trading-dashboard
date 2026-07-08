@@ -37,6 +37,14 @@ def health():
     return {"status": "ok"}
 
 
+@app.get("/api/outbound-ip")
+def outbound_ip():
+    """Check what IP this server uses for outbound requests."""
+    import httpx
+    resp = httpx.get("https://api.ipify.org?format=json", timeout=10)
+    return resp.json()
+
+
 # ── Place orders ─────────────────────────────────────────────────────────────
 
 class Order(BaseModel):

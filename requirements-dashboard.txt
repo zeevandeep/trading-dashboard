@@ -7,3 +7,4 @@ python-dotenv>=1.0.0
 fastapi>=0.110.0
 uvicorn>=0.29.0
 kiteconnect>=5.0.0
+httpx>=0.27.0
