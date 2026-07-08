@@ -1,8 +1,8 @@
-# Strategy: Indian Smallcap Monthly Momentum v2 — LIVE (top 5, Rs 10K)
+# Strategy: Indian Smallcap Monthly Momentum v2 — LIVE (top 15, Rs 1L)
 #
-# Same signal as v2 (12-1 momentum, no trend filter) but concentrated
-# to top 5 equal-weight positions for a Rs 10,000 live allocation.
-# ~Rs 2,000 per position — enough to buy at least 1 share of most names.
+# Same signal as v2 (12-1 momentum, no trend filter) with 15 equal-weight
+# positions for a Rs 1,00,000 live allocation on Zerodha/Kite.
+# ~Rs 6,667 per position — matches the paper portfolio sizing.
 #
 # Monthly rebalance at month-end via Kite Connect CNC orders.
 
@@ -26,7 +26,7 @@ trend_filter:
   sma_window: 200
 
 portfolio:
-  top_n: 5
+  top_n: 15
   rebalance_freq: "ME"
   weighting: equal
 

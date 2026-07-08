@@ -4,3 +4,37 @@ HINDCOPPER,BUY,3,1630.05,260604221046195,placed,546.05,2026-06-04T11:52:53.11679
 MCX,BUY,1,2896.70,260604221046203,placed,2911.20,2026-06-04T11:52:53.116799
 VEDL,BUY,6,1967.10,260604221046213,placed,329.50,2026-06-04T11:52:53.116799
 RBLBANK,BUY,5,1743.50,260604221046221,placed,350.45,2026-06-04T11:52:53.116799
+RBLBANK,SELL,5,1843.0000305175781,,failed: IP (94.43.216.201) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,366.75,2026-07-06T14:31:35.660451
+VEDL,SELL,6,1692.0,,failed: IP (94.43.216.201) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,280.6,2026-07-06T14:31:35.660451
+ADANIGREEN,BUY,4,6196.7998046875,,failed: IP (94.43.216.201) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,1556.9,2026-07-06T14:31:35.660451
+ADANIPOWER,BUY,30,6595.500183105469,,failed: IP (94.43.216.201) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,220.95,2026-07-06T14:31:35.660451
+BHARATFORG,BUY,3,6416.099853515625,,failed: IP (94.43.216.201) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,2149.4,2026-07-06T14:31:35.660451
+BHEL,BUY,17,6587.5,,failed: IP (94.43.216.201) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,389.45,2026-07-06T14:31:35.660451
+CUMMINSIND,BUY,1,5578.5,,failed: IP (94.43.216.201) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,5606.4,2026-07-06T14:31:35.660451
+GESHIP,BUY,4,5640.39990234375,,failed: IP (94.43.216.201) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,1417.2,2026-07-06T14:31:35.660451
+GRANULES,BUY,7,5979.400085449219,,failed: IP (94.43.216.201) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,858.45,2026-07-06T14:31:35.660451
+HINDCOPPER,BUY,10,4946.000061035156,,failed: IP (94.43.216.201) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,497.05,2026-07-06T14:31:35.660451
+IDEA,BUY,473,6664.570072174072,,failed: IP (94.43.216.201) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,14.15,2026-07-06T14:31:35.660451
+LAURUSLABS,BUY,4,6116.7998046875,,failed: IP (94.43.216.201) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,1536.8,2026-07-06T14:31:35.660451
+MCX,BUY,1,2723.10009765625,,failed: IP (94.43.216.201) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,2736.7,2026-07-06T14:31:35.660451
+NATIONALUM,BUY,14,4914.6998291015625,,failed: IP (94.43.216.201) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,352.8,2026-07-06T14:31:35.660451
+NAVINFLUOR,BUY,1,7729.0,,failed: IP (94.43.216.201) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,7767.6,2026-07-06T14:31:35.660451
+POLYCAB,BUY,1,9584.0,,failed: IP (94.43.216.201) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,9631.9,2026-07-06T14:31:35.660451
+SAIL,BUY,39,6599.969833374023,,failed: IP (94.43.216.201) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,170.1,2026-07-06T14:31:35.660451
+RBLBANK,SELL,5,1798.0000305175781,260708221483790,placed,357.8,2026-07-08T11:35:56.618579
+VEDL,SELL,6,1631.3999633789062,260708221483807,placed,270.55,2026-07-08T11:35:56.618579
+ADANIGREEN,BUY,4,5996.0,260708221483836,placed,1506.5,2026-07-08T11:35:56.618579
+ADANIPOWER,BUY,30,6481.500091552734,260708221483845,placed,217.15,2026-07-08T11:35:56.618579
+BHARATFORG,BUY,3,6258.599853515625,260708221483854,placed,2096.6,2026-07-08T11:35:56.618579
+BHEL,BUY,17,6409.0,260708221483862,placed,378.9,2026-07-08T11:35:56.618579
+CUMMINSIND,BUY,1,5491.5,260708221483882,placed,5519.0,2026-07-08T11:35:56.618579
+FEDERALBNK,BUY,20,6515.0,260708221483896,placed,327.4,2026-07-08T11:35:56.618579
+GESHIP,BUY,4,5506.7998046875,260708221483915,placed,1383.6,2026-07-08T11:35:56.618579
+GRANULES,BUY,7,5989.900085449219,260708221483936,placed,860.0,2026-07-08T11:35:56.618579
+HINDCOPPER,BUY,10,4868.500061035156,260708221483949,placed,489.3,2026-07-08T11:35:56.618579
+IDEA,BUY,479,6658.099817276001,260708221483957,placed,13.95,2026-07-08T11:35:56.618579
+LAURUSLABS,BUY,4,5857.2001953125,260708221483969,placed,1471.6,2026-07-08T11:35:56.618579
+MCX,BUY,1,2727.0,260708221483977,placed,2740.6,2026-07-08T11:35:56.618579
+NATIONALUM,BUY,15,5229.000091552734,260708221483997,placed,350.35,2026-07-08T11:35:56.618579
+NAVINFLUOR,BUY,1,7350.0,,failed: Tick size for this script is 0.50. Kindly enter price in the multiple of tick size for this script,7386.7,2026-07-08T11:35:56.618579
+POLYCAB,BUY,1,9206.5,260708221484026,placed,9252.5,2026-07-08T11:35:56.618579
