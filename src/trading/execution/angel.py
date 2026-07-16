@@ -180,6 +180,61 @@ def place_orders(
     return results
 
 
+def place_orders_remote(
+    orders: list[dict],
+    prices: dict[str, float],
+    exchange: str = "NSE",
+    limit_buffer_pct: float = 0.5,
+) -> list[dict]:
+    """Place orders via the Render proxy (fixed IP, no local IP whitelisting needed)."""
+    import httpx
+
+    secrets = Secrets.from_env()
+    proxy_url = secrets.proxy_url.rstrip("/")
+    proxy_key = secrets.proxy_api_key
+
+    if not proxy_url or not proxy_key:
+        raise ValueError("PROXY_URL and PROXY_API_KEY must be set in .env")
+
+    payload = {
+        "angel_api_key": secrets.angel_api_key,
+        "angel_client_id": secrets.angel_client_id,
+        "angel_password": secrets.angel_password,
+        "angel_totp_secret": secrets.angel_totp_secret,
+        "orders": [
+            {"symbol": o["symbol"], "side": o["side"], "quantity": o["quantity"],
+             "estimated_value": o.get("estimated_value", 0)}
+            for o in orders
+        ],
+        "prices": prices,
+        "exchange": exchange,
+        "limit_buffer_pct": limit_buffer_pct,
+    }
+
+    log.info(f"Sending {len(orders)} orders to proxy at {proxy_url}")
+    resp = httpx.post(
+        f"{proxy_url}/api/angel/place-orders",
+        json=payload,
+        headers={"Authorization": f"Bearer {proxy_key}"},
+        timeout=120,
+    )
+    resp.raise_for_status()
+
+    results = []
+    for r in resp.json():
+        results.append({
+            "symbol": r["symbol"],
+            "side": r["side"],
+            "quantity": r["quantity"],
+            "order_id": r.get("order_id"),
+            "status": r["status"],
+            "limit_price": r.get("limit_price", 0),
+        })
+        log.info(f"  {r['side']} {r['quantity']} x {r['symbol']} → {r['status']}")
+
+    return results
+
+
 def log_orders(results: list[dict], log_path: Path) -> None:
     """Append order results to a CSV log."""
     if not results:

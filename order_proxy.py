@@ -1,12 +1,15 @@
-"""Lightweight order proxy — forwards Kite API calls from a fixed-IP server.
+"""Lightweight order proxy — forwards broker API calls from a fixed-IP server.
 
-Deployed on Render alongside the Streamlit dashboard. The local rebalance
-script sends orders here (with the Kite access_token obtained via browser
-login), and this proxy forwards them to Kite from Render's whitelisted IP.
+Deployed on Render alongside the Streamlit dashboard. Supports both:
+  - Kite (Ascent) via /api/place-orders
+  - AngelOne (Bedrock) via /api/angel/place-orders
+
+The local rebalance script sends orders here, and this proxy forwards them
+from Render's whitelisted static IP.
 
 Security:
     - PROXY_API_KEY env var required in Authorization header
-    - Access token is per-request, never stored
+    - Credentials are per-request, never stored
     - HTTPS provided by Render
 """
 
@@ -118,6 +121,103 @@ def place_orders(
                 symbol=order.symbol, side=order.side, quantity=order.quantity,
                 order_id=str(order_id), status="placed", limit_price=limit_price,
             ))
+        except Exception as e:
+            results.append(OrderResult(
+                symbol=order.symbol, side=order.side, quantity=order.quantity,
+                order_id=None, status=f"failed: {e}", limit_price=limit_price,
+            ))
+
+    return results
+
+
+# ── AngelOne orders ─────────────────────────────────────────────────────────
+
+class AngelPlaceOrdersRequest(BaseModel):
+    angel_api_key: str
+    angel_client_id: str
+    angel_password: str
+    angel_totp_secret: str
+    orders: list[Order]
+    prices: dict[str, float]
+    exchange: str = "NSE"
+    limit_buffer_pct: float = 0.5
+
+
+@app.post("/api/angel/place-orders")
+def angel_place_orders(
+    req: AngelPlaceOrdersRequest,
+    authorization: str = Header(None),
+) -> list[OrderResult]:
+    _check_auth(authorization)
+
+    import pyotp
+    from SmartApi import SmartConnect
+
+    # Login
+    obj = SmartConnect(api_key=req.angel_api_key)
+    totp = pyotp.TOTP(req.angel_totp_secret).now()
+    session = obj.generateSession(req.angel_client_id, req.angel_password, totp)
+    if not session.get("status"):
+        raise HTTPException(500, f"AngelOne login failed: {session.get('message', session)}")
+
+    results = []
+    for order in req.orders:
+        ltp = req.prices.get(order.symbol, 0)
+        tick = 0.50 if ltp >= 5000 else (0.10 if ltp >= 1000 else 0.05)
+
+        if order.side == "BUY":
+            limit_price = round(round(ltp * (1 + req.limit_buffer_pct / 100) / tick) * tick, 2)
+        else:
+            limit_price = round(round(ltp * (1 - req.limit_buffer_pct / 100) / tick) * tick, 2)
+
+        # Look up symbol token
+        token = None
+        try:
+            search = obj.searchScrip(req.exchange, order.symbol)
+            if search and search.get("data"):
+                for item in search["data"]:
+                    if item.get("tradingsymbol") == order.symbol:
+                        token = item["symboltoken"]
+                        break
+                if not token:
+                    token = search["data"][0].get("symboltoken")
+        except Exception as e:
+            results.append(OrderResult(
+                symbol=order.symbol, side=order.side, quantity=order.quantity,
+                order_id=None, status=f"failed: token lookup: {e}", limit_price=limit_price,
+            ))
+            continue
+
+        if not token:
+            results.append(OrderResult(
+                symbol=order.symbol, side=order.side, quantity=order.quantity,
+                order_id=None, status="failed: no symbol token", limit_price=limit_price,
+            ))
+            continue
+
+        try:
+            resp = obj.placeOrder({
+                "variety": "NORMAL",
+                "tradingsymbol": order.symbol,
+                "symboltoken": token,
+                "transactiontype": order.side,
+                "exchange": req.exchange,
+                "ordertype": "LIMIT",
+                "producttype": "DELIVERY",
+                "duration": "DAY",
+                "price": str(limit_price),
+                "quantity": str(order.quantity),
+            })
+            if resp:
+                results.append(OrderResult(
+                    symbol=order.symbol, side=order.side, quantity=order.quantity,
+                    order_id=str(resp), status="placed", limit_price=limit_price,
+                ))
+            else:
+                results.append(OrderResult(
+                    symbol=order.symbol, side=order.side, quantity=order.quantity,
+                    order_id=None, status="failed: no response", limit_price=limit_price,
+                ))
         except Exception as e:
             results.append(OrderResult(
                 symbol=order.symbol, side=order.side, quantity=order.quantity,

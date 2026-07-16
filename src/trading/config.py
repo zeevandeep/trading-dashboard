@@ -35,6 +35,8 @@ class Secrets:
     angel_client_id: str = ""
     angel_password: str = ""
     angel_totp_secret: str = ""
+    proxy_url: str = ""
+    proxy_api_key: str = ""
 
     @classmethod
     def from_env(cls) -> "Secrets":
@@ -45,6 +47,8 @@ class Secrets:
             angel_client_id=os.getenv("ANGEL_CLIENT_ID", ""),
             angel_password=os.getenv("ANGEL_PASSWORD", ""),
             angel_totp_secret=os.getenv("ANGEL_TOTP_SECRET", ""),
+            proxy_url=os.getenv("PROXY_URL", ""),
+            proxy_api_key=os.getenv("PROXY_API_KEY", ""),
         )
 
     def __repr__(self) -> str:

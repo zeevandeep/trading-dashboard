@@ -37,7 +37,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from trading.config import DATA_DIR, load_strategy_config, ensure_dirs
 from trading.data.universe import nifty50_tickers, nse500_starter_tickers
 from trading.signals.value_quality import fetch_fundamentals, score_value_quality
-from trading.execution.angel import login, get_holdings, get_ltp, place_orders, log_orders
+from trading.execution.angel import login, get_holdings, get_ltp, place_orders, place_orders_remote, log_orders
 from trading.utils.logging import setup_logging
 
 log = setup_logging("bedrock_rebalance")
@@ -49,6 +49,7 @@ DEFAULT_CAPITAL = 100_000
 def main():
     parser = argparse.ArgumentParser(description="Quarterly Bedrock rebalance (AngelOne)")
     parser.add_argument("--dry-run", action="store_true", help="Show orders without placing them")
+    parser.add_argument("--remote", action="store_true", help="Route orders via Render proxy (fixed IP)")
     parser.add_argument("--capital", type=float, default=DEFAULT_CAPITAL, help="Total capital in INR")
     args = parser.parse_args()
 
@@ -63,7 +64,8 @@ def main():
     print(f"  Strategy: {strategy_name}")
     print(f"  Capital:  Rs. {args.capital:,.0f}")
     print(f"  Top N:    {top_n}")
-    print(f"  Mode:     {'DRY RUN' if args.dry_run else 'LIVE'}")
+    mode = "DRY RUN" if args.dry_run else ("LIVE via PROXY" if args.remote else "LIVE")
+    print(f"  Mode:     {mode}")
     print(f"{'='*60}\n")
 
     # ── AngelOne login (automated via TOTP)
@@ -193,8 +195,11 @@ def main():
         return
 
     # ── Place orders
-    print(f"\nPlacing {len(orders)} orders...")
-    results = place_orders(obj, orders, prices=live_prices, dry_run=False)
+    print(f"\nPlacing {len(orders)} orders{'  (via proxy)' if args.remote else ''}...")
+    if args.remote:
+        results = place_orders_remote(orders, prices=live_prices)
+    else:
+        results = place_orders(obj, orders, prices=live_prices, dry_run=False)
 
     # ── Log
     log_path = DATA_DIR / "live" / strategy_name / "orders.csv"
