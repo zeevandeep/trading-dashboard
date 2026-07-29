@@ -1,127 +1,127 @@
 {
-  "updated_at": "2026-07-28T15:02:03.578069",
-  "n_scored": 88,
+  "updated_at": "2026-07-29T14:56:19.913325",
+  "n_scored": 87,
   "n_universe": 168,
   "top_15": [
     {
       "ticker": "LICI",
-      "score": 0.8697,
-      "pe": 9.41,
+      "score": 0.877,
+      "pe": 9.33,
       "roe": 0.4077,
       "de": 0.43,
       "earnings_growth": 0.331
     },
     {
       "ticker": "GESHIP",
-      "score": 0.8061,
-      "pe": 6.7,
+      "score": 0.8097,
+      "pe": 6.67,
       "roe": 0.1885,
       "de": 6.41,
       "earnings_growth": 1.875
     },
     {
       "ticker": "MCX",
-      "score": 0.7837,
-      "pe": 51.83,
+      "score": 0.7898,
+      "pe": 52.16,
       "roe": 0.3788,
       "de": 0.11,
       "earnings_growth": 2.912
     },
     {
       "ticker": "GNFC",
-      "score": 0.7454,
-      "pe": 9.31,
+      "score": 0.7396,
+      "pe": 9.55,
       "roe": 0.0914,
       "de": 0.07,
       "earnings_growth": 0.871
     },
     {
       "ticker": "NATIONALUM",
-      "score": 0.7354,
-      "pe": 10.01,
+      "score": 0.7353,
+      "pe": 10.3,
       "roe": 0.2942,
       "de": 0.28,
       "earnings_growth": -0.167
     },
     {
       "ticker": "CHAMBLFERT",
-      "score": 0.7201,
-      "pe": 8.99,
+      "score": 0.7286,
+      "pe": 9.26,
       "roe": 0.2045,
       "de": 10.27,
       "earnings_growth": 0.302
     },
     {
       "ticker": "HINDCOPPER",
-      "score": 0.7093,
-      "pe": 49.81,
+      "score": 0.7145,
+      "pe": 50.84,
       "roe": 0.306,
       "de": 3.32,
       "earnings_growth": 1.366
     },
     {
       "ticker": "NMDC",
-      "score": 0.7039,
-      "pe": 9.91,
+      "score": 0.7093,
+      "pe": 10.14,
       "roe": 0.2336,
       "de": 18.8,
       "earnings_growth": 0.377
     },
     {
       "ticker": "INDIAMART",
-      "score": 0.7009,
-      "pe": 21.3,
+      "score": 0.7004,
+      "pe": 21.42,
       "roe": 0.2315,
       "de": 0.97,
       "earnings_growth": 0.119
     },
     {
       "ticker": "LUPIN",
-      "score": 0.6972,
-      "pe": 20.58,
+      "score": 0.6966,
+      "pe": 21.02,
       "roe": 0.2691,
       "de": 29.39,
       "earnings_growth": 0.89
     },
     {
       "ticker": "MUTHOOTFIN",
-      "score": 0.6864,
-      "pe": 11.42,
+      "score": 0.6857,
+      "pe": 11.44,
       "roe": 0.3041,
       "de": 379.71,
       "earnings_growth": 1.267
     },
     {
-      "ticker": "HAL",
-      "score": 0.6656,
-      "pe": 33.76,
-      "roe": 0.2398,
-      "de": 0.03,
-      "earnings_growth": 0.055
-    },
-    {
       "ticker": "PETRONET",
-      "score": 0.6656,
-      "pe": 10.66,
+      "score": 0.6735,
+      "pe": 10.62,
       "roe": 0.1856,
       "de": 10.51,
       "earnings_growth": 0.253
     },
     {
-      "ticker": "VEDL",
-      "score": 0.6576,
-      "pe": 14.46,
-      "roe": 0.204,
-      "de": 48.04,
-      "earnings_growth": 0.922
+      "ticker": "HAL",
+      "score": 0.6704,
+      "pe": 33.73,
+      "roe": 0.2398,
+      "de": 0.03,
+      "earnings_growth": 0.055
     },
     {
       "ticker": "POLYCAB",
-      "score": 0.6494,
-      "pe": 47.98,
+      "score": 0.6599,
+      "pe": 47.68,
       "roe": 0.2555,
       "de": 1.74,
       "earnings_growth": 0.325
+    },
+    {
+      "ticker": "VEDL",
+      "score": 0.6565,
+      "pe": 14.74,
+      "roe": 0.204,
+      "de": 48.04,
+      "earnings_growth": 0.922
     }
   ]
 }
