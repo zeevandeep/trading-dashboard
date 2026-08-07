@@ -1,127 +1,127 @@
 {
-  "updated_at": "2026-08-06T14:56:06.216807",
-  "n_scored": 50,
+  "updated_at": "2026-08-07T13:51:33.398667",
+  "n_scored": 43,
   "n_universe": 168,
   "top_15": [
     {
-      "ticker": "LICI",
-      "score": 0.8849,
-      "pe": 8.53,
-      "roe": 0.4077,
-      "de": 0.43,
-      "earnings_growth": 0.331
-    },
-    {
       "ticker": "OFSS",
-      "score": 0.8637,
-      "pe": 29.97,
+      "score": 0.8592,
+      "pe": 30.15,
       "roe": 0.499,
       "de": 0.57,
       "earnings_growth": 1.202
     },
     {
       "ticker": "NMDC",
-      "score": 0.7105,
-      "pe": 10.18,
+      "score": 0.7228,
+      "pe": 10.03,
       "roe": 0.2336,
       "de": 18.8,
       "earnings_growth": 0.377
     },
     {
-      "ticker": "LUPIN",
-      "score": 0.7081,
-      "pe": 20.47,
-      "roe": 0.2691,
-      "de": 29.39,
-      "earnings_growth": 0.89
-    },
-    {
       "ticker": "INDIAMART",
-      "score": 0.7073,
-      "pe": 21.54,
+      "score": 0.7189,
+      "pe": 21.45,
       "roe": 0.2315,
       "de": 0.97,
       "earnings_growth": 0.119
     },
     {
+      "ticker": "LUPIN",
+      "score": 0.7013,
+      "pe": 20.31,
+      "roe": 0.2691,
+      "de": 29.39,
+      "earnings_growth": 0.89
+    },
+    {
       "ticker": "PETRONET",
-      "score": 0.6893,
-      "pe": 10.78,
+      "score": 0.6924,
+      "pe": 10.76,
       "roe": 0.1856,
       "de": 10.51,
       "earnings_growth": 0.253
     },
     {
       "ticker": "HINDCOPPER",
-      "score": 0.689,
-      "pe": 57.47,
+      "score": 0.6794,
+      "pe": 56.43,
       "roe": 0.306,
       "de": 3.32,
       "earnings_growth": 1.366
     },
     {
       "ticker": "HAL",
-      "score": 0.6704,
-      "pe": 36.15,
+      "score": 0.6698,
+      "pe": 36.03,
       "roe": 0.2398,
       "de": 0.16,
       "earnings_growth": 0.055
     },
     {
       "ticker": "POLYCAB",
-      "score": 0.6546,
-      "pe": 48.91,
+      "score": 0.6638,
+      "pe": 48.51,
       "roe": 0.2555,
       "de": 1.74,
       "earnings_growth": 0.325
     },
     {
       "ticker": "IRCTC",
-      "score": 0.6435,
-      "pe": 29.91,
+      "score": 0.6501,
+      "pe": 29.81,
       "roe": 0.3496,
       "de": 1.87,
       "earnings_growth": -0.089
     },
     {
       "ticker": "IPCALAB",
-      "score": 0.63,
-      "pe": 38.53,
+      "score": 0.6047,
+      "pe": 38.64,
       "roe": 0.1322,
       "de": 8.49,
       "earnings_growth": 3.416
     },
     {
-      "ticker": "FINPIPE",
-      "score": 0.5968,
-      "pe": 17.68,
-      "roe": 0.0973,
-      "de": 7.17,
-      "earnings_growth": 0.59
-    },
-    {
       "ticker": "IGL",
-      "score": 0.5869,
-      "pe": 13.94,
+      "score": 0.584,
+      "pe": 13.73,
       "roe": 0.1393,
       "de": 0.85,
       "earnings_growth": -0.252
     },
     {
-      "ticker": "GLAND",
-      "score": 0.5784,
-      "pe": 41.83,
-      "roe": 0.1053,
-      "de": 2.74,
-      "earnings_growth": 0.964
+      "ticker": "FINPIPE",
+      "score": 0.5837,
+      "pe": 16.95,
+      "roe": 0.0973,
+      "de": 7.17,
+      "earnings_growth": 0.59
     },
     {
       "ticker": "BOSCHLTD",
-      "score": 0.5721,
-      "pe": 44.68,
+      "score": 0.5669,
+      "pe": 45.65,
       "roe": 0.1935,
       "de": 0.8,
       "earnings_growth": 0.03
+    },
+    {
+      "ticker": "MRF",
+      "score": 0.5596,
+      "pe": 23.46,
+      "roe": 0.1226,
+      "de": 15.29,
+      "earnings_growth": 0.372
+    },
+    {
+      "ticker": "GLAND",
+      "score": 0.5564,
+      "pe": 41.72,
+      "roe": 0.1053,
+      "de": 2.74,
+      "earnings_growth": 0.964
     }
   ]
 }
