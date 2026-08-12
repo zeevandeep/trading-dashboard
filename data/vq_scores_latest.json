@@ -1,127 +1,127 @@
 {
-  "updated_at": "2026-08-11T13:56:55.146296",
-  "n_scored": 29,
+  "updated_at": "2026-08-12T13:59:05.556124",
+  "n_scored": 26,
   "n_universe": 168,
   "top_15": [
     {
       "ticker": "OFSS",
-      "score": 0.8445,
-      "pe": 30.41,
+      "score": 0.8458,
+      "pe": 29.84,
       "roe": 0.499,
       "de": 0.57,
       "earnings_growth": 1.202
     },
     {
       "ticker": "INDIAMART",
-      "score": 0.7204,
-      "pe": 21.8,
+      "score": 0.6977,
+      "pe": 21.84,
       "roe": 0.2315,
       "de": 0.97,
       "earnings_growth": 0.119
     },
     {
       "ticker": "PETRONET",
-      "score": 0.6961,
-      "pe": 10.65,
+      "score": 0.6804,
+      "pe": 10.73,
       "roe": 0.1856,
       "de": 10.51,
       "earnings_growth": 0.253
     },
     {
-      "ticker": "POLYCAB",
-      "score": 0.6533,
-      "pe": 48.05,
-      "roe": 0.2555,
-      "de": 1.74,
-      "earnings_growth": 0.325
-    },
-    {
       "ticker": "HAL",
-      "score": 0.6502,
-      "pe": 35.96,
+      "score": 0.6677,
+      "pe": 36.6,
       "roe": 0.2398,
       "de": 0.16,
       "earnings_growth": 0.055
     },
     {
+      "ticker": "POLYCAB",
+      "score": 0.6519,
+      "pe": 49.66,
+      "roe": 0.2555,
+      "de": 1.74,
+      "earnings_growth": 0.325
+    },
+    {
       "ticker": "IRCTC",
-      "score": 0.6145,
-      "pe": 29.53,
+      "score": 0.6181,
+      "pe": 29.5,
       "roe": 0.3496,
       "de": 1.87,
       "earnings_growth": -0.089
     },
     {
-      "ticker": "MRF",
-      "score": 0.5502,
-      "pe": 22.94,
-      "roe": 0.1226,
-      "de": 15.29,
-      "earnings_growth": 0.372
-    },
-    {
       "ticker": "CDSL",
-      "score": 0.5363,
-      "pe": 59.47,
+      "score": 0.5308,
+      "pe": 59.54,
       "roe": 0.2391,
       "de": 0.11,
       "earnings_growth": -0.199
     },
     {
       "ticker": "IGL",
-      "score": 0.5357,
-      "pe": 13.8,
+      "score": 0.53,
+      "pe": 13.96,
       "roe": 0.1393,
       "de": 0.85,
       "earnings_growth": -0.252
     },
     {
       "ticker": "SOLARINDS",
-      "score": 0.5249,
-      "pe": 100.74,
+      "score": 0.5181,
+      "pe": 100.8,
       "roe": 0.3123,
       "de": 23.27,
       "earnings_growth": 0.7
     },
     {
       "ticker": "ASHOKLEY",
-      "score": 0.5234,
-      "pe": 29.53,
+      "score": 0.5165,
+      "pe": 29.75,
       "roe": 0.2164,
       "de": 344.74,
       "earnings_growth": 0.245
     },
     {
       "ticker": "PAGEIND",
-      "score": 0.5129,
-      "pe": 57.81,
+      "score": 0.5142,
+      "pe": 55.97,
       "roe": 0.525,
       "de": 18.42,
       "earnings_growth": 0.09
     },
     {
-      "ticker": "INDUSTOWER",
-      "score": 0.5114,
-      "pe": 13.62,
-      "roe": 0.1891,
-      "de": 51.79,
-      "earnings_growth": 0.006
+      "ticker": "GLAND",
+      "score": 0.4992,
+      "pe": 42.25,
+      "roe": 0.1053,
+      "de": 2.74,
+      "earnings_growth": 0.964
+    },
+    {
+      "ticker": "MPHASIS",
+      "score": 0.4954,
+      "pe": 25.14,
+      "roe": 0.1774,
+      "de": 24.68,
+      "earnings_growth": 0.107
     },
     {
       "ticker": "SUNTV",
-      "score": 0.5006,
-      "pe": 13.24,
+      "score": 0.4908,
+      "pe": 13.08,
       "roe": 0.1185,
       "de": 0.84,
       "earnings_growth": -0.374
     },
     {
-      "ticker": "MPHASIS",
-      "score": 0.496,
-      "pe": 25.28,
-      "roe": 0.1774,
-      "de": 24.68,
-      "earnings_growth": 0.107
+      "ticker": "INDUSTOWER",
+      "score": 0.4838,
+      "pe": 14.14,
+      "roe": 0.1891,
+      "de": 51.79,
+      "earnings_growth": 0.006
     }
   ]
 }
