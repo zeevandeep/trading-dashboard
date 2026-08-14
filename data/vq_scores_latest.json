@@ -1,127 +1,127 @@
 {
-  "updated_at": "2026-08-13T13:59:37.037465",
-  "n_scored": 25,
+  "updated_at": "2026-08-14T13:55:44.663445",
+  "n_scored": 17,
   "n_universe": 168,
   "top_15": [
     {
       "ticker": "OFSS",
-      "score": 0.8596,
-      "pe": 29.19,
+      "score": 0.8382,
+      "pe": 30.23,
       "roe": 0.499,
       "de": 0.57,
       "earnings_growth": 1.202
     },
     {
-      "ticker": "NMDC",
-      "score": 0.7079,
-      "pe": 10.04,
-      "roe": 0.2336,
-      "de": 18.8,
-      "earnings_growth": 0.377
-    },
-    {
       "ticker": "INDIAMART",
-      "score": 0.6954,
-      "pe": 22.07,
+      "score": 0.7059,
+      "pe": 21.86,
       "roe": 0.2315,
       "de": 0.97,
       "earnings_growth": 0.119
     },
     {
-      "ticker": "HAL",
-      "score": 0.6642,
-      "pe": 35.48,
-      "roe": 0.2398,
-      "de": 0.16,
-      "earnings_growth": 0.055
-    },
-    {
       "ticker": "POLYCAB",
-      "score": 0.6475,
-      "pe": 49.06,
+      "score": 0.6176,
+      "pe": 48.72,
       "roe": 0.2555,
       "de": 1.74,
       "earnings_growth": 0.325
     },
     {
-      "ticker": "IRCTC",
-      "score": 0.6225,
-      "pe": 28.97,
-      "roe": 0.3496,
-      "de": 1.87,
-      "earnings_growth": -0.089
-    },
-    {
-      "ticker": "PAGEIND",
-      "score": 0.5346,
-      "pe": 53.28,
-      "roe": 0.525,
-      "de": 18.42,
-      "earnings_growth": 0.09
-    },
-    {
-      "ticker": "IGL",
-      "score": 0.5308,
-      "pe": 13.71,
-      "roe": 0.1393,
-      "de": 0.85,
-      "earnings_growth": -0.252
-    },
-    {
-      "ticker": "CDSL",
-      "score": 0.5217,
-      "pe": 60.0,
-      "roe": 0.2391,
-      "de": 0.11,
-      "earnings_growth": -0.199
-    },
-    {
-      "ticker": "GLAND",
-      "score": 0.5092,
-      "pe": 43.31,
-      "roe": 0.1053,
-      "de": 2.74,
-      "earnings_growth": 0.964
-    },
-    {
-      "ticker": "SOLARINDS",
-      "score": 0.5088,
-      "pe": 109.37,
-      "roe": 0.3123,
-      "de": 23.27,
-      "earnings_growth": 0.7
-    },
-    {
-      "ticker": "ASHOKLEY",
-      "score": 0.4971,
-      "pe": 29.87,
-      "roe": 0.2164,
-      "de": 344.74,
-      "earnings_growth": 0.245
-    },
-    {
-      "ticker": "MPHASIS",
-      "score": 0.495,
-      "pe": 25.35,
-      "roe": 0.1774,
-      "de": 24.68,
-      "earnings_growth": 0.107
-    },
-    {
       "ticker": "INDUSTOWER",
-      "score": 0.4829,
-      "pe": 14.14,
+      "score": 0.5294,
+      "pe": 14.19,
       "roe": 0.1891,
       "de": 51.79,
       "earnings_growth": 0.006
     },
     {
+      "ticker": "ASHOKLEY",
+      "score": 0.5294,
+      "pe": 29.09,
+      "roe": 0.2164,
+      "de": 344.74,
+      "earnings_growth": 0.245
+    },
+    {
+      "ticker": "CDSL",
+      "score": 0.5294,
+      "pe": 59.28,
+      "roe": 0.2391,
+      "de": 0.11,
+      "earnings_growth": -0.199
+    },
+    {
+      "ticker": "IGL",
+      "score": 0.5147,
+      "pe": 16.6,
+      "roe": 0.1393,
+      "de": 0.85,
+      "earnings_growth": -0.252
+    },
+    {
+      "ticker": "MPHASIS",
+      "score": 0.5,
+      "pe": 25.42,
+      "roe": 0.1774,
+      "de": 24.68,
+      "earnings_growth": 0.107
+    },
+    {
+      "ticker": "CESC",
+      "score": 0.4853,
+      "pe": 14.3,
+      "roe": 0.1255,
+      "de": 164.31,
+      "earnings_growth": 0.178
+    },
+    {
+      "ticker": "GLAND",
+      "score": 0.4706,
+      "pe": 43.33,
+      "roe": 0.1053,
+      "de": 2.74,
+      "earnings_growth": 0.964
+    },
+    {
+      "ticker": "ALKEM",
+      "score": 0.4412,
+      "pe": 27.9,
+      "roe": 0.1756,
+      "de": 14.27,
+      "earnings_growth": -0.227
+    },
+    {
       "ticker": "JBCHEPHARM",
-      "score": 0.4504,
+      "score": 0.4412,
       "pe": 54.22,
       "roe": 0.1869,
       "de": 0.09,
       "earnings_growth": -0.31
+    },
+    {
+      "ticker": "GODREJIND",
+      "score": 0.4412,
+      "pe": 34.04,
+      "roe": 0.1083,
+      "de": 222.41,
+      "earnings_growth": 1.426
+    },
+    {
+      "ticker": "ABB",
+      "score": 0.4265,
+      "pe": 102.27,
+      "roe": 0.1913,
+      "de": 1.55,
+      "earnings_growth": 0.03
+    },
+    {
+      "ticker": "VBL",
+      "score": 0.4265,
+      "pe": 43.5,
+      "roe": 0.1685,
+      "de": 15.87,
+      "earnings_growth": 0.157
     }
   ]
 }
