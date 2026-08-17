@@ -1,127 +1,111 @@
 {
-  "updated_at": "2026-08-14T13:55:44.663445",
-  "n_scored": 17,
+  "updated_at": "2026-08-17T13:22:46.822457",
+  "n_scored": 13,
   "n_universe": 168,
   "top_15": [
     {
       "ticker": "OFSS",
-      "score": 0.8382,
-      "pe": 30.23,
+      "score": 0.8654,
+      "pe": 30.11,
       "roe": 0.499,
       "de": 0.57,
       "earnings_growth": 1.202
     },
     {
       "ticker": "INDIAMART",
-      "score": 0.7059,
-      "pe": 21.86,
+      "score": 0.6731,
+      "pe": 21.64,
       "roe": 0.2315,
       "de": 0.97,
       "earnings_growth": 0.119
     },
     {
       "ticker": "POLYCAB",
-      "score": 0.6176,
-      "pe": 48.72,
+      "score": 0.6154,
+      "pe": 49.47,
       "roe": 0.2555,
       "de": 1.74,
       "earnings_growth": 0.325
     },
     {
       "ticker": "INDUSTOWER",
-      "score": 0.5294,
-      "pe": 14.19,
+      "score": 0.5385,
+      "pe": 14.0,
       "roe": 0.1891,
       "de": 51.79,
       "earnings_growth": 0.006
     },
     {
-      "ticker": "ASHOKLEY",
-      "score": 0.5294,
-      "pe": 29.09,
-      "roe": 0.2164,
-      "de": 344.74,
-      "earnings_growth": 0.245
-    },
-    {
       "ticker": "CDSL",
-      "score": 0.5294,
-      "pe": 59.28,
+      "score": 0.5192,
+      "pe": 60.06,
       "roe": 0.2391,
       "de": 0.11,
       "earnings_growth": -0.199
     },
     {
       "ticker": "IGL",
-      "score": 0.5147,
-      "pe": 16.6,
+      "score": 0.5192,
+      "pe": 16.54,
       "roe": 0.1393,
       "de": 0.85,
       "earnings_growth": -0.252
     },
     {
+      "ticker": "GLAND",
+      "score": 0.5192,
+      "pe": 42.6,
+      "roe": 0.1053,
+      "de": 2.74,
+      "earnings_growth": 0.964
+    },
+    {
       "ticker": "MPHASIS",
       "score": 0.5,
-      "pe": 25.42,
+      "pe": 25.09,
       "roe": 0.1774,
       "de": 24.68,
       "earnings_growth": 0.107
     },
     {
       "ticker": "CESC",
-      "score": 0.4853,
-      "pe": 14.3,
+      "score": 0.4808,
+      "pe": 14.49,
       "roe": 0.1255,
       "de": 164.31,
       "earnings_growth": 0.178
     },
     {
-      "ticker": "GLAND",
-      "score": 0.4706,
-      "pe": 43.33,
-      "roe": 0.1053,
-      "de": 2.74,
-      "earnings_growth": 0.964
-    },
-    {
-      "ticker": "ALKEM",
-      "score": 0.4412,
-      "pe": 27.9,
-      "roe": 0.1756,
-      "de": 14.27,
-      "earnings_growth": -0.227
-    },
-    {
-      "ticker": "JBCHEPHARM",
-      "score": 0.4412,
-      "pe": 54.22,
-      "roe": 0.1869,
-      "de": 0.09,
-      "earnings_growth": -0.31
-    },
-    {
-      "ticker": "GODREJIND",
-      "score": 0.4412,
-      "pe": 34.04,
-      "roe": 0.1083,
-      "de": 222.41,
-      "earnings_growth": 1.426
-    },
-    {
-      "ticker": "ABB",
-      "score": 0.4265,
-      "pe": 102.27,
-      "roe": 0.1913,
-      "de": 1.55,
-      "earnings_growth": 0.03
-    },
-    {
       "ticker": "VBL",
-      "score": 0.4265,
-      "pe": 43.5,
+      "score": 0.4808,
+      "pe": 43.39,
       "roe": 0.1685,
       "de": 15.87,
       "earnings_growth": 0.157
+    },
+    {
+      "ticker": "ICICIPRULI",
+      "score": 0.4615,
+      "pe": 43.67,
+      "roe": 0.1258,
+      "de": 19.04,
+      "earnings_growth": 0.614
+    },
+    {
+      "ticker": "DLF",
+      "score": 0.4615,
+      "pe": 37.36,
+      "roe": 0.101,
+      "de": 0.67,
+      "earnings_growth": 0.042
+    },
+    {
+      "ticker": "PRESTIGE",
+      "score": 0.1154,
+      "pe": 60.21,
+      "roe": 0.0775,
+      "de": 105.49,
+      "earnings_growth": -0.193
     }
   ]
 }
