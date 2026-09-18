@@ -1,127 +1,111 @@
 {
-  "updated_at": "2026-07-15T14:22:17.625306",
-  "n_scored": 115,
+  "updated_at": "2026-08-17T13:22:46.822457",
+  "n_scored": 13,
   "n_universe": 168,
   "top_15": [
     {
-      "ticker": "GESHIP",
-      "score": 0.8145,
-      "pe": 6.77,
-      "roe": 0.1885,
-      "de": 6.41,
-      "earnings_growth": 1.875
-    },
-    {
-      "ticker": "MCX",
-      "score": 0.7888,
-      "pe": 55.28,
-      "roe": 0.3788,
-      "de": 0.11,
-      "earnings_growth": 2.912
-    },
-    {
-      "ticker": "IEX",
-      "score": 0.7694,
-      "pe": 21.46,
-      "roe": 0.3942,
-      "de": 0.82,
-      "earnings_growth": 0.098
-    },
-    {
-      "ticker": "GNFC",
-      "score": 0.7521,
-      "pe": 9.07,
-      "roe": 0.0914,
-      "de": 0.07,
-      "earnings_growth": 0.871
-    },
-    {
       "ticker": "OFSS",
-      "score": 0.7467,
-      "pe": 38.84,
-      "roe": 0.3261,
-      "de": 0.41,
-      "earnings_growth": 0.306
+      "score": 0.8654,
+      "pe": 30.11,
+      "roe": 0.499,
+      "de": 0.57,
+      "earnings_growth": 1.202
     },
     {
-      "ticker": "NATIONALUM",
-      "score": 0.7401,
-      "pe": 10.82,
-      "roe": 0.2942,
-      "de": 0.28,
-      "earnings_growth": -0.167
+      "ticker": "INDIAMART",
+      "score": 0.6731,
+      "pe": 21.64,
+      "roe": 0.2315,
+      "de": 0.97,
+      "earnings_growth": 0.119
     },
     {
-      "ticker": "NMDC",
-      "score": 0.7345,
-      "pe": 10.02,
-      "roe": 0.2336,
-      "de": 18.8,
-      "earnings_growth": 0.377
+      "ticker": "POLYCAB",
+      "score": 0.6154,
+      "pe": 49.47,
+      "roe": 0.2555,
+      "de": 1.74,
+      "earnings_growth": 0.325
     },
     {
-      "ticker": "CHAMBLFERT",
-      "score": 0.729,
-      "pe": 9.3,
-      "roe": 0.2045,
-      "de": 10.27,
-      "earnings_growth": 0.302
+      "ticker": "INDUSTOWER",
+      "score": 0.5385,
+      "pe": 14.0,
+      "roe": 0.1891,
+      "de": 51.79,
+      "earnings_growth": 0.006
     },
     {
-      "ticker": "LUPIN",
-      "score": 0.7285,
-      "pe": 21.39,
-      "roe": 0.2691,
-      "de": 29.39,
-      "earnings_growth": 0.89
+      "ticker": "CDSL",
+      "score": 0.5192,
+      "pe": 60.06,
+      "roe": 0.2391,
+      "de": 0.11,
+      "earnings_growth": -0.199
     },
     {
-      "ticker": "HINDCOPPER",
-      "score": 0.7076,
-      "pe": 51.75,
-      "roe": 0.306,
-      "de": 3.32,
-      "earnings_growth": 1.366
+      "ticker": "IGL",
+      "score": 0.5192,
+      "pe": 16.54,
+      "roe": 0.1393,
+      "de": 0.85,
+      "earnings_growth": -0.252
     },
     {
-      "ticker": "MUTHOOTFIN",
-      "score": 0.6944,
-      "pe": 11.6,
-      "roe": 0.3041,
-      "de": 379.71,
-      "earnings_growth": 1.267
+      "ticker": "GLAND",
+      "score": 0.5192,
+      "pe": 42.6,
+      "roe": 0.1053,
+      "de": 2.74,
+      "earnings_growth": 0.964
     },
     {
-      "ticker": "VEDL",
-      "score": 0.6851,
-      "pe": 14.52,
-      "roe": 0.204,
-      "de": 48.04,
-      "earnings_growth": 0.922
+      "ticker": "MPHASIS",
+      "score": 0.5,
+      "pe": 25.09,
+      "roe": 0.1774,
+      "de": 24.68,
+      "earnings_growth": 0.107
     },
     {
-      "ticker": "PETRONET",
-      "score": 0.685,
-      "pe": 10.67,
-      "roe": 0.1856,
-      "de": 10.51,
-      "earnings_growth": 0.253
+      "ticker": "CESC",
+      "score": 0.4808,
+      "pe": 14.49,
+      "roe": 0.1255,
+      "de": 164.31,
+      "earnings_growth": 0.178
     },
     {
-      "ticker": "IRCTC",
-      "score": 0.6625,
-      "pe": 28.86,
-      "roe": 0.3496,
-      "de": 1.87,
-      "earnings_growth": -0.089
+      "ticker": "VBL",
+      "score": 0.4808,
+      "pe": 43.39,
+      "roe": 0.1685,
+      "de": 15.87,
+      "earnings_growth": 0.157
     },
     {
-      "ticker": "TATAELXSI",
-      "score": 0.6548,
-      "pe": 33.53,
-      "roe": 0.213,
-      "de": 5.34,
-      "earnings_growth": 0.278
+      "ticker": "ICICIPRULI",
+      "score": 0.4615,
+      "pe": 43.67,
+      "roe": 0.1258,
+      "de": 19.04,
+      "earnings_growth": 0.614
+    },
+    {
+      "ticker": "DLF",
+      "score": 0.4615,
+      "pe": 37.36,
+      "roe": 0.101,
+      "de": 0.67,
+      "earnings_growth": 0.042
+    },
+    {
+      "ticker": "PRESTIGE",
+      "score": 0.1154,
+      "pe": 60.21,
+      "roe": 0.0775,
+      "de": 105.49,
+      "earnings_growth": -0.193
     }
   ]
 }
