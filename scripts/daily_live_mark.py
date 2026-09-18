@@ -13,6 +13,7 @@ Usage:
 
 from __future__ import annotations
 
+import json
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -40,18 +41,62 @@ def find_live_strategies() -> list[str]:
     ]
 
 
-def compute_holdings(orders_df: pd.DataFrame) -> dict[str, dict]:
-    """Compute current holdings from order log.
+def load_kite_snapshot(strategy_dir: Path) -> dict | None:
+    """Load Kite holdings snapshot if one exists."""
+    snap_path = strategy_dir / "kite_snapshot.json"
+    if not snap_path.exists():
+        return None
+    with open(snap_path) as f:
+        return json.load(f)
 
-    Returns {symbol: {quantity, cost_basis}} by netting buys and sells.
+
+def compute_holdings(
+    orders_df: pd.DataFrame,
+    as_of_date: str | None = None,
+    kite_snapshot: dict | None = None,
+) -> dict[str, dict]:
+    """Compute holdings for a given date.
+
+    Priority:
+      1. If kite_snapshot exists and as_of_date >= snapshot date: use snapshot
+         as the base, then apply any placed orders after the snapshot date.
+      2. Otherwise: derive from orders.csv up to as_of_date.
+
+    This handles messy rebalances (duplicate orders, retries) by anchoring to
+    what Kite actually holds, as captured by kite_portfolio_sync.py.
     """
-    holdings = {}
-    placed = orders_df[orders_df["status"] == "placed"]
+    if kite_snapshot and as_of_date and as_of_date >= kite_snapshot["date"]:
+        # Start from snapshot
+        holdings: dict[str, dict] = {
+            sym: {"quantity": h["quantity"], "cost_basis": h["cost_basis"]}
+            for sym, h in kite_snapshot["holdings"].items()
+            if h["quantity"] > 0
+        }
+        # Apply orders placed strictly after the snapshot date
+        post = orders_df[
+            (orders_df["status"] == "placed")
+            & (orders_df["timestamp"].str[:10] > kite_snapshot["date"])
+            & (orders_df["timestamp"].str[:10] <= as_of_date)
+        ].sort_values("timestamp")
+        _apply_orders(post, holdings)
+        return {s: h for s, h in holdings.items() if h["quantity"] > 0}
 
-    for _, row in placed.iterrows():
+    # Derive from orders.csv only
+    holdings = {}
+    placed = orders_df[orders_df["status"] == "placed"].copy()
+    if as_of_date:
+        placed = placed[placed["timestamp"].str[:10] <= as_of_date]
+    placed = placed.sort_values("timestamp")
+    _apply_orders(placed, holdings)
+    return {s: h for s, h in holdings.items() if h["quantity"] > 0}
+
+
+def _apply_orders(orders: pd.DataFrame, holdings: dict) -> None:
+    """Apply a set of orders onto a holdings dict in-place."""
+    for _, row in orders.iterrows():
         sym = row["symbol"]
         qty = int(row["quantity"])
-        value = float(row["estimated_value"])
+        value = float(row["estimated_value"]) if pd.notna(row.get("estimated_value")) else 0.0
 
         if sym not in holdings:
             holdings[sym] = {"quantity": 0, "cost_basis": 0.0}
@@ -64,8 +109,6 @@ def compute_holdings(orders_df: pd.DataFrame) -> dict[str, dict]:
                 avg_cost = holdings[sym]["cost_basis"] / holdings[sym]["quantity"]
                 holdings[sym]["cost_basis"] -= avg_cost * qty
             holdings[sym]["quantity"] -= qty
-
-    return {s: h for s, h in holdings.items() if h["quantity"] > 0}
 
 
 def fetch_historical_closes(symbols: list[str], start: str) -> pd.DataFrame:
@@ -213,13 +256,13 @@ def mark_live_strategy(strategy: str) -> None:
         log.info(f"{strategy}: no orders, skipping")
         return
 
-    holdings = compute_holdings(orders_df)
-    if not holdings:
-        log.info(f"{strategy}: no active holdings, skipping")
-        return
+    # Load Kite snapshot if available (ground truth for messy rebalances)
+    kite_snapshot = load_kite_snapshot(strategy_dir)
+    if kite_snapshot:
+        log.info(f"{strategy}: using Kite snapshot from {kite_snapshot['date']} as holdings anchor")
 
     # Find earliest order date for backfill boundary
-    first_order_date = orders_df["timestamp"].min()[:10]
+    first_order_date = orders_df["timestamp"].dropna().min()[:10]
 
     # Find all missing trading days
     missing = find_missing_dates(equity_path, first_order_date)
@@ -227,13 +270,17 @@ def mark_live_strategy(strategy: str) -> None:
         log.info(f"{strategy}: all dates up to today already marked")
         return
 
-    symbols = list(holdings.keys())
-    total_cost = sum(h["cost_basis"] for h in holdings.values())
+    # Collect all symbols we might need prices for
+    # (union of orders-derived symbols and snapshot symbols)
+    all_symbols: set[str] = set()
+    snap_symbols = set(kite_snapshot["holdings"].keys()) if kite_snapshot else set()
+    order_symbols = set(orders_df[orders_df["status"] == "placed"]["symbol"].tolist())
+    all_symbols = snap_symbols | order_symbols
 
-    # Fetch historical prices covering the entire gap
+    # Fetch historical prices for the full gap
     fetch_start = (pd.Timestamp(missing[0]) - pd.DateOffset(days=5)).strftime("%Y-%m-%d")
-    log.info(f"{strategy}: fetching prices for {len(symbols)} holdings from {fetch_start}...")
-    hist = fetch_historical_closes(symbols, start=fetch_start)
+    log.info(f"{strategy}: fetching prices for {len(all_symbols)} symbols from {fetch_start}...")
+    hist = fetch_historical_closes(list(all_symbols), start=fetch_start)
 
     if hist.empty:
         log.warning(f"{strategy}: could not fetch historical prices")
@@ -244,39 +291,47 @@ def mark_live_strategy(strategy: str) -> None:
     for date_str in missing:
         dt = pd.Timestamp(date_str)
         if dt not in hist.index:
-            # Not a trading day (holiday), skip
+            continue  # market holiday
+
+        # Determine holdings for this specific date
+        holdings = compute_holdings(orders_df, as_of_date=date_str, kite_snapshot=kite_snapshot)
+        if not holdings:
+            log.warning(f"{strategy}: no holdings computed for {date_str}, skipping")
             continue
 
         close_prices = {}
         skip = False
-        for sym in symbols:
+        for sym in holdings:
             if sym in hist.columns and pd.notna(hist.loc[dt, sym]):
                 close_prices[sym] = float(hist.loc[dt, sym])
             else:
+                log.warning(f"{strategy}: no price for {sym} on {date_str}, skipping day")
                 skip = True
                 break
 
         if skip:
-            log.warning(f"{strategy}: missing price data for {date_str}, skipping")
             continue
 
         if mark_single_day(strategy, holdings, close_prices, date_str, equity_path, positions_path):
             marked += 1
 
-    # Sort files by date to keep them clean after backfills
+    # Sort files by date after backfills
     if marked > 0:
         for fpath in [equity_path, positions_path]:
             if fpath.exists():
                 df = pd.read_csv(fpath)
-                df = df.sort_values("date").drop_duplicates(subset=["date"] if fpath == equity_path else ["date", "symbol"])
+                subset = ["date"] if fpath == equity_path else ["date", "symbol"]
+                df = df.sort_values("date").drop_duplicates(subset=subset)
                 df.to_csv(fpath, index=False)
 
     if marked > 0:
-        # Log summary for the latest mark
-        latest_date = missing[-1] if missing else "?"
+        # Summary using latest date's holdings
+        latest_holdings = compute_holdings(orders_df, kite_snapshot=kite_snapshot)
+        total_cost = sum(h["cost_basis"] for h in latest_holdings.values())
+        latest_date = missing[-1]
         current_value = sum(
-            holdings[s]["quantity"] * hist[s].loc[:pd.Timestamp(latest_date)].dropna().iloc[-1]
-            for s in symbols if s in hist.columns
+            latest_holdings[s]["quantity"] * hist[s].loc[:pd.Timestamp(latest_date)].dropna().iloc[-1]
+            for s in latest_holdings if s in hist.columns
         ) if not hist.empty else 0
         total_pnl = current_value - total_cost
         total_pnl_pct = (total_pnl / total_cost * 100) if total_cost > 0 else 0
@@ -286,7 +341,7 @@ def mark_live_strategy(strategy: str) -> None:
             f"({'backfilled' if marked > 1 else 'current'}) | "
             f"invested Rs.{total_cost:,.0f} -> value Rs.{current_value:,.0f} "
             f"(P&L {total_pnl:+,.0f} / {total_pnl_pct:+.2f}%) | "
-            f"{len(holdings)} positions"
+            f"{len(latest_holdings)} positions"
         )
     else:
         log.info(f"{strategy}: no trading days to mark (holidays?)")

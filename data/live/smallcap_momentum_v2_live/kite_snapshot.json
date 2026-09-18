@@ -1,0 +1,76 @@
+{
+  "date": "2026-09-18",
+  "source": "kite_holdings_api",
+  "holdings": {
+    "ADANIPOWER": {
+      "quantity": 64,
+      "average_price": 211.88,
+      "cost_basis": 13560.2
+    },
+    "AEGISLOG": {
+      "quantity": 10,
+      "average_price": 1333,
+      "cost_basis": 13330
+    },
+    "AUROPHARMA": {
+      "quantity": 8,
+      "average_price": 1623.5,
+      "cost_basis": 12988.0
+    },
+    "BHARATFORG": {
+      "quantity": 6,
+      "average_price": 2046.55,
+      "cost_basis": 12279.3
+    },
+    "BHEL": {
+      "quantity": 32,
+      "average_price": 395.36,
+      "cost_basis": 12651.55
+    },
+    "CUB": {
+      "quantity": 58,
+      "average_price": 225.7,
+      "cost_basis": 13090.6
+    },
+    "FEDERALBNK": {
+      "quantity": 38,
+      "average_price": 335.81,
+      "cost_basis": 12760.95
+    },
+    "GRANULES": {
+      "quantity": 16,
+      "average_price": 840.23,
+      "cost_basis": 13443.7
+    },
+    "HINDCOPPER": {
+      "quantity": 23,
+      "average_price": 520.52,
+      "cost_basis": 11971.9
+    },
+    "IDEA": {
+      "quantity": 885,
+      "average_price": 14.46,
+      "cost_basis": 12796.82
+    },
+    "LAURUSLABS": {
+      "quantity": 7,
+      "average_price": 1648.1,
+      "cost_basis": 11536.7
+    },
+    "MCX": {
+      "quantity": 3,
+      "average_price": 2986.17,
+      "cost_basis": 8958.5
+    },
+    "NATIONALUM": {
+      "quantity": 33,
+      "average_price": 378.9,
+      "cost_basis": 12503.8
+    },
+    "NAVINFLUOR": {
+      "quantity": 1,
+      "average_price": 7340,
+      "cost_basis": 7340
+    }
+  }
+}

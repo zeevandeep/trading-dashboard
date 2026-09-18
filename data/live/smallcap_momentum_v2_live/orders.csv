@@ -39,3 +39,72 @@ NATIONALUM,BUY,15,5229.000091552734,260708221483997,placed,350.35,2026-07-08T11:
 NAVINFLUOR,BUY,1,7350.0,,failed: Tick size for this script is 0.50. Kindly enter price in the multiple of tick size for this script,7386.7,2026-07-08T11:35:56.618579
 NAVINFLUOR,BUY,1,7350.0,260708221487030,placed,7386.5,2026-07-08T11:36:10.000000
 POLYCAB,BUY,1,9206.5,260708221484026,placed,9252.5,2026-07-08T11:35:56.618579
+ADANIGREEN,SELL,4,5212.7998046875,,failed: IP (2804:2778:2491:182:f0d8:5c34:31d3:c969) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,1296.7,2026-08-26T12:12:43.121812
+BHEL,SELL,1,415.5,,failed: IP (2804:2778:2491:182:f0d8:5c34:31d3:c969) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,413.4,2026-08-26T12:12:43.121812
+CUMMINSIND,SELL,1,5200.0,,failed: IP (2804:2778:2491:182:f0d8:5c34:31d3:c969) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,5174.0,2026-08-26T12:12:43.121812
+FEDERALBNK,SELL,1,345.29998779296875,,failed: IP (2804:2778:2491:182:f0d8:5c34:31d3:c969) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,343.55,2026-08-26T12:12:43.121812
+GESHIP,SELL,4,5328.7998046875,,failed: IP (2804:2778:2491:182:f0d8:5c34:31d3:c969) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,1325.5,2026-08-26T12:12:43.121812
+HINDCOPPER,SELL,2,1112.0999755859375,,failed: IP (2804:2778:2491:182:f0d8:5c34:31d3:c969) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,553.25,2026-08-26T12:12:43.121812
+IDEA,SELL,37,557.2200155258179,,failed: IP (2804:2778:2491:182:f0d8:5c34:31d3:c969) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,15.0,2026-08-26T12:12:43.121812
+LAURUSLABS,SELL,1,1887.0,,failed: IP (2804:2778:2491:182:f0d8:5c34:31d3:c969) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,1877.6,2026-08-26T12:12:43.121812
+MCX,SELL,1,3350.0,,failed: IP (2804:2778:2491:182:f0d8:5c34:31d3:c969) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,3333.2,2026-08-26T12:12:43.121812
+NATIONALUM,SELL,3,1197.8999633789062,,failed: IP (2804:2778:2491:182:f0d8:5c34:31d3:c969) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,397.3,2026-08-26T12:12:43.121812
+POLYCAB,SELL,1,9060.0,,failed: IP (2804:2778:2491:182:f0d8:5c34:31d3:c969) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,9014.5,2026-08-26T12:12:43.121812
+ADANIPOWER,BUY,2,414.3999938964844,,failed: IP (2804:2778:2491:182:f0d8:5c34:31d3:c969) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,208.25,2026-08-26T12:12:43.121812
+AEGISLOG,BUY,5,6658.499755859375,,failed: IP (2804:2778:2491:182:f0d8:5c34:31d3:c969) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,1338.4,2026-08-26T12:12:43.121812
+AUROPHARMA,BUY,4,6492.0,,failed: IP (2804:2778:2491:182:f0d8:5c34:31d3:c969) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,1631.1,2026-08-26T12:12:43.121812
+CUB,BUY,29,6577.200088500977,,failed: IP (2804:2778:2491:182:f0d8:5c34:31d3:c969) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,227.95,2026-08-26T12:12:43.121812
+GRANULES,BUY,1,828.2000122070312,,failed: IP (2804:2778:2491:182:f0d8:5c34:31d3:c969) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,832.35,2026-08-26T12:12:43.121812
+MOTHERSON,BUY,40,6600.0,,failed: IP (2804:2778:2491:182:f0d8:5c34:31d3:c969) is not allowed to place orders for this app. Update allowed IPs on the Kite developer console. Learn more - https://support.zerodha.com/category/trading-and-markets/general-kite/kite-api/articles/static-ip,165.8,2026-08-26T12:12:43.121812
+ADANIGREEN,SELL,4,,failed: Your order could not be converted to a After Market Order (AMO).,1296.7,2026-08-26T12:41:43.810533
+BHEL,SELL,1,,failed: Your order could not be converted to a After Market Order (AMO).,413.4,2026-08-26T12:41:43.810533
+CUMMINSIND,SELL,1,,failed: Your order could not be converted to a After Market Order (AMO).,5174.0,2026-08-26T12:41:43.810533
+FEDERALBNK,SELL,1,,failed: Your order could not be converted to a After Market Order (AMO).,343.55,2026-08-26T12:41:43.810533
+GESHIP,SELL,4,,failed: Your order could not be converted to a After Market Order (AMO).,1325.5,2026-08-26T12:41:43.810533
+HINDCOPPER,SELL,2,,failed: Your order could not be converted to a After Market Order (AMO).,553.25,2026-08-26T12:41:43.810533
+IDEA,SELL,37,,failed: Your order could not be converted to a After Market Order (AMO).,15.0,2026-08-26T12:41:43.810533
+LAURUSLABS,SELL,1,,failed: Your order could not be converted to a After Market Order (AMO).,1877.6,2026-08-26T12:41:43.810533
+MCX,SELL,1,,failed: Your order could not be converted to a After Market Order (AMO).,3333.2,2026-08-26T12:41:43.810533
+NATIONALUM,SELL,3,,failed: Your order could not be converted to a After Market Order (AMO).,397.3,2026-08-26T12:41:43.810533
+POLYCAB,SELL,1,,failed: Maximum allowed order requests per second exceeded.,9014.5,2026-08-26T12:41:43.810533
+ADANIPOWER,BUY,2,,failed: Maximum allowed order requests per second exceeded.,208.25,2026-08-26T12:41:43.810533
+AEGISLOG,BUY,5,,failed: Maximum allowed order requests per second exceeded.,1338.4,2026-08-26T12:41:43.810533
+AUROPHARMA,BUY,4,,failed: Maximum allowed order requests per second exceeded.,1631.1,2026-08-26T12:41:43.810533
+CUB,BUY,29,,failed: Maximum allowed order requests per second exceeded.,227.95,2026-08-26T12:41:43.810533
+GRANULES,BUY,1,,failed: Maximum allowed order requests per second exceeded.,832.35,2026-08-26T12:41:43.810533
+MOTHERSON,BUY,40,,failed: Maximum allowed order requests per second exceeded.,165.8,2026-08-26T12:41:43.810533
+ADANIGREEN,SELL,4,260826221157635,placed,1296.7,2026-08-26T12:43:39.177122
+BHEL,SELL,1,260826221157636,placed,413.4,2026-08-26T12:43:39.177122
+CUMMINSIND,SELL,1,260826221157637,placed,5174.0,2026-08-26T12:43:39.177122
+FEDERALBNK,SELL,1,260826221157638,placed,343.55,2026-08-26T12:43:39.177122
+GESHIP,SELL,4,260826221157639,placed,1325.5,2026-08-26T12:43:39.177122
+HINDCOPPER,SELL,2,260826221157641,placed,553.25,2026-08-26T12:43:39.177122
+IDEA,SELL,37,260826221157642,placed,15.0,2026-08-26T12:43:39.177122
+LAURUSLABS,SELL,1,260826221157643,placed,1877.6,2026-08-26T12:43:39.177122
+MCX,SELL,1,260826221157646,placed,3333.2,2026-08-26T12:43:39.177122
+NATIONALUM,SELL,3,260826221157647,placed,397.3,2026-08-26T12:43:39.177122
+POLYCAB,SELL,1,260826221157649,placed,9014.5,2026-08-26T12:43:39.177122
+ADANIPOWER,BUY,2,260826221157650,placed,208.25,2026-08-26T12:43:39.177122
+AEGISLOG,BUY,5,260826221157651,placed,1338.4,2026-08-26T12:43:39.177122
+AUROPHARMA,BUY,4,260826221157652,placed,1631.1,2026-08-26T12:43:39.177122
+CUB,BUY,29,260826221157653,placed,227.95,2026-08-26T12:43:39.177122
+GRANULES,BUY,1,260826221157655,placed,832.35,2026-08-26T12:43:39.177122
+MOTHERSON,BUY,40,260826221157658,placed,165.8,2026-08-26T12:43:39.177122
+ADANIGREEN,SELL,4,260826221158862,placed,1296.7,2026-08-26T13:11:21.242917
+CUMMINSIND,SELL,1,260826221158864,placed,5174.0,2026-08-26T13:11:21.242917
+GESHIP,SELL,4,260826221158866,placed,1325.5,2026-08-26T13:11:21.242917
+POLYCAB,SELL,1,260826221158868,placed,9014.5,2026-08-26T13:11:21.242917
+ADANIPOWER,BUY,34,260826221158869,placed,208.25,2026-08-26T13:11:21.242917
+AEGISLOG,BUY,10,260826221158870,placed,1338.4,2026-08-26T13:11:21.242917
+AUROPHARMA,BUY,8,260826221158871,placed,1631.1,2026-08-26T13:11:21.242917
+BHARATFORG,BUY,3,260826221158873,placed,2015.0,2026-08-26T13:11:21.242917
+BHEL,BUY,15,260826221158874,placed,417.6,2026-08-26T13:11:21.242917
+CUB,BUY,58,260826221158875,placed,227.95,2026-08-26T13:11:21.242917
+FEDERALBNK,BUY,18,260826221158876,placed,347.05,2026-08-26T13:11:21.242917
+GRANULES,BUY,9,260826221158877,placed,832.35,2026-08-26T13:11:21.242917
+HINDCOPPER,BUY,10,260826221158878,placed,558.85,2026-08-26T13:11:21.242917
+IDEA,BUY,406,260826221158881,placed,15.15,2026-08-26T13:11:21.242917
+LAURUSLABS,BUY,3,260826221158883,placed,1896.4,2026-08-26T13:11:21.242917
+MCX,BUY,1,260826221158884,placed,3366.7,2026-08-26T13:11:21.242917
+MOTHERSON,BUY,80,260826221158885,placed,165.8,2026-08-26T13:11:21.242917
+NATIONALUM,BUY,14,260826221158886,placed,401.3,2026-08-26T13:11:21.242917

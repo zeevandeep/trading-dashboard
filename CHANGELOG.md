@@ -5,6 +5,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Kite snapshot + live mark fix (2026-09-18)
+- **`scripts/kite_portfolio_sync.py`** (new) — one-time script to log into Kite, fetch actual holdings, and save `kite_snapshot.json`. Also triggers an immediate equity.csv backfill. Run this after any messy rebalance.
+- **`scripts/daily_live_mark.py`** — updated `compute_holdings()` to accept `as_of_date` and `kite_snapshot` params. When a snapshot exists, uses it as ground truth and only applies orders placed after the snapshot date on top. Fixes the Aug 26 duplicate-order problem. `mark_live_strategy()` now computes holdings per-date (so backfill across rebalances works correctly).
+
 ### Bedrock live on AngelOne (pending first execution)
 - Script ready: `scripts/bedrock_live_rebalance.py`
 - Config: `configs/value_quality_v1_live.yaml` (top 15, Rs 1L, quarterly)
