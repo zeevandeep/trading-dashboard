@@ -48,6 +48,84 @@ CONFIG_PATH = ROOT / "configs" / "smallcap_momentum_v2_live.yaml"
 DEFAULT_CAPITAL = 10_000
 
 
+def _post_rebalance_cleanup(
+    strategy_name: str,
+    broker_holdings: dict,
+    log_path: Path,
+    broker_source: str = "kite",
+) -> None:
+    """Run after placing real orders:
+    1. Validate orders.csv for column-shift corruption (NaN timestamps)
+    2. Save pre-rebalance holdings as snapshot dated yesterday — ensures today's
+       placed orders are applied on top by compute_holdings (strict > comparison)
+    3. Run daily mark for immediate P&L update
+    """
+    import json
+    from datetime import date, timedelta
+
+    strategy_dir = DATA_DIR / "live" / strategy_name
+    snap_fname = "kite_snapshot.json" if broker_source == "kite" else "holdings_snapshot.json"
+    snap_path = strategy_dir / snap_fname
+
+    # 1. Validate orders.csv
+    if log_path.exists():
+        import pandas as _pd
+        df = _pd.read_csv(log_path)
+        bad = int(df["timestamp"].isna().sum())
+        if bad > 0:
+            print(f"\n⚠ WARNING: {bad} rows have NaN timestamp in {log_path.name}")
+            print("  This indicates a column-shift bug (estimated_value missing from order results).")
+            print("  Rows are corrupt — status/limit_price/timestamp columns are shifted.")
+            print("  Run a manual repair before the next rebalance.")
+
+    # 2. Save snapshot (pre-rebalance holdings, dated yesterday)
+    yesterday = (date.today() - timedelta(days=1)).isoformat()
+
+    # Preserve epoch_start from existing snapshot
+    epoch_start = None
+    if snap_path.exists():
+        with open(snap_path) as f:
+            old = json.load(f)
+        epoch_start = old.get("epoch_start")
+
+    def _strip_eq(s: str) -> str:
+        return s[:-3] if s.endswith("-EQ") else s
+
+    snap = {
+        "date": yesterday,
+        "source": f"{broker_source}_holdings_api",
+        "holdings": {
+            _strip_eq(sym): {
+                "quantity": h["quantity"],
+                "average_price": round(float(h.get("average_price", 0)), 2),
+                "cost_basis": round(h["quantity"] * float(h.get("average_price", 0)), 2),
+            }
+            for sym, h in broker_holdings.items()
+            if h.get("quantity", 0) > 0
+        },
+    }
+    if epoch_start:
+        snap["epoch_start"] = epoch_start
+
+    with open(snap_path, "w") as f:
+        json.dump(snap, f, indent=2)
+
+    n = len(snap["holdings"])
+    log.info(f"Snapshot saved: {n} pre-rebalance positions dated {yesterday} → {snap_path.name}")
+    print(f"\nSnapshot updated: {n} positions, dated {yesterday}")
+    print(f"Today's placed orders will be applied on top by compute_holdings.")
+
+    # 3. Immediate daily mark
+    print("Running daily mark...")
+    import importlib.util
+    mark_script = ROOT / "scripts" / "daily_live_mark.py"
+    spec = importlib.util.spec_from_file_location("daily_live_mark", mark_script)
+    mark_mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mark_mod)
+    mark_mod.mark_live_strategy(strategy_name)
+    print("Mark complete.")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Monthly live rebalance (top-5)")
     parser.add_argument("--dry-run", action="store_true", help="Show orders without placing them")
@@ -256,7 +334,14 @@ def main():
 
     if placed:
         print(f"\nOrders logged to {log_path}")
-        print("Check your Kite app to verify fills.")
+        _post_rebalance_cleanup(
+            strategy_name=strategy_name,
+            broker_holdings=current_holdings,
+            log_path=log_path,
+            broker_source="kite",
+        )
+    else:
+        print("No orders placed — skipping post-rebalance cleanup.")
 
 
 if __name__ == "__main__":

@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import json
 import sys
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 import pandas as pd
@@ -38,10 +38,11 @@ STRATEGY_DIR = DATA_DIR / "live" / STRATEGY
 SNAP_PATH = STRATEGY_DIR / "kite_snapshot.json"
 
 
-def fetch_and_save_snapshot() -> dict:
+def fetch_and_save_snapshot(kite=None) -> dict:
     """Log into Kite, fetch holdings, save snapshot. Returns holdings dict."""
-    log.info("Logging into Kite...")
-    kite = kite_module.login()
+    if kite is None:
+        log.info("Logging into Kite...")
+        kite = kite_module.login()
 
     raw = kite.holdings()
     holdings = {}
@@ -56,7 +57,7 @@ def fetch_and_save_snapshot() -> dict:
             }
 
     snap = {
-        "date": date.today().isoformat(),
+        "date": (date.today() - timedelta(days=1)).isoformat(),
         "source": "kite_holdings_api",
         "holdings": holdings,
     }

@@ -5,6 +5,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Post-rebalance auto-safeguards (2026-10-13)
+
+#### Added
+- **`scripts/monthly_live_rebalance.py`** + **`scripts/bedrock_live_rebalance.py`** — `_post_rebalance_cleanup()` runs automatically after every real execution (skipped on dry-run). Does three things:
+  1. **orders.csv validation** — detects NaN timestamps (symptom of column-shift bug) and prints a loud warning immediately instead of failing silently days later.
+  2. **Snapshot refresh** — saves current (pre-rebalance) holdings to `kite_snapshot.json` / `holdings_snapshot.json` with `date = yesterday`. This guarantees today's placed orders are always applied on top by `compute_holdings` (which uses strict `>`). Eliminates the "snapshot dated same day as rebalance → orders silently excluded" bug.
+  3. **Immediate daily mark** — runs `mark_live_strategy()` right after orders log, so equity.csv reflects the new holdings without waiting for the nightly cron.
+- **`scripts/kite_portfolio_sync.py`** — `fetch_and_save_snapshot()` now accepts an optional `kite=` parameter (avoids a second login when called from the rebalance script). Snapshot date also changed to yesterday consistently.
+
 ### Universe cleanup + proxy firewall + Bedrock capital + Ascent holdings fix (2026-10-13)
 
 #### Fixed
