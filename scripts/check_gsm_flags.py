@@ -34,38 +34,55 @@ log = setup_logging("gsm_check")
 
 def check_gsm_via_angel(symbols: list[str], obj=None) -> dict[str, str]:
     """
-    Check GSM status via AngelOne searchScrip.
+    Check GSM/cautionary status via the DO proxy's /api/angel/check-tradeable.
+
+    Places a stub BUY at Rs 1 from the whitelisted proxy IP. AngelOne validates
+    the cautionary flag (AB4036) before price — blocked stocks detected immediately.
+    Stub orders that land are cancelled right away by the proxy.
 
     Returns {symbol: "gsm" | "ok" | "error"}.
-    A stock with '-BE' series on NSE is in Trade-for-Trade segment (GSM proxy).
-
-    Pass an existing AngelOne session as `obj` to avoid an extra login.
+    `obj` param is accepted for API compatibility but not used (proxy handles login).
     """
-    if obj is None:
-        from trading.execution.angel import login
-        obj = login()
-    results: dict[str, str] = {}
+    import httpx
+    from trading.config import Secrets
 
-    for i, sym in enumerate(symbols):
-        if i > 0:
-            time.sleep(1.2)  # AngelOne searchScrip rate limit
-        try:
-            search = obj.searchScrip("NSE", sym)
-            data = search.get("data") or []
-            series = [d.get("tradingsymbol", "") for d in data]
-            # '-BE' = Trade-for-Trade segment = GSM indicator
-            if f"{sym}-BE" in series or f"{sym}-BL" in series:
-                results[sym] = "gsm"
-                log.warning(f"  {sym}: GSM/T+T (series: {[s for s in series if s.startswith(sym)]})")
-            elif any(d.get("tradingsymbol") == f"{sym}-EQ" for d in data):
-                results[sym] = "ok"
-                log.info(f"  {sym}: OK")
-            else:
-                results[sym] = "unknown"
-                log.warning(f"  {sym}: no EQ series found — {series}")
-        except Exception as e:
-            results[sym] = "error"
-            log.error(f"  {sym}: error — {e}")
+    secrets = Secrets.from_env()
+    proxy_url = secrets.proxy_url.rstrip("/")
+    proxy_key = secrets.proxy_api_key
+
+    payload = {
+        "angel_api_key":     secrets.angel_api_key,
+        "angel_client_id":   secrets.angel_client_id,
+        "angel_password":    secrets.angel_password,
+        "angel_totp_secret": secrets.angel_totp_secret,
+        "symbols": symbols,
+    }
+
+    log.info(f"Sending GSM check for {len(symbols)} symbols via proxy...")
+    try:
+        resp = httpx.post(
+            f"{proxy_url}/api/angel/check-tradeable",
+            json=payload,
+            headers={"Authorization": f"Bearer {proxy_key}"},
+            timeout=len(symbols) * 4 + 30,  # ~4s per symbol + buffer
+        )
+        resp.raise_for_status()
+    except Exception as e:
+        log.error(f"Proxy GSM check failed: {e}")
+        return {s: "error" for s in symbols}
+
+    results: dict[str, str] = {}
+    for r in resp.json():
+        sym = r["symbol"]
+        status = r["status"]
+        reason = r.get("reason", "")
+        results[sym] = status
+        if status == "gsm":
+            log.warning(f"  {sym}: GSM BLOCKED — {reason}")
+        elif status == "ok":
+            log.info(f"  {sym}: OK")
+        else:
+            log.warning(f"  {sym}: {status} — {reason}")
 
     return results
 

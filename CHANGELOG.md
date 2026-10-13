@@ -5,6 +5,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Fix double-Bearer JWT header + Oct 12 rebalance corrections complete (2026-10-13)
+
+#### Fixed
+- **`order_proxy.py`** — `_place_order_raw()` was prepending `"Bearer "` to the JWT token, but `session["data"]["jwtToken"]` already includes the `"Bearer "` prefix. This caused `"Bearer Bearer eyJ..."` → AngelOne returned `"Invalid Token"` for all direct HTTP orders. Fixed by using `auth_token` directly in the `Authorization` header (not wrapped in `f"Bearer {auth_token}"`).
+- Same double-prefix bug fixed in `/api/angel/check-tradeable` stub order headers.
+
+#### Changed
+- **`scripts/retry_failed_orders.py`** — PENDING_ORDERS cleared: IOB SELL 142 and AUBANK BUY 4 are confirmed placed. IEX SELL 13 and BAJAJHLDNG BUY 1 are documented as exchange-blocked (NSE cautionary listing AB4036) — no API workaround exists.
+
+#### Investigated
+- IEX (SELL 13) and BAJAJHLDNG (BUY 1) both return AB4036: "The order cannot be processed as the token is categorised under cautionary listings by the exchange." NSE has placed both stocks on its cautionary/surveillance listing. Neither can be traded via AngelOne API.
+
 ### AngelOne idempotency fix + CSV column fix (2026-10-13)
 
 #### Fixed

@@ -24,12 +24,11 @@ from trading.utils.logging import setup_logging
 log = setup_logging("retry_orders")
 
 # Oct 12 rebalance — outstanding corrections
-PENDING_ORDERS = [
-    {"symbol": "IOB",        "side": "SELL", "quantity": 142},  # double-bought, trim back to 142
-    {"symbol": "IEX",        "side": "SELL", "quantity": 13},   # sell failed in rebalance
-    {"symbol": "AUBANK",     "side": "BUY",  "quantity": 4},    # buy never filled
-    {"symbol": "BAJAJHLDNG", "side": "BUY",  "quantity": 1},    # buy never filled
-]
+# IOB SELL 142 ✓ placed  |  AUBANK BUY 4 ✓ placed
+# IEX SELL 13 — BLOCKED: NSE cautionary listing (AB4036), exchange blocks API trading
+# BAJAJHLDNG BUY 1 — BLOCKED: NSE cautionary listing (AB4036), exchange blocks API trading
+# Both require AngelOne app to place manually (exchange-level restriction, no API workaround)
+PENDING_ORDERS: list[dict] = []
 
 LOG_PATH = DATA_DIR / "live" / "value_quality_v1_live" / "orders.csv"
 

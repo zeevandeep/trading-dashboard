@@ -159,6 +159,7 @@ def angel_place_orders(
     _check_auth(authorization)
 
     import pyotp
+    import requests as _requests
     from SmartApi import SmartConnect
 
     # Login
@@ -167,6 +168,49 @@ def angel_place_orders(
     session = obj.generateSession(req.angel_client_id, req.angel_password, totp)
     if not session.get("status"):
         raise HTTPException(500, f"AngelOne login failed: {session.get('message', session)}")
+
+    # jwtToken already includes "Bearer " prefix from AngelOne — use as-is
+    _auth_token = session["data"]["jwtToken"]
+
+    def _place_order_raw(params: dict) -> tuple[str | None, str]:
+        """
+        Place an order via direct HTTP call (not SmartApi wrapper).
+        Returns (order_id_or_None, status_string).
+        SmartApi's placeOrder returns None for failures — we need the raw response
+        to read the actual AngelOne error code (e.g. AB4036 for GSM).
+        """
+        headers = {
+            "Content-type": "application/json",
+            "Authorization": _auth_token,
+            "X-ClientLocalIP": "127.0.0.1",
+            "X-ClientPublicIP": "127.0.0.1",
+            "X-MACAddress": "00:00:00:00:00:00",
+            "Accept": "application/json",
+            "X-PrivateKey": req.angel_api_key,
+            "X-UserType": "USER",
+            "X-SourceID": "WEB",
+        }
+        try:
+            r = _requests.post(
+                "https://apiconnect.angelone.in/rest/secure/angelbroking/order/v1/placeOrder",
+                json=params,
+                headers=headers,
+                timeout=15,
+            )
+            data = r.json()
+            if data.get("status") and data.get("data", {}).get("orderid"):
+                return data["data"]["orderid"], "placed"
+            else:
+                msg = data.get("message", "")
+                code = data.get("errorcode", "")
+                if code == "AB4036" or "cautionary" in msg.lower():
+                    return None, "failed: GSM cautionary listing (AB4036)"
+                elif code == "AB8051" or "suspended" in msg.lower():
+                    return None, "failed: stock suspended (AB8051)"
+                else:
+                    return None, f"failed: {msg} ({code})" if code else f"failed: {msg or 'no response'}"
+        except Exception as e:
+            return None, f"failed: {e}"
 
     import time
     import logging
@@ -273,58 +317,172 @@ def angel_place_orders(
             "quantity": str(order.quantity),
         }
         logger.info(f"placeOrder params: {params}")
-        try:
-            resp = obj.placeOrder(params)
-            logger.info(f"placeOrder resp: {resp!r}")
-            if resp:
-                results.append(OrderResult(
-                    symbol=order.symbol, side=order.side, quantity=order.quantity,
-                    order_id=str(resp), status="placed", limit_price=limit_price,
-                ))
-            else:
-                # "No response" — AngelOne sometimes executes silently.
-                # Re-check the order book before declaring failure.
-                logger.warning(f"No response for {order.side} {order.quantity} {order.symbol} — re-checking order book...")
-                time.sleep(2)
-                try:
-                    ob2 = obj.orderBook()
-                    fresh_book = ob2.get("data") or []
-                    verified = _find_in_book(fresh_book, order.symbol, order.side, order.quantity)
-                    if verified:
-                        verified_id = verified.get("orderid", "unknown")
-                        logger.info(f"  → found in order book after retry (id={verified_id}) — marking as placed")
-                        results.append(OrderResult(
-                            symbol=order.symbol, side=order.side, quantity=order.quantity,
-                            order_id=str(verified_id), status="placed", limit_price=limit_price,
-                        ))
-                    else:
-                        logger.error(f"  → not found in order book — genuinely failed")
-                        results.append(OrderResult(
-                            symbol=order.symbol, side=order.side, quantity=order.quantity,
-                            order_id=None, status="failed: no response after retry", limit_price=limit_price,
-                        ))
-                except Exception as ob_exc:
-                    logger.error(f"  → order book re-check failed: {ob_exc}")
-                    results.append(OrderResult(
-                        symbol=order.symbol, side=order.side, quantity=order.quantity,
-                        order_id=None, status="failed: no response after retry", limit_price=limit_price,
-                    ))
-        except Exception as e:
-            err_str = str(e)
-            logger.error(f"placeOrder exception: {err_str}")
-            # Surface specific AngelOne error codes clearly
-            if "AB4036" in err_str or "cautionary" in err_str.lower():
-                status = "failed: GSM cautionary listing (AB4036)"
-            elif "AB8051" in err_str or "suspended" in err_str.lower():
-                status = "failed: stock suspended (AB8051)"
-            elif "not a registered IP" in err_str or "AG7002" in err_str:
-                status = "failed: IP not whitelisted (AG7002)"
-            else:
-                status = f"failed: {err_str[:120]}"
+        order_id, status = _place_order_raw(params)
+        logger.info(f"placeOrder result: order_id={order_id} status={status}")
+
+        if order_id:
+            results.append(OrderResult(
+                symbol=order.symbol, side=order.side, quantity=order.quantity,
+                order_id=order_id, status="placed", limit_price=limit_price,
+            ))
+        elif status.startswith("failed: GSM") or status.startswith("failed: stock suspended"):
+            # Hard block — don't re-check order book
             results.append(OrderResult(
                 symbol=order.symbol, side=order.side, quantity=order.quantity,
                 order_id=None, status=status, limit_price=limit_price,
             ))
+        else:
+            # Ambiguous failure — AngelOne sometimes executes silently.
+            # Re-check the order book before declaring failure.
+            logger.warning(f"Ambiguous response for {order.side} {order.quantity} {order.symbol} — re-checking order book...")
+            time.sleep(2)
+            try:
+                ob2 = obj.orderBook()
+                fresh_book = ob2.get("data") or []
+                verified = _find_in_book(fresh_book, order.symbol, order.side, order.quantity)
+                if verified:
+                    verified_id = verified.get("orderid", "unknown")
+                    logger.info(f"  → found in order book (id={verified_id}) — marking as placed")
+                    results.append(OrderResult(
+                        symbol=order.symbol, side=order.side, quantity=order.quantity,
+                        order_id=str(verified_id), status="placed", limit_price=limit_price,
+                    ))
+                else:
+                    logger.error(f"  → not found in order book — genuinely failed: {status}")
+                    results.append(OrderResult(
+                        symbol=order.symbol, side=order.side, quantity=order.quantity,
+                        order_id=None, status=status, limit_price=limit_price,
+                    ))
+            except Exception as ob_exc:
+                logger.error(f"  → order book re-check failed: {ob_exc}")
+                results.append(OrderResult(
+                    symbol=order.symbol, side=order.side, quantity=order.quantity,
+                    order_id=None, status=status, limit_price=limit_price,
+                ))
+
+    return results
+
+
+class AngelCheckTradeableRequest(BaseModel):
+    angel_api_key: str
+    angel_client_id: str
+    angel_password: str
+    angel_totp_secret: str
+    symbols: list[str]
+    exchange: str = "NSE"
+
+
+class TradeableResult(BaseModel):
+    symbol: str
+    status: str   # "ok" | "gsm" | "suspended" | "error"
+    reason: str = ""
+
+
+@app.post("/api/angel/check-tradeable")
+def angel_check_tradeable(
+    req: AngelCheckTradeableRequest,
+    authorization: str = Header(None),
+) -> list[TradeableResult]:
+    """
+    Pre-rebalance GSM/cautionary check. Places a stub BUY order at Rs 1
+    for each symbol. AngelOne validates the cautionary flag (AB4036) before
+    price, so blocked stocks are detected immediately. Stub orders that land
+    are cancelled right away.
+    """
+    _check_auth(authorization)
+
+    import pyotp
+    import time
+    import logging
+    from SmartApi import SmartConnect
+
+    logger = logging.getLogger("angel_proxy")
+    obj = SmartConnect(api_key=req.angel_api_key)
+    totp = pyotp.TOTP(req.angel_totp_secret).now()
+    session = obj.generateSession(req.angel_client_id, req.angel_password, totp)
+    if not session.get("status"):
+        raise HTTPException(500, f"AngelOne login failed: {session.get('message', session)}")
+
+    results = []
+    for i, sym in enumerate(req.symbols):
+        if i > 0:
+            time.sleep(1.2)
+
+        # Get EQ token
+        try:
+            search = obj.searchScrip(req.exchange, sym)
+            data = search.get("data") or []
+            token = next(
+                (d["symboltoken"] for d in data if d.get("tradingsymbol") == f"{sym}-EQ"),
+                None,
+            )
+            if not token:
+                results.append(TradeableResult(symbol=sym, status="error", reason="no EQ token"))
+                continue
+        except Exception as e:
+            results.append(TradeableResult(symbol=sym, status="error", reason=str(e)[:80]))
+            continue
+
+        time.sleep(0.5)
+
+        # Stub BUY at Rs 1 via direct HTTP — AB4036 fires before price validation for GSM stocks
+        auth_token = session["data"]["jwtToken"]  # already includes "Bearer " prefix
+        stub_params = {
+            "variety": "NORMAL",
+            "tradingsymbol": f"{sym}-EQ",
+            "symboltoken": token,
+            "transactiontype": "BUY",
+            "exchange": req.exchange,
+            "ordertype": "LIMIT",
+            "producttype": "DELIVERY",
+            "duration": "DAY",
+            "price": "1.00",
+            "quantity": "1",
+        }
+        import requests as _req
+        headers = {
+            "Content-type": "application/json",
+            "Authorization": auth_token,
+            "X-ClientLocalIP": "127.0.0.1",
+            "X-ClientPublicIP": "127.0.0.1",
+            "X-MACAddress": "00:00:00:00:00:00",
+            "Accept": "application/json",
+            "X-PrivateKey": req.angel_api_key,
+            "X-UserType": "USER",
+            "X-SourceID": "WEB",
+        }
+        try:
+            r = _req.post(
+                "https://apiconnect.angelone.in/rest/secure/angelbroking/order/v1/placeOrder",
+                json=stub_params, headers=headers, timeout=10,
+            )
+            data = r.json()
+            if data.get("status") and data.get("data", {}).get("orderid"):
+                order_id = data["data"]["orderid"]
+                # Cancel immediately
+                try:
+                    time.sleep(0.5)
+                    obj.cancelOrder(str(order_id), "NORMAL")
+                    logger.info(f"  {sym}: OK — stub order {order_id} cancelled")
+                except Exception:
+                    logger.warning(f"  {sym}: stub {order_id} — cancel failed, cancel manually")
+                results.append(TradeableResult(symbol=sym, status="ok"))
+            else:
+                msg = data.get("message", "")
+                code = data.get("errorcode", "")
+                if code == "AB4036" or "cautionary" in msg.lower():
+                    results.append(TradeableResult(symbol=sym, status="gsm", reason=f"AB4036: {msg}"))
+                    logger.warning(f"  {sym}: GSM BLOCKED")
+                elif code == "AB8051" or "suspended" in msg.lower():
+                    results.append(TradeableResult(symbol=sym, status="suspended", reason=f"AB8051: {msg}"))
+                    logger.warning(f"  {sym}: SUSPENDED")
+                else:
+                    # Price rejected or other non-GSM error — stock is tradeable
+                    results.append(TradeableResult(symbol=sym, status="ok"))
+                    logger.info(f"  {sym}: OK (stub rejected for price: {msg})")
+        except Exception as e:
+            results.append(TradeableResult(symbol=sym, status="error", reason=str(e)[:120]))
+            logger.error(f"  {sym}: error — {e}")
 
     return results
 
