@@ -75,6 +75,10 @@ jobs:
             git push
           fi
 
+      - name: Validate live data integrity
+        if: github.event.schedule != '15 4 * * 1-5'
+        run: python scripts/validate_live_data.py --strict
+
       - name: Send Telegram summary
         if: always()
         env:

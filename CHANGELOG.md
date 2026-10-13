@@ -5,6 +5,22 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Live data integrity validation system (2026-10-13)
+
+#### Added
+- **`scripts/validate_live_data.py`** — Comprehensive validation script that runs after every daily mark. Catches the exact failures that caused historical data corruption:
+  - `equity.csv`: NAV never resets to 1.0 after day 1, no >25% daily swings without a capital event, invested column matches capital_events sum
+  - `orders.csv`: 8-column schema, no NaN timestamps in placed orders, no NaN estimated_value in placed BUYs, no duplicate placed orders same symbol/side/date
+  - `capital_events.csv`: no duplicate dates
+  - `positions.csv`: no cost_basis=0 for active positions
+  - `kite_snapshot.json`: epoch_start ≤ snapshot date, epoch_start matches a capital event
+- **`.github/workflows/daily-mark.yml`** — Added `Validate live data integrity` step with `--strict` flag (exits 1 on any error, blocking the push). Runs after every 6PM mark.
+
+#### Fixed
+- **`data/live/value_quality_v1_live/orders.csv`** — AUBANK BUY (Oct 13) had NaN estimated_value → cost_basis was 0 in positions.csv. Fixed to Rs.3,955.60 (4 × 988.9).
+- **`data/live/value_quality_v1_live/positions.csv`** — AUBANK cost_basis, pnl, pnl_pct recomputed.
+- **`data/live/smallcap_momentum_v2_live/orders.csv`** — 20 Aug 26 placed BUY rows had NaN estimated_value (orders placed via Kite app, value not captured). Patched to quantity × limit_price.
+
 ### Fix NAV chain-link from Jun 4 (2026-10-13)
 
 #### Fixed
