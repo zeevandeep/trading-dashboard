@@ -541,31 +541,40 @@ def days_to_rebal():
     return max(0, (date(t.year, t.month, ld) - t).days)
 
 
-def extend_returns_with_paper(backtest_returns: pd.Series, paper_strategy: str) -> pd.Series:
-    """Append paper trading daily returns after the backtest period.
+def extend_returns_with_paper(backtest_returns: pd.Series, paper_strategy: str,
+                              live_strategy: str | None = None) -> pd.Series:
+    """Append live (or paper) daily returns after the backtest period.
 
-    Computes daily returns from the paper equity.csv and concatenates them
-    to the backtest returns so the monthly heatmap stays up to date.
+    Priority: live equity.csv NAV > paper equity.csv.
+    Live returns use the NAV column so they reflect actual capital-adjusted performance.
     """
-    eq_path = PAPER_DIR / paper_strategy / "equity.csv"
-    if not eq_path.exists():
-        return backtest_returns
-
-    eq_df = pd.read_csv(eq_path, parse_dates=["date"], index_col="date")
-    if eq_df.empty or "equity" not in eq_df.columns:
-        return backtest_returns
-
-    paper_ret = eq_df["equity"].pct_change().dropna()
-    paper_ret.index = pd.DatetimeIndex(paper_ret.index)
-
-    # Only keep paper returns after the backtest ends
     cutoff = backtest_returns.index[-1]
-    paper_ret = paper_ret[paper_ret.index > cutoff]
+    live_ret = pd.Series(dtype=float)
 
-    if paper_ret.empty:
+    # ── Try live data first ───────────────────────────────────────────────────
+    if live_strategy:
+        live_path = LIVE_DIR / live_strategy / "equity.csv"
+        if live_path.exists():
+            ldf = pd.read_csv(live_path, parse_dates=["date"], index_col="date")
+            if not ldf.empty and "nav" in ldf.columns:
+                live_ret = ldf["nav"].pct_change().dropna()
+                live_ret.index = pd.DatetimeIndex(live_ret.index)
+                live_ret = live_ret[live_ret.index > cutoff]
+
+    # ── Fall back to paper if no live data ────────────────────────────────────
+    if live_ret.empty:
+        eq_path = PAPER_DIR / paper_strategy / "equity.csv"
+        if eq_path.exists():
+            eq_df = pd.read_csv(eq_path, parse_dates=["date"], index_col="date")
+            if not eq_df.empty and "equity" in eq_df.columns:
+                live_ret = eq_df["equity"].pct_change().dropna()
+                live_ret.index = pd.DatetimeIndex(live_ret.index)
+                live_ret = live_ret[live_ret.index > cutoff]
+
+    if live_ret.empty:
         return backtest_returns
 
-    return pd.concat([backtest_returns, paper_ret])
+    return pd.concat([backtest_returns, live_ret])
 
 
 def monthly_table(rets):

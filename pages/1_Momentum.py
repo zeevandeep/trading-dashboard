@@ -155,7 +155,8 @@ with col_l:
     """, unsafe_allow_html=True)
 
     try:
-        extended = extend_returns_with_paper(returns, "smallcap_momentum_v2")
+        extended = extend_returns_with_paper(returns, "smallcap_momentum_v2",
+                                              live_strategy="smallcap_momentum_v2_live")
         mr = monthly_table(extended) * 100
         years = [str(y) for y in mr.index.tolist()]
         months = mr.columns.tolist()

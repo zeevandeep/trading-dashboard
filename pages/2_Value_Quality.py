@@ -185,7 +185,8 @@ with vq_l:
         """, unsafe_allow_html=True)
 
         try:
-            extended = extend_returns_with_paper(vq_returns, "value_quality_v1")
+            extended = extend_returns_with_paper(vq_returns, "value_quality_v1",
+                                                  live_strategy="value_quality_v1_live")
             mr = monthly_table(extended) * 100
             years = [str(y) for y in mr.index.tolist()]
             months = mr.columns.tolist()

@@ -5,6 +5,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Monthly heatmap shows live returns, not paper (2026-10-14)
+
+#### Fixed
+- **`dashboard_shared.py`** `extend_returns_with_paper()` — heatmap was showing paper simulation returns for recent months (Jun +0.5%, etc.) instead of actual live NAV returns. Now accepts `live_strategy` parameter; if live equity.csv exists, uses NAV column for daily returns. Falls back to paper only if no live data.
+- **`pages/1_Momentum.py`** — passes `live_strategy="smallcap_momentum_v2_live"` so Jun–Oct 2026 shows actual live performance: Jun −6.9%, Jul −0.3%, Aug +3.7%, Sep −3.8%, Oct −8.2%.
+- **`pages/2_Value_Quality.py`** — same fix, passes `live_strategy="value_quality_v1_live"`.
+
 ### Live data integrity validation system (2026-10-13)
 
 #### Added
