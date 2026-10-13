@@ -1,12 +1,15 @@
-"""Build a daily Telegram summary from equity CSVs and send it."""
+"""Build a daily Telegram summary from live equity CSVs and send it."""
 import csv
 import os
 import sys
 import urllib.request
 import urllib.parse
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
 
 def read_last_two(path):
-    """Return (prev_row, last_row) or (None, last_row) from a CSV."""
     rows = []
     with open(path) as f:
         reader = csv.DictReader(f)
@@ -14,54 +17,63 @@ def read_last_two(path):
             rows.append(row)
     if not rows:
         return None, None
-    if len(rows) == 1:
-        return None, rows[-1]
-    return rows[-2], rows[-1]
+    return (rows[-2] if len(rows) > 1 else None), rows[-1]
+
 
 def fmt_pct(val):
     sign = "+" if val >= 0 else ""
     return f"{sign}{val:.2f}%"
 
+
+def nav_return_pct(nav: float) -> float:
+    """NAV is stored as a multiplier (1.0 = 0%, 1.05 = +5%). Return % change."""
+    return (nav - 1.0) * 100
+
+
 def build_message():
-    lines = ["📊 *JD Quant Daily Mark*", ""]
+    lines = ["📊 *JD Quant Daily Update*", ""]
+    mark_date = None
 
-    # Paper: Ascent
-    ascent_path = "data/paper/smallcap_momentum_v2/equity.csv"
-    if os.path.exists(ascent_path):
-        prev, last = read_last_two(ascent_path)
-        if last:
-            equity = float(last["equity"])
-            total_ret = (equity - 1) * 100
-            daily = ""
-            if prev:
-                daily_ret = (float(last["equity"]) / float(prev["equity"]) - 1) * 100
-                daily = f" ({fmt_pct(daily_ret)} today)"
-            lines.append(f"*Ascent* (paper): {fmt_pct(total_ret)} total{daily}")
+    strategies = [
+        ("Ascent", "data/live/smallcap_momentum_v2_live/equity.csv"),
+        ("Bedrock", "data/live/value_quality_v1_live/equity.csv"),
+    ]
 
-    # Paper: Bedrock
-    bedrock_path = "data/paper/value_quality_v1/equity.csv"
-    if os.path.exists(bedrock_path):
-        prev, last = read_last_two(bedrock_path)
-        if last:
-            equity = float(last["equity"])
-            total_ret = (equity - 1) * 100
-            daily = ""
-            if prev:
-                daily_ret = (float(last["equity"]) / float(prev["equity"]) - 1) * 100
-                daily = f" ({fmt_pct(daily_ret)} today)"
-            lines.append(f"*Bedrock* (paper): {fmt_pct(total_ret)} total{daily}")
+    for name, rel_path in strategies:
+        path = ROOT / rel_path
+        if not path.exists():
+            lines.append(f"*{name}*: no data")
+            continue
 
-    # Live
-    live_path = "data/live/smallcap_momentum_v2_live/equity.csv"
-    if os.path.exists(live_path):
-        prev, last = read_last_two(live_path)
-        if last:
-            pnl = float(last["pnl"])
-            pnl_pct = float(last["pnl_pct"])
-            lines.append(f"*Live* (₹10K): ₹{pnl:+,.0f} ({fmt_pct(pnl_pct)})")
+        prev, last = read_last_two(str(path))
+        if not last:
+            lines.append(f"*{name}*: empty")
+            continue
 
-    lines.append(f"\n_{last['date'] if last else 'N/A'}_")
+        mark_date = last.get("date", "")
+        nav = float(last.get("nav", 1.0))
+        mv = float(last.get("market_value", 0))
+        inv = float(last.get("invested", 0))
+        pnl = float(last.get("pnl", 0))
+        n_pos = int(last.get("n_positions", 0))
+        total_ret = nav_return_pct(nav)
+
+        daily_str = ""
+        if prev:
+            prev_nav = float(prev.get("nav", nav))
+            daily_ret = (nav / prev_nav - 1) * 100 if prev_nav > 0 else 0
+            daily_str = f"  ({fmt_pct(daily_ret)} today)"
+
+        lines.append(
+            f"*{name}*: NAV {fmt_pct(total_ret)}{daily_str}"
+            f"\n  ₹{mv:,.0f} market · ₹{pnl:+,.0f} P&L · {n_pos} pos"
+        )
+
+    if mark_date:
+        lines.append(f"\n_{mark_date}_")
+
     return "\n".join(lines)
+
 
 def send(message):
     token = os.environ.get("TELEGRAM_BOT_TOKEN")
@@ -78,6 +90,7 @@ def send(message):
     req = urllib.request.Request(url, data=data)
     urllib.request.urlopen(req)
     print("Telegram message sent.")
+
 
 if __name__ == "__main__":
     msg = build_message()

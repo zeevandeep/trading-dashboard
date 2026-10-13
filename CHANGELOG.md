@@ -5,6 +5,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Order fill cron improvements + Telegram summary (2026-10-13)
+
+#### Fixed
+- **`scripts/check_order_fills.py`** — `check_angel_fills()` now does a proper quantity comparison: builds expected post-rebalance holdings (snapshot + placed orders applied), fetches actual AngelOne holdings, and flags any symbol where `actual_qty != expected_qty`. Previously it only flagged BUY symbols with `actual_qty == 0`, missing partial fills and all sell verifications.
+- **`scripts/check_order_fills.py`** — `check_ascent_fills()` no longer checks the pre-rebalance snapshot (which always showed new BUY positions as unfilled). Now sends a Telegram reminder listing placed orders so JD can verify manually in the Kite app — honest about the CI limitation instead of silently wrong.
+- **`scripts/check_order_fills.py`** — Alert logic now distinguishes real failures (Bedrock qty mismatch → `sys.exit(1)`) from Ascent manual-check reminders (informational Telegram, no failure). Previously all "unfilled" triggered `sys.exit(1)` including the always-broken Ascent check.
+- **`scripts/telegram_summary.py`** — Rewritten to show both live strategies (Ascent + Bedrock) using NAV return and market value from equity.csv. Previously showed paper portfolio stats and a stale "Rs 10K live" line.
+
 ### Post-rebalance auto-safeguards (2026-10-13)
 
 #### Added

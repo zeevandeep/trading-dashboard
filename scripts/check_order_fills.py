@@ -85,12 +85,36 @@ def compute_expected_holdings(orders_df: pd.DataFrame, current_holdings: dict[st
 
 # ── AngelOne fill check ───────────────────────────────────────────────────────
 
-def check_angel_fills(orders_df: pd.DataFrame) -> list[dict]:
-    """Check AngelOne order fills. Returns list of unfilled orders."""
+def check_angel_fills(orders_df: pd.DataFrame, strategy_dir: Path) -> list[dict]:
+    """Check AngelOne fills: compare expected post-rebalance holdings vs actual.
+
+    Expected = snapshot (pre-rebalance base) + placed orders applied on top.
+    Actual = live AngelOne holdings via API.
+    Flags any symbol where actual qty != expected qty.
+    """
     if orders_df.empty:
         return []
 
+    import json
     from trading.execution.angel import login, get_holdings
+
+    # Build expected holdings: snapshot + orders
+    snap_path = strategy_dir / "holdings_snapshot.json"
+    snap_qty: dict[str, int] = {}
+    if snap_path.exists():
+        with open(snap_path) as f:
+            snap = json.load(f)
+        snap_qty = {s: int(h["quantity"]) for s, h in snap["holdings"].items() if h["quantity"] > 0}
+
+    expected_qty = dict(snap_qty)
+    for _, row in orders_df.iterrows():
+        sym = str(row["symbol"]).replace("-EQ", "")
+        qty = int(row["quantity"])
+        if row["side"] == "BUY":
+            expected_qty[sym] = expected_qty.get(sym, 0) + qty
+        elif row["side"] == "SELL":
+            expected_qty[sym] = max(0, expected_qty.get(sym, 0) - qty)
+    expected_qty = {k: v for k, v in expected_qty.items() if v > 0}
 
     log.info("Logging in to AngelOne...")
     obj = login()
@@ -98,39 +122,20 @@ def check_angel_fills(orders_df: pd.DataFrame) -> list[dict]:
     actual_qty = {s.replace("-EQ", ""): h["quantity"] for s, h in holdings.items()}
 
     unfilled = []
-    for _, row in orders_df.iterrows():
-        sym = row["symbol"].replace("-EQ", "")
-        qty = int(row["quantity"])
-        side = row["side"]
+    for sym, expected in expected_qty.items():
         actual = actual_qty.get(sym, 0)
-
-        if side == "BUY" and actual == 0:
+        if actual != expected:
+            side = "BUY" if actual < expected else "SELL"
             unfilled.append({
-                "symbol": sym, "side": side, "quantity": qty,
-                "actual_qty": actual, "order_id": row.get("order_id", ""),
-                "timestamp": str(row["timestamp"]),
+                "symbol": sym,
+                "side": side,
+                "quantity": abs(expected - actual),
+                "expected_qty": expected,
+                "actual_qty": actual,
+                "order_id": orders_df[orders_df["symbol"].str.replace("-EQ", "") == sym]["order_id"].iloc[0]
+                             if sym in orders_df["symbol"].str.replace("-EQ", "").values else "",
+                "timestamp": str(orders_df["timestamp"].iloc[-1]),
             })
-        elif side == "SELL":
-            # For sells, check order book if available (today only)
-            order_book = []
-            try:
-                resp = obj.orderBook()
-                order_book = resp.get("data") or []
-            except Exception:
-                pass
-            order_id = str(row.get("order_id", ""))
-            filled = any(
-                o.get("orderid") == order_id and o.get("status") == "complete"
-                for o in order_book
-            )
-            if not filled and order_id:
-                # Can't verify sell fills from holdings alone — mark as uncertain
-                unfilled.append({
-                    "symbol": sym, "side": side, "quantity": qty,
-                    "actual_qty": actual, "order_id": order_id,
-                    "timestamp": str(row["timestamp"]),
-                    "note": "sell fill unverifiable from holdings",
-                })
 
     return unfilled
 
@@ -138,38 +143,28 @@ def check_angel_fills(orders_df: pd.DataFrame) -> list[dict]:
 # ── Ascent (Kite) fill check ─────────────────────────────────────────────────
 
 def check_ascent_fills(orders_df: pd.DataFrame) -> list[dict]:
-    """Check Ascent fill status from holdings snapshot (Kite access token not available in CI)."""
+    """Kite automated login is not available in CI (requires browser OAuth).
+
+    Instead of a broken holdings comparison, send a Telegram reminder listing
+    what was placed so JD can manually verify fills in the Kite app.
+    Returns the placed orders as "pending verification" items.
+    """
     if orders_df.empty:
         return []
 
-    snapshot_path = LIVE_DIR / STRATEGIES["ascent"] / "kite_snapshot.json"
-    if not snapshot_path.exists():
-        log.warning("No Kite snapshot — skipping Ascent fill check")
-        return []
-
-    import json
-    with open(snapshot_path) as f:
-        snapshot = json.load(f)
-
-    holdings = snapshot.get("holdings", {})
-    actual_qty = {s.replace("-EQ", "").replace(":NSE", ""): h.get("quantity", 0)
-                  for s, h in holdings.items()}
-
-    unfilled = []
+    log.info("Ascent: Kite automated login unavailable in CI — returning orders for manual verification")
+    result = []
     for _, row in orders_df.iterrows():
-        sym = row["symbol"].replace("-EQ", "")
-        qty = int(row["quantity"])
-        side = row["side"]
-        actual = actual_qty.get(sym, 0)
-
-        if side == "BUY" and actual == 0:
-            unfilled.append({
-                "symbol": sym, "side": side, "quantity": qty,
-                "actual_qty": actual, "order_id": row.get("order_id", ""),
-                "timestamp": str(row["timestamp"]),
-            })
-
-    return unfilled
+        result.append({
+            "symbol": str(row["symbol"]).replace("-EQ", ""),
+            "side": row["side"],
+            "quantity": int(row["quantity"]),
+            "actual_qty": None,  # unknown — manual check needed
+            "order_id": row.get("order_id", ""),
+            "timestamp": str(row["timestamp"]),
+            "note": "manual Kite verification required",
+        })
+    return result
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
@@ -197,30 +192,58 @@ def main():
 
         log.info(f"{strat}: checking {len(orders_df)} placed orders...")
 
+        strategy_dir = LIVE_DIR / STRATEGIES[strat]
         if strat == "bedrock":
-            unfilled = check_angel_fills(orders_df)
+            unfilled = check_angel_fills(orders_df, strategy_dir)
         else:
             unfilled = check_ascent_fills(orders_df)
 
         if unfilled:
             all_unfilled[strat] = unfilled
             for u in unfilled:
-                log.warning(f"  UNFILLED: {u['side']} {u['quantity']} {u['symbol']}  order_id={u['order_id']}")
+                if u.get("note") == "manual Kite verification required":
+                    log.info(f"  PLACED (verify manually): {u['side']} {u['quantity']} {u['symbol']}  order_id={u['order_id']}")
+                else:
+                    log.warning(f"  UNFILLED: {u['side']} {u['quantity']} {u['symbol']}  expected={u['expected_qty']} actual={u['actual_qty']}")
         else:
             log.info(f"  {strat}: all orders filled")
 
     # ── Alert ────────────────────────────────────────────────────────────────
-    if all_unfilled:
-        lines = ["*JD Quant — Unfilled Orders Alert*\n"]
-        for strat, orders in all_unfilled.items():
+    # Separate true failures (Bedrock mismatch) from manual-check reminders (Ascent)
+    real_failures: dict[str, list] = {}
+    manual_check: dict[str, list] = {}
+    for strat, orders in all_unfilled.items():
+        for u in orders:
+            if u.get("note") == "manual Kite verification required":
+                manual_check.setdefault(strat, []).append(u)
+            else:
+                real_failures.setdefault(strat, []).append(u)
+
+    if manual_check:
+        lines = ["*JD Quant — Kite Fill Check*", "Verify these orders in the Kite app:\n"]
+        for strat, orders in manual_check.items():
+            lines.append(f"*{strat.upper()}* ({orders[0]['timestamp'][:10]})")
+            for u in orders:
+                lines.append(f"  {u['side']} {u['quantity']} × {u['symbol']}")
+        lines.append("\nOpen Kite → Orders → check status.")
+        send_telegram("\n".join(lines))
+        print("\nAscent fill reminder sent via Telegram.")
+
+    if real_failures:
+        lines = ["*JD Quant — UNFILLED ORDERS*\n"]
+        for strat, orders in real_failures.items():
             lines.append(f"*{strat.upper()}*")
             for u in orders:
-                lines.append(f"  {u['side']} {u['quantity']} {u['symbol']} — order `{u['order_id']}`")
+                lines.append(
+                    f"  {u['side']} {u['symbol']}: expected {u['expected_qty']} got {u['actual_qty']}"
+                    f" — order `{u['order_id']}`"
+                )
         lines.append("\nRe-run rebalance script to retry.")
         send_telegram("\n".join(lines))
         print("\nUNFILLED ORDERS DETECTED — Telegram alert sent")
         sys.exit(1)
-    else:
+
+    if not all_unfilled:
         log.info("All orders filled. No alert needed.")
         print("\nAll orders filled.")
 
