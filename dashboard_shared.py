@@ -18,6 +18,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from trading.config import DATA_DIR, OUTPUTS_DIR  # noqa: E402
 
 PAPER_DIR = DATA_DIR / "paper"
+LIVE_DIR  = DATA_DIR / "live"
 
 # ─── CSS Design System ───────────────────────────────────────────────────────
 
