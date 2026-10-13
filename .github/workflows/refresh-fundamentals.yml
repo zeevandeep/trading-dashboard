@@ -1,0 +1,82 @@
+name: Refresh Fundamentals Cache
+
+on:
+  # Quarterly: 1st of Jan, Apr, Jul, Oct at 2 AM IST (20:30 UTC prev day)
+  schedule:
+    - cron: "30 20 31 3,6,9,12 *"
+  workflow_dispatch:
+    inputs:
+      tickers:
+        description: "Specific tickers to refresh (space-separated, leave blank for full universe)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        env:
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -e .
+
+      - name: Refresh fundamentals cache
+        env:
+          SCREENER_CSRFTOKEN: ${{ secrets.SCREENER_CSRFTOKEN }}
+          SCREENER_SESSIONID: ${{ secrets.SCREENER_SESSIONID }}
+        run: |
+          if [ -n "${{ github.event.inputs.tickers }}" ]; then
+            python scripts/refresh_fundamentals_cache.py --tickers ${{ github.event.inputs.tickers }}
+          else
+            python scripts/refresh_fundamentals_cache.py
+          fi
+
+      - name: Push updated cache
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/cache/
+          if git diff --cached --quiet; then
+            echo "No cache changes to push."
+          else
+            git commit -m "Refresh fundamentals cache $(date +%Y-%m-%d)"
+            git fetch origin main
+            git rebase origin/main
+            git push
+          fi
+
+      - name: Notify via Telegram
+        if: always()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          if [ "$JOB_STATUS" = "success" ]; then
+            STATUS_MSG="✅ Fundamentals cache refreshed successfully."
+          else
+            STATUS_MSG="🔴 Fundamentals cache refresh FAILED."
+          fi
+          python -c "
+          import os, urllib.request, urllib.parse
+          token = os.environ['TELEGRAM_BOT_TOKEN']
+          chat_id = os.environ['TELEGRAM_CHAT_ID']
+          msg = os.environ.get('STATUS_MSG', 'Fundamentals refresh done.')
+          url = f'https://api.telegram.org/bot{token}/sendMessage'
+          data = urllib.parse.urlencode({'chat_id': chat_id, 'text': msg}).encode()
+          urllib.request.urlopen(urllib.request.Request(url, data=data))
+          " STATUS_MSG="$STATUS_MSG" || true

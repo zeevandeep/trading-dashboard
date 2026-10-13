@@ -1,10 +1,15 @@
-name: Bedrock Quarterly Paper Rebalance
+name: Bedrock Quarterly Rebalance
 
 on:
   schedule:
-    # 13:30 UTC = 7:00 PM IST, on 28th of Mar/Jun/Sep/Dec
     - cron: "30 13 28 3,6,9,12 *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      execute:
+        description: "Place live orders (false = dry-run only)"
+        required: false
+        default: "false"
+        type: string
 
 permissions:
   contents: write
@@ -12,7 +17,7 @@ permissions:
 jobs:
   rebalance:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v5
@@ -41,15 +46,37 @@ jobs:
           name: bedrock-factsheet
           path: outputs/factsheets/bedrock_*.pdf
 
+      - name: Bedrock live dry-run
+        if: github.event.inputs.execute != 'true'
+        env:
+          ANGEL_API_KEY: ${{ secrets.ANGEL_API_KEY }}
+          ANGEL_CLIENT_ID: ${{ secrets.ANGEL_CLIENT_ID }}
+          ANGEL_PASSWORD: ${{ secrets.ANGEL_PASSWORD }}
+          ANGEL_TOTP_SECRET: ${{ secrets.ANGEL_TOTP_SECRET }}
+        run: |
+          python scripts/bedrock_live_rebalance.py --dry-run 2>&1 | tee /tmp/bedrock_dryrun.txt
+          echo "DRY_RUN_OUTPUT<<EOF" >> $GITHUB_ENV
+          head -60 /tmp/bedrock_dryrun.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Bedrock live execute
+        if: github.event.inputs.execute == 'true'
+        env:
+          ANGEL_API_KEY: ${{ secrets.ANGEL_API_KEY }}
+          ANGEL_CLIENT_ID: ${{ secrets.ANGEL_CLIENT_ID }}
+          ANGEL_PASSWORD: ${{ secrets.ANGEL_PASSWORD }}
+          ANGEL_TOTP_SECRET: ${{ secrets.ANGEL_TOTP_SECRET }}
+        run: python scripts/bedrock_live_rebalance.py --yes --amo
+
       - name: Push updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/paper/ || true
+          git add data/paper/ data/live/ || true
           if git diff --cached --quiet; then
             echo "No data changes to push."
           else
-            git commit -m "Bedrock quarterly paper rebalance $(date +%Y-%m-%d)"
+            git commit -m "Bedrock quarterly rebalance $(date +%Y-%m-%d)"
             git fetch origin main
             git rebase origin/main
             git push
@@ -61,36 +88,29 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           JOB_STATUS: ${{ job.status }}
+          EXECUTE: ${{ github.event.inputs.execute }}
+          DRY_RUN_OUTPUT: ${{ env.DRY_RUN_OUTPUT }}
         run: |
-          python -c "
-          import glob, os, urllib.request, urllib.parse
-          token = os.environ['TELEGRAM_BOT_TOKEN']
-          chat_id = os.environ['TELEGRAM_CHAT_ID']
-          status = os.environ['JOB_STATUS']
-          icon = '🟢' if status == 'success' else '🔴'
-          msg = f'{icon} Bedrock quarterly rebalance: {status.upper()}'
-          # Send text
-          url = f'https://api.telegram.org/bot{token}/sendMessage'
-          data = urllib.parse.urlencode({'chat_id': chat_id, 'text': msg}).encode()
-          urllib.request.urlopen(urllib.request.Request(url, data=data))
-          # Send PDF if exists
-          pdfs = glob.glob('outputs/factsheets/bedrock_*.pdf')
-          if pdfs and status == 'success':
-              import http.client, mimetypes, uuid
-              boundary = uuid.uuid4().hex
-              pdf_path = pdfs[0]
-              with open(pdf_path, 'rb') as f:
-                  pdf_data = f.read()
-              fname = os.path.basename(pdf_path)
-              body = (
-                  f'--{boundary}\r\nContent-Disposition: form-data; name=\"chat_id\"\r\n\r\n{chat_id}\r\n'
-                  f'--{boundary}\r\nContent-Disposition: form-data; name=\"document\"; filename=\"{fname}\"\r\n'
-                  f'Content-Type: application/pdf\r\n\r\n'
-              ).encode() + pdf_data + f'\r\n--{boundary}--\r\n'.encode()
-              req = urllib.request.Request(
-                  f'https://api.telegram.org/bot{token}/sendDocument',
-                  data=body,
-                  headers={'Content-Type': f'multipart/form-data; boundary={boundary}'}
+          python - <<'PYEOF'
+          import os, urllib.request, urllib.parse
+          token = os.environ["TELEGRAM_BOT_TOKEN"]
+          chat_id = os.environ["TELEGRAM_CHAT_ID"]
+          status = os.environ["JOB_STATUS"]
+          execute = os.environ.get("EXECUTE", "false")
+          dry_run_output = os.environ.get("DRY_RUN_OUTPUT", "")
+
+          icon = "🟢" if status == "success" else "🔴"
+
+          if execute == "true":
+              msg = f"{icon} Bedrock live rebalance: {status.upper()}\nCheck AngelOne app for fills."
+          else:
+              msg = (
+                  f"{icon} Bedrock quarterly rebalance due.\n"
+                  f"Dry-run preview:\n```\n{dry_run_output[:2000]}\n```\n"
+                  f"To execute: trigger workflow with execute=true"
               )
-              urllib.request.urlopen(req)
-          "
+
+          url = f"https://api.telegram.org/bot{token}/sendMessage"
+          data = urllib.parse.urlencode({"chat_id": chat_id, "text": msg, "parse_mode": "Markdown"}).encode()
+          urllib.request.urlopen(urllib.request.Request(url, data=data))
+          PYEOF

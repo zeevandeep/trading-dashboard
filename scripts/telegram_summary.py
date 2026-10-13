@@ -69,6 +69,21 @@ def build_message():
             f"\n  ₹{mv:,.0f} market · ₹{pnl:+,.0f} P&L · {n_pos} pos"
         )
 
+    # ── Trend filter comparison (Ascent vs Ascent+filter) ────────────────────
+    tf_path = ROOT / "data/paper/ascent_trend_filtered/equity.csv"
+    if tf_path.exists():
+        _, tf_last = read_last_two(str(tf_path))
+        if tf_last:
+            tf_nav = float(tf_last.get("nav", 1.0))
+            tf_ret = nav_return_pct(tf_nav)
+            regime = tf_last.get("regime", "UNKNOWN")
+            nifty_10m = float(tf_last.get("nifty_10m_ret", 0))
+            regime_icon = "🟢" if regime == "RISK_ON" else "🔴"
+            lines.append(
+                f"\n*Trend Filter* (paper): NAV {fmt_pct(tf_ret)}"
+                f"\n  {regime_icon} {regime} · NIFTY 10m {fmt_pct(nifty_10m)}"
+            )
+
     if mark_date:
         lines.append(f"\n_{mark_date}_")
 

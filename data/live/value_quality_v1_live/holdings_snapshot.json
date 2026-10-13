@@ -1,0 +1,61 @@
+{
+  "date": "2026-09-27",
+  "source": "angelone_manual",
+  "holdings": {
+    "CHAMBLFERT": {
+      "quantity": 14,
+      "average_price": 455.19,
+      "cost_basis": 6372.66
+    },
+    "GESHIP": {
+      "quantity": 4,
+      "average_price": 1348.23,
+      "cost_basis": 5392.92
+    },
+    "GLAXO": {
+      "quantity": 2,
+      "average_price": 2439.14,
+      "cost_basis": 4878.28
+    },
+    "GNFC": {
+      "quantity": 13,
+      "average_price": 504.64,
+      "cost_basis": 6560.32
+    },
+    "IEX": {
+      "quantity": 54,
+      "average_price": 123.39,
+      "cost_basis": 6663.06
+    },
+    "IRCTC": {
+      "quantity": 13,
+      "average_price": 505.69,
+      "cost_basis": 6573.97
+    },
+    "LUPIN": {
+      "quantity": 2,
+      "average_price": 2450.15,
+      "cost_basis": 4900.30
+    },
+    "MCX": {
+      "quantity": 2,
+      "average_price": 2754.51,
+      "cost_basis": 5509.02
+    },
+    "MUTHOOTFIN": {
+      "quantity": 2,
+      "average_price": 2978.03,
+      "cost_basis": 5956.06
+    },
+    "NMDC": {
+      "quantity": 80,
+      "average_price": 83.24,
+      "cost_basis": 6659.20
+    },
+    "PETRONET": {
+      "quantity": 24,
+      "average_price": 273.75,
+      "cost_basis": 6570.00
+    }
+  }
+}

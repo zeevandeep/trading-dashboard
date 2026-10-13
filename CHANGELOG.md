@@ -5,6 +5,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Trend filter paper portfolio + automated rebalances + fundamentals refresh (2026-10-13)
+
+#### Added
+- **`scripts/trend_filter_paper_mark.py`** — Daily tracker for NIFTY 10-month momentum filter applied to Ascent. RISK-ON (NIFTY > 10m ago): copies Ascent daily return. RISK-OFF: stays flat (cash). Output: `data/paper/ascent_trend_filtered/equity.csv`. Seeded with 92 days of history: all RISK-OFF, NAV=1.0 vs Ascent 0.929 — confirming that the filter would have outperformed since Aug launch.
+- **`.github/workflows/daily-mark.yml`** — Added `Trend filter paper mark` step that runs after the live mark each evening. Failures are warnings, not blockers.
+- **`scripts/telegram_summary.py`** — Now includes trend filter paper NAV comparison alongside live strategies. Shows regime (RISK_ON/RISK_OFF) and NIFTY 10-month return.
+- **`.github/workflows/quarterly-bedrock-rebalance.yml`** — Safe-by-default automated rebalance for Bedrock. Scheduled runs produce a dry-run preview via Telegram. Manual `workflow_dispatch` with `execute=true` triggers live execution. Never executes live without explicit opt-in.
+- **`.github/workflows/rebalance-reminders.yml`** — Monthly Telegram reminder on the 28th: "Ascent Monthly Rebalance Due" so manual Kite rebalance is never forgotten.
+- **`.github/workflows/refresh-fundamentals.yml`** — Quarterly fundamentals cache refresh (quarterly cron + manual trigger). Requires `SCREENER_CSRFTOKEN` + `SCREENER_SESSIONID` in GitHub Secrets. Scrapes Screener.in for all NSE 500 ex-Nifty 50 tickers (~168) and saves to parquet cache. Telegram notification on completion.
+
 ### Order fill cron improvements + Telegram summary (2026-10-13)
 
 #### Fixed
