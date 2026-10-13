@@ -64,6 +64,7 @@ class PlaceOrdersRequest(BaseModel):
     prices: dict[str, float]  # {symbol: ltp}
     exchange: str = "NSE"
     limit_buffer_pct: float = 0.5
+    amo: bool = False
 
 
 class OrderResult(BaseModel):
@@ -82,13 +83,19 @@ def place_orders(
 ) -> list[OrderResult]:
     _check_auth(authorization)
 
+    import time
     from kiteconnect import KiteConnect
 
     kite = KiteConnect(api_key=req.kite_api_key)
     kite.set_access_token(req.access_token)
 
+    variety = KiteConnect.VARIETY_AMO if req.amo else KiteConnect.VARIETY_REGULAR
+
     results = []
-    for order in req.orders:
+    for i, order in enumerate(req.orders):
+        if i > 0:
+            time.sleep(0.4)  # stay well under Kite's 3 orders/sec limit
+
         ltp = req.prices.get(order.symbol, 0)
         tick = 0.50 if ltp >= 5000 else (0.10 if ltp >= 1000 else 0.05)
 
@@ -107,7 +114,7 @@ def place_orders(
 
         try:
             order_id = kite.place_order(
-                variety=KiteConnect.VARIETY_REGULAR,
+                variety=variety,
                 exchange=req.exchange,
                 tradingsymbol=order.symbol,
                 transaction_type=transaction,
@@ -141,6 +148,7 @@ class AngelPlaceOrdersRequest(BaseModel):
     prices: dict[str, float]
     exchange: str = "NSE"
     limit_buffer_pct: float = 0.5
+    amo: bool = False  # After-Market Order (use outside 9:15–3:30 IST)
 
 
 @app.post("/api/angel/place-orders")
@@ -160,8 +168,70 @@ def angel_place_orders(
     if not session.get("status"):
         raise HTTPException(500, f"AngelOne login failed: {session.get('message', session)}")
 
+    import time
+    import logging
+    logger = logging.getLogger("angel_proxy")
+
+    # Build symbol → token cache upfront with rate-limit-safe delays (1s each)
+    all_symbols = list({o.symbol for o in req.orders})
+    token_cache: dict[str, str] = {}
+    for sym in all_symbols:
+        try:
+            search = obj.searchScrip(req.exchange, sym)
+            logger.info(f"searchScrip({sym}): {search}")
+            if search and search.get("data"):
+                # Prefer exact -EQ match (delivery), then exact, then first result
+                token = None
+                for item in search["data"]:
+                    if item.get("tradingsymbol") == f"{sym}-EQ":
+                        token = item["symboltoken"]
+                        break
+                if not token:
+                    for item in search["data"]:
+                        if item.get("tradingsymbol") == sym:
+                            token = item["symboltoken"]
+                            break
+                if not token:
+                    token = search["data"][0].get("symboltoken")
+                if token:
+                    token_cache[sym] = token
+                    logger.info(f"  → token {token}")
+                else:
+                    logger.warning(f"  → no token found in results: {[x.get('tradingsymbol') for x in search['data'][:5]]}")
+            else:
+                logger.warning(f"  → empty/null result")
+        except Exception as exc:
+            logger.error(f"  → exception: {exc}")
+        time.sleep(1.0)  # stay under AngelOne's searchScrip rate limit
+
+    # Fetch today's order book ONCE upfront — used to skip already-placed orders
+    # and to verify "no response" cases (AngelOne sometimes executes silently).
+    today_orders: list[dict] = []
+    try:
+        ob = obj.orderBook()
+        today_orders = ob.get("data") or []
+        logger.info(f"Order book fetched: {len(today_orders)} orders")
+    except Exception as exc:
+        logger.warning(f"Could not fetch order book upfront: {exc}")
+
+    def _find_in_book(book: list[dict], symbol: str, side: str, qty: int) -> dict | None:
+        """Return first non-rejected/cancelled order matching symbol+side+qty."""
+        sym_eq = f"{symbol}-EQ"
+        for o in book:
+            if (
+                o.get("tradingsymbol") in (symbol, sym_eq)
+                and o.get("transactiontype", "").upper() == side.upper()
+                and int(o.get("quantity", 0)) == qty
+                and o.get("status", "").lower() not in ("rejected", "cancelled")
+            ):
+                return o
+        return None
+
     results = []
-    for order in req.orders:
+    for i, order in enumerate(req.orders):
+        if i > 0:
+            time.sleep(1)  # stay under AngelOne's placeOrder rate limit
+
         ltp = req.prices.get(order.symbol, 0)
         tick = 0.50 if ltp >= 5000 else (0.10 if ltp >= 1000 else 0.05)
 
@@ -170,58 +240,111 @@ def angel_place_orders(
         else:
             limit_price = round(round(ltp * (1 - req.limit_buffer_pct / 100) / tick) * tick, 2)
 
-        # Look up symbol token
-        token = None
-        try:
-            search = obj.searchScrip(req.exchange, order.symbol)
-            if search and search.get("data"):
-                for item in search["data"]:
-                    if item.get("tradingsymbol") == order.symbol:
-                        token = item["symboltoken"]
-                        break
-                if not token:
-                    token = search["data"][0].get("symboltoken")
-        except Exception as e:
-            results.append(OrderResult(
-                symbol=order.symbol, side=order.side, quantity=order.quantity,
-                order_id=None, status=f"failed: token lookup: {e}", limit_price=limit_price,
-            ))
-            continue
-
+        token = token_cache.get(order.symbol)
         if not token:
+            logger.error(f"No token for {order.symbol} — available tokens: {list(token_cache.keys())}")
             results.append(OrderResult(
                 symbol=order.symbol, side=order.side, quantity=order.quantity,
                 order_id=None, status="failed: no symbol token", limit_price=limit_price,
             ))
             continue
 
+        # ── Idempotency check: skip if already in today's order book ──────────
+        existing = _find_in_book(today_orders, order.symbol, order.side, order.quantity)
+        if existing:
+            existing_id = existing.get("orderid", "unknown")
+            logger.info(f"SKIP {order.side} {order.quantity} {order.symbol} — already in order book (id={existing_id}, status={existing.get('status')})")
+            results.append(OrderResult(
+                symbol=order.symbol, side=order.side, quantity=order.quantity,
+                order_id=str(existing_id), status="placed (already exists)", limit_price=limit_price,
+            ))
+            continue
+
+        params = {
+            "variety": "NORMAL",  # AngelOne API only supports NORMAL/STOPLOSS/ROBO; NORMAL orders placed after hours are queued as AMO automatically
+            "tradingsymbol": f"{order.symbol}-EQ",
+            "symboltoken": token,
+            "transactiontype": order.side,
+            "exchange": req.exchange,
+            "ordertype": "LIMIT",
+            "producttype": "DELIVERY",
+            "duration": "DAY",
+            "price": str(limit_price),
+            "quantity": str(order.quantity),
+        }
+        logger.info(f"placeOrder params: {params}")
         try:
-            resp = obj.placeOrder({
-                "variety": "NORMAL",
-                "tradingsymbol": order.symbol,
-                "symboltoken": token,
-                "transactiontype": order.side,
-                "exchange": req.exchange,
-                "ordertype": "LIMIT",
-                "producttype": "DELIVERY",
-                "duration": "DAY",
-                "price": str(limit_price),
-                "quantity": str(order.quantity),
-            })
+            resp = obj.placeOrder(params)
+            logger.info(f"placeOrder resp: {resp!r}")
             if resp:
                 results.append(OrderResult(
                     symbol=order.symbol, side=order.side, quantity=order.quantity,
                     order_id=str(resp), status="placed", limit_price=limit_price,
                 ))
             else:
-                results.append(OrderResult(
-                    symbol=order.symbol, side=order.side, quantity=order.quantity,
-                    order_id=None, status="failed: no response", limit_price=limit_price,
-                ))
+                # "No response" from API — AngelOne sometimes executes silently.
+                # Re-check the order book before declaring failure.
+                logger.warning(f"No response for {order.side} {order.quantity} {order.symbol} — re-checking order book...")
+                time.sleep(2)
+                try:
+                    ob2 = obj.orderBook()
+                    fresh_book = ob2.get("data") or []
+                    verified = _find_in_book(fresh_book, order.symbol, order.side, order.quantity)
+                    if verified:
+                        verified_id = verified.get("orderid", "unknown")
+                        logger.info(f"  → found in order book after retry (id={verified_id}) — marking as placed")
+                        results.append(OrderResult(
+                            symbol=order.symbol, side=order.side, quantity=order.quantity,
+                            order_id=str(verified_id), status="placed", limit_price=limit_price,
+                        ))
+                    else:
+                        logger.error(f"  → not found in order book — genuinely failed")
+                        results.append(OrderResult(
+                            symbol=order.symbol, side=order.side, quantity=order.quantity,
+                            order_id=None, status="failed: no response after retry", limit_price=limit_price,
+                        ))
+                except Exception as ob_exc:
+                    logger.error(f"  → order book re-check failed: {ob_exc}")
+                    results.append(OrderResult(
+                        symbol=order.symbol, side=order.side, quantity=order.quantity,
+                        order_id=None, status="failed: no response after retry", limit_price=limit_price,
+                    ))
         except Exception as e:
+            logger.error(f"placeOrder exception: {e}")
             results.append(OrderResult(
                 symbol=order.symbol, side=order.side, quantity=order.quantity,
                 order_id=None, status=f"failed: {e}", limit_price=limit_price,
             ))
 
     return results
+
+
+class AngelCancelRequest(BaseModel):
+    angel_api_key: str
+    angel_client_id: str
+    angel_password: str
+    angel_totp_secret: str
+    order_id: str
+    variety: str = "NORMAL"
+
+
+@app.post("/api/angel/cancel-order")
+def angel_cancel_order(
+    req: AngelCancelRequest,
+    authorization: str = Header(None),
+):
+    _check_auth(authorization)
+    import pyotp
+    from SmartApi import SmartConnect
+
+    obj = SmartConnect(api_key=req.angel_api_key)
+    totp = pyotp.TOTP(req.angel_totp_secret).now()
+    session = obj.generateSession(req.angel_client_id, req.angel_password, totp)
+    if not session.get("status"):
+        raise HTTPException(500, f"AngelOne login failed: {session.get('message', session)}")
+
+    try:
+        resp = obj.cancelOrder(req.order_id, req.variety)
+        return {"order_id": req.order_id, "status": "cancelled", "response": str(resp)}
+    except Exception as e:
+        raise HTTPException(500, f"Cancel failed: {e}")
