@@ -2,7 +2,9 @@ name: Daily Mark-to-Market
 
 on:
   schedule:
-    # 12:30 UTC = 6:00 PM IST, Mon-Fri
+    # 4:15 UTC = 9:45 AM IST, Mon-Fri — order fill check
+    - cron: "15 4 * * 1-5"
+    # 12:30 UTC = 6:00 PM IST, Mon-Fri — daily mark
     - cron: "30 12 * * 1-5"
   workflow_dispatch: {}
 
@@ -29,13 +31,27 @@ jobs:
       - name: Install dependencies
         run: pip install -e .
 
+      - name: Check order fills (9:45 AM IST run only)
+        if: github.event.schedule == '15 4 * * 1-5'
+        env:
+          ANGEL_API_KEY: ${{ secrets.ANGEL_API_KEY }}
+          ANGEL_CLIENT_ID: ${{ secrets.ANGEL_CLIENT_ID }}
+          ANGEL_PASSWORD: ${{ secrets.ANGEL_PASSWORD }}
+          ANGEL_TOTP_SECRET: ${{ secrets.ANGEL_TOTP_SECRET }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python scripts/check_order_fills.py || echo "::warning::Unfilled orders detected"
+
       - name: Paper trading mark-to-market
+        if: github.event.schedule != '15 4 * * 1-5'
         run: python scripts/daily_mark.py
 
       - name: Live trading mark-to-market
+        if: github.event.schedule != '15 4 * * 1-5'
         run: python scripts/daily_live_mark.py
 
       - name: Refresh V+Q scores
+        if: github.event.schedule != '15 4 * * 1-5'
         run: python scripts/refresh_vq_scores.py || echo "::warning::V+Q refresh failed"
 
       - name: Push updated data

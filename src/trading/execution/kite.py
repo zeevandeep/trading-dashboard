@@ -354,6 +354,7 @@ def place_orders(
     exchange: str = "NSE",
     dry_run: bool = False,
     limit_buffer_pct: float = 0.5,
+    amo: bool = False,
 ) -> list[dict]:
     """Place CNC LIMIT orders on Kite Connect.
 
@@ -364,6 +365,8 @@ def place_orders(
     ----------
     prices: {symbol: ltp} — used to set limit price. If None, fetches via yfinance.
     limit_buffer_pct: buffer above/below LTP for limit price (default 0.5%).
+    amo: if True, place as After Market Orders (VARIETY_AMO). Use outside market hours
+         (accepted 3:45 PM – 8:57 AM IST); orders execute at next market open.
     """
     KiteConnect = _import_kite()
     results = []
@@ -371,6 +374,8 @@ def place_orders(
     if prices is None:
         symbols = [o["symbol"] for o in orders]
         prices = get_ltp(kite, symbols)
+
+    variety = KiteConnect.VARIETY_AMO if amo else KiteConnect.VARIETY_REGULAR
 
     for order in orders:
         transaction = (
@@ -390,9 +395,9 @@ def place_orders(
             # Round DOWN to nearest tick for sells
             limit_price = round(round(raw_price / tick) * tick, 2)
 
+        mode = "[DRY RUN] " if dry_run else ("[AMO] " if amo else "")
         log.info(
-            f"{'[DRY RUN] ' if dry_run else ''}"
-            f"{order['side']} {order['quantity']} x {order['symbol']} "
+            f"{mode}{order['side']} {order['quantity']} x {order['symbol']} "
             f"@ limit {limit_price:.2f} (LTP {ltp:.2f})"
         )
 
@@ -402,7 +407,7 @@ def place_orders(
 
         try:
             order_id = kite.place_order(
-                variety=KiteConnect.VARIETY_REGULAR,
+                variety=variety,
                 exchange=exchange,
                 tradingsymbol=order["symbol"],
                 transaction_type=transaction,
@@ -430,6 +435,7 @@ def place_orders_remote(
     proxy_api_key: str,
     exchange: str = "NSE",
     limit_buffer_pct: float = 0.5,
+    amo: bool = False,
 ) -> list[dict]:
     """Place orders via the Render proxy (fixed IP).
 
@@ -449,6 +455,7 @@ def place_orders_remote(
         "prices": prices,
         "exchange": exchange,
         "limit_buffer_pct": limit_buffer_pct,
+        "amo": amo,
     }
 
     url = f"{proxy_url.rstrip('/')}/api/place-orders"

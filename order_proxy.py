@@ -282,7 +282,7 @@ def angel_place_orders(
                     order_id=str(resp), status="placed", limit_price=limit_price,
                 ))
             else:
-                # "No response" from API — AngelOne sometimes executes silently.
+                # "No response" — AngelOne sometimes executes silently.
                 # Re-check the order book before declaring failure.
                 logger.warning(f"No response for {order.side} {order.quantity} {order.symbol} — re-checking order book...")
                 time.sleep(2)
@@ -310,10 +310,20 @@ def angel_place_orders(
                         order_id=None, status="failed: no response after retry", limit_price=limit_price,
                     ))
         except Exception as e:
-            logger.error(f"placeOrder exception: {e}")
+            err_str = str(e)
+            logger.error(f"placeOrder exception: {err_str}")
+            # Surface specific AngelOne error codes clearly
+            if "AB4036" in err_str or "cautionary" in err_str.lower():
+                status = "failed: GSM cautionary listing (AB4036)"
+            elif "AB8051" in err_str or "suspended" in err_str.lower():
+                status = "failed: stock suspended (AB8051)"
+            elif "not a registered IP" in err_str or "AG7002" in err_str:
+                status = "failed: IP not whitelisted (AG7002)"
+            else:
+                status = f"failed: {err_str[:120]}"
             results.append(OrderResult(
                 symbol=order.symbol, side=order.side, quantity=order.quantity,
-                order_id=None, status=f"failed: {e}", limit_price=limit_price,
+                order_id=None, status=status, limit_price=limit_price,
             ))
 
     return results

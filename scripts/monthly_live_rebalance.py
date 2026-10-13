@@ -54,6 +54,8 @@ def main():
     parser.add_argument("--capital", type=float, default=DEFAULT_CAPITAL, help="Total capital in INR")
     parser.add_argument("--force-refresh", action="store_true", help="Re-download all price data")
     parser.add_argument("--remote", action="store_true", help="Place orders via Render proxy (fixed IP)")
+    parser.add_argument("--amo", action="store_true", help="Place as After Market Orders (outside market hours, execute at next open)")
+    parser.add_argument("--yes", action="store_true", help="Skip confirmation prompt (use carefully)")
     args = parser.parse_args()
 
     ensure_dirs()
@@ -67,7 +69,8 @@ def main():
     print(f"  Strategy: {strategy_name}")
     print(f"  Capital:  Rs. {args.capital:,.0f}")
     print(f"  Top N:    {top_n}")
-    print(f"  Mode:     {'DRY RUN' if args.dry_run else 'LIVE'}")
+    mode_str = "DRY RUN" if args.dry_run else ("LIVE (AMO)" if args.amo else "LIVE")
+    print(f"  Mode:     {mode_str}")
     print(f"{'='*60}\n")
 
     # ── Kite login
@@ -201,14 +204,18 @@ def main():
         return
 
     # ── Confirmation
+    order_type = "AMO ORDERS (execute at next market open)" if args.amo else "REAL ORDERS ON NSE"
     print(f"\n{'!'*60}")
-    print(f"  THIS WILL PLACE {len(orders)} REAL ORDERS ON NSE")
+    print(f"  THIS WILL PLACE {len(orders)} {order_type}")
     print(f"  Total buy value: Rs. {total_buy:,.0f}")
     print(f"{'!'*60}")
-    confirm = input("\nType 'yes' to confirm: ")
-    if confirm.strip().lower() != "yes":
-        print("Aborted.")
-        return
+    if args.yes:
+        print("Auto-confirmed via --yes flag.")
+    else:
+        confirm = input("\nType 'yes' to confirm: ")
+        if confirm.strip().lower() != "yes":
+            print("Aborted.")
+            return
 
     # ── Place orders
     print(f"\nPlacing {len(orders)} orders...")
@@ -228,9 +235,10 @@ def main():
             proxy_url=proxy_url,
             proxy_api_key=proxy_api_key,
             exchange="NSE",
+            amo=args.amo,
         )
     else:
-        results = place_orders(kite, orders, prices=live_prices, exchange="NSE", dry_run=False)
+        results = place_orders(kite, orders, prices=live_prices, exchange="NSE", dry_run=False, amo=args.amo)
 
     # ── Log
     log_path = DATA_DIR / "live" / strategy_name / "orders.csv"

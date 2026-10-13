@@ -45,7 +45,13 @@ def fetch_one(
         try:
             df = pd.read_parquet(cache_file)
             if not df.empty:
-                return df
+                # Check if cached data is stale (last row > 2 trading days old)
+                last_date = df.index.max()
+                days_stale = (pd.Timestamp.now() - last_date).days
+                if days_stale <= 3:  # fresh enough (accounts for weekends)
+                    return df
+                else:
+                    log.info(f"{yf_ticker}: cache is {days_stale}d old, refreshing")
         except Exception as e:
             log.warning(f"Cache read failed for {yf_ticker}: {e}. Refetching.")
 

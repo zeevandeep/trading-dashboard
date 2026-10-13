@@ -15,11 +15,14 @@ Usage:
     # Step 1: Always dry-run first
     python scripts/bedrock_live_rebalance.py --dry-run
 
-    # Step 2: If orders look right, execute for real
+    # Step 2: If orders look right, execute (always routes via DO proxy by default)
     python scripts/bedrock_live_rebalance.py
 
     # Override capital (default Rs 1,00,000)
     python scripts/bedrock_live_rebalance.py --capital 200000
+
+    # Direct execution without proxy (requires locally whitelisted IP — rarely needed)
+    python scripts/bedrock_live_rebalance.py --local
 """
 
 from __future__ import annotations
@@ -36,7 +39,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from trading.config import DATA_DIR, load_strategy_config, ensure_dirs
 from trading.data.universe import nifty50_tickers, nse500_starter_tickers
-from trading.signals.value_quality import fetch_fundamentals, score_value_quality
+from trading.signals.value_quality import score_value_quality_from_cache
 from trading.execution.angel import login, get_holdings, get_ltp, place_orders, place_orders_remote, log_orders
 from trading.utils.logging import setup_logging
 
@@ -49,9 +52,12 @@ DEFAULT_CAPITAL = 100_000
 def main():
     parser = argparse.ArgumentParser(description="Quarterly Bedrock rebalance (AngelOne)")
     parser.add_argument("--dry-run", action="store_true", help="Show orders without placing them")
-    parser.add_argument("--remote", action="store_true", help="Route orders via Render proxy (fixed IP)")
+    parser.add_argument("--local", action="store_true", help="Place orders directly (requires whitelisted IP — rarely needed)")
+    parser.add_argument("--amo", action="store_true", help="Place After Market Orders (use outside 9:15–3:30 IST)")
+    parser.add_argument("--yes", action="store_true", help="Skip confirmation prompt")
     parser.add_argument("--capital", type=float, default=DEFAULT_CAPITAL, help="Total capital in INR")
     args = parser.parse_args()
+    args.remote = not args.local  # proxy is always default
 
     ensure_dirs()
 
@@ -64,7 +70,14 @@ def main():
     print(f"  Strategy: {strategy_name}")
     print(f"  Capital:  Rs. {args.capital:,.0f}")
     print(f"  Top N:    {top_n}")
-    mode = "DRY RUN" if args.dry_run else ("LIVE via PROXY" if args.remote else "LIVE")
+    mode_parts = []
+    if args.dry_run:
+        mode_parts.append("DRY RUN")
+    else:
+        mode_parts.append("LIVE via PROXY" if args.remote else "LIVE (local)")
+        if args.amo:
+            mode_parts.append("AMO")
+    mode = " | ".join(mode_parts)
     print(f"  Mode:     {mode}")
     print(f"{'='*60}\n")
 
@@ -77,18 +90,14 @@ def main():
     tickers = [t for t in nse500_starter_tickers() if t not in nifty50]
     log.info(f"Universe: {len(tickers)} tickers (NSE 500 ex Nifty 50)")
 
-    # ── Fetch fundamentals and score
-    log.info("Fetching fundamentals...")
-    fundamentals = fetch_fundamentals(tickers)
-
-    if fundamentals.empty:
-        log.error("No fundamentals fetched.")
-        return
-
-    scores = score_value_quality(fundamentals)
+    # ── Score V+Q from fundamentals cache
+    # Cache is built quarterly by refresh_fundamentals_cache.py
+    # Never scrapes live at execution time — decoupled and reliable
+    log.info("Scoring V+Q from fundamentals cache...")
+    scores = score_value_quality_from_cache(tickers)
 
     if scores.empty:
-        log.error("No valid V+Q scores.")
+        log.error("No valid V+Q scores. Run: python scripts/refresh_fundamentals_cache.py")
         return
 
     if len(scores) < top_n:
@@ -110,12 +119,25 @@ def main():
         print()
 
     # ── Prices
-    all_symbols = list(set(list(target_weights.keys()) + list(current_holdings.keys())))
+    # AngelOne returns holdings with '-EQ' suffix (e.g. GLAXO-EQ) — strip for LTP lookup
+    def _strip_eq(sym: str) -> str:
+        return sym[:-3] if sym.endswith("-EQ") else sym
+
+    target_syms = list(target_weights.keys())
+    holding_syms_plain = [_strip_eq(s) for s in current_holdings.keys()]
+    all_symbols = list(set(target_syms + holding_syms_plain))
     live_prices = get_ltp(obj, all_symbols) if all_symbols else {}
+
+    # Build a lookup that works for both plain and -EQ symbols
+    for sym in list(current_holdings.keys()):
+        plain = _strip_eq(sym)
+        if plain in live_prices and sym not in live_prices:
+            live_prices[sym] = live_prices[plain]
 
     # ── Compute orders
     orders = []
-    current_qty = {s: h["quantity"] for s, h in current_holdings.items()}
+    # Normalise -EQ suffix from AngelOne holdings so symbols match target picks
+    current_qty = {_strip_eq(s): h["quantity"] for s, h in current_holdings.items()}
     per_stock = args.capital / top_n
 
     target_qty = {}
@@ -156,6 +178,29 @@ def main():
         print("No orders needed — portfolio already at target.")
         return
 
+    # ── GSM pre-check: flag any target stocks under NSE cautionary listing
+    # Stocks with '-BE' series on AngelOne = Trade-for-Trade = GSM proxy
+    # AngelOne blocks API orders on these with error AB4036
+    log.info("Running GSM pre-check on order symbols...")
+    order_syms = list({o["symbol"] for o in orders})
+    gsm_flagged: list[str] = []
+    try:
+        from scripts.check_gsm_flags import check_gsm_via_angel
+        gsm_results = check_gsm_via_angel(order_syms, obj=obj)
+        gsm_flagged = [s for s, v in gsm_results.items() if v == "gsm"]
+        if gsm_flagged:
+            print(f"\n{'!'*60}")
+            print(f"  GSM WARNING — AngelOne will BLOCK orders for:")
+            for s in gsm_flagged:
+                print(f"    {s}")
+            print(f"  These will fail with AB4036 (cautionary listing).")
+            print(f"  Remove them or handle manually.")
+            print(f"{'!'*60}\n")
+        else:
+            log.info("GSM check passed — no cautionary stocks in order list")
+    except Exception as gsm_err:
+        log.warning(f"GSM check failed (non-blocking): {gsm_err}")
+
     # ── Display order plan
     sells = [o for o in orders if o["side"] == "SELL"]
     buys = [o for o in orders if o["side"] == "BUY"]
@@ -189,15 +234,20 @@ def main():
     print(f"  THIS WILL PLACE {len(orders)} REAL ORDERS ON ANGELONE")
     print(f"  Total buy value: Rs. {total_buy:,.0f}")
     print(f"{'!'*60}")
-    confirm = input("\nType 'yes' to confirm: ")
-    if confirm.strip().lower() != "yes":
-        print("Aborted.")
-        return
+    if args.yes:
+        print("Auto-confirmed via --yes flag.")
+    else:
+        confirm = input("\nType 'yes' to confirm: ")
+        if confirm.strip().lower() != "yes":
+            print("Aborted.")
+            return
 
     # ── Place orders
-    print(f"\nPlacing {len(orders)} orders{'  (via proxy)' if args.remote else ''}...")
+    amo_label = " AMO" if args.amo else ""
+    proxy_label = " (via proxy)" if args.remote else ""
+    print(f"\nPlacing {len(orders)}{amo_label} orders{proxy_label}...")
     if args.remote:
-        results = place_orders_remote(orders, prices=live_prices)
+        results = place_orders_remote(orders, prices=live_prices, amo=args.amo)
     else:
         results = place_orders(obj, orders, prices=live_prices, dry_run=False)
 

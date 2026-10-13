@@ -77,6 +77,122 @@ def fetch_fundamentals(tickers: list[str], max_workers: int = 10) -> pd.DataFram
     return df
 
 
+def score_value_quality_from_cache(
+    tickers: list[str],
+    cache_file: "Path | None" = None,
+    prices: "pd.DataFrame | None" = None,
+) -> pd.Series:
+    """Compute live V+Q scores using the fundamentals cache + current prices.
+
+    This is the production path for the live rebalance. It reads the most
+    recent annual report per ticker from the cache (same data used in backtests)
+    and pairs it with current market prices to compute P/E.
+
+    Parameters
+    ----------
+    tickers : universe tickers to score
+    cache_file : path to historical_fundamentals.parquet; defaults to
+                 data/cache/fundamentals/historical_fundamentals.parquet
+    prices : optional pre-fetched price Series (ticker → price); if None,
+             fetches via yfinance
+
+    Returns
+    -------
+    Series of composite V+Q scores, indexed by ticker, descending order.
+    """
+    if cache_file is None:
+        cache_file = Path(__file__).resolve().parents[3] / "data" / "cache" / "fundamentals" / "historical_fundamentals.parquet"
+
+    if not cache_file.exists():
+        log.error(f"Fundamentals cache not found: {cache_file}. Run refresh_fundamentals_cache.py first.")
+        return pd.Series(dtype=float)
+
+    # Load cache and get latest annual report per ticker
+    df_all = pd.read_parquet(cache_file)
+
+    # Normalise date column
+    df_all["date"] = pd.to_datetime(df_all["date"])
+    df_all = df_all.sort_values(["ticker", "date"])
+
+    # Keep only tickers in our universe
+    df_all = df_all[df_all["ticker"].isin(tickers)]
+
+    if df_all.empty:
+        log.error("No cache data found for universe tickers.")
+        return pd.Series(dtype=float)
+
+    # Latest two annual reports per ticker (need two for earnings growth)
+    # Note: groupby().apply() drops the grouping column in some pandas versions
+    # so we reconstruct it from the group name explicitly
+    def _latest_two(grp):
+        top2 = grp.nlargest(2, "date").copy()
+        top2["ticker"] = grp.name
+        return top2
+
+    latest = df_all.groupby("ticker", group_keys=False).apply(_latest_two).reset_index(drop=True)
+
+    # Get current prices
+    if prices is None:
+        import yfinance as yf
+        yf_map = {t: f"{t}.NS" for t in tickers}
+        raw = yf.download(list(yf_map.values()), period="1d", progress=False, threads=True)
+        if raw.empty:
+            log.error("Could not fetch prices from yfinance.")
+            return pd.Series(dtype=float)
+        if isinstance(raw.columns, pd.MultiIndex):
+            price_row = raw["Close"].iloc[-1]
+        else:
+            price_row = raw["Close"].iloc[-1]
+        prices = pd.Series({t: float(price_row.get(f"{t}.NS", float("nan"))) for t in tickers})
+
+    # Build fundamentals snapshot for scoring
+    fund_rows = []
+    for ticker, grp in latest.groupby("ticker"):
+        grp = grp.sort_values("date", ascending=False)
+        if len(grp) < 1:
+            continue
+
+        latest_row = grp.iloc[0]
+        ni = latest_row["net_income"]
+        eq = latest_row["equity"]
+        debt = latest_row["total_debt"]
+        shares = latest_row["shares"]
+        ni_prev = grp.iloc[1]["net_income"] if len(grp) >= 2 else float("nan")
+
+        if pd.isna(ni) or pd.isna(eq) or eq <= 0 or pd.isna(shares) or shares <= 0:
+            continue
+
+        eps = ni / shares
+        if eps <= 0:
+            continue
+
+        price = prices.get(ticker, float("nan"))
+        if pd.isna(price) or price <= 0:
+            continue
+
+        pe = price / eps
+        roe = ni / eq
+        de = float(debt / eq) if pd.notna(debt) and eq > 0 else 0.0
+        eg = float((ni - ni_prev) / abs(ni_prev)) if pd.notna(ni_prev) and abs(ni_prev) > 0 else float("nan")
+
+        fund_rows.append({
+            "ticker": ticker,
+            "pe": pe,
+            "roe": roe,
+            "de": de,
+            "earnings_growth": eg,
+        })
+
+    if not fund_rows:
+        log.error("No valid fundamental snapshots built from cache.")
+        return pd.Series(dtype=float)
+
+    fund_df = pd.DataFrame(fund_rows).set_index("ticker")
+    log.info(f"Built fundamental snapshot for {len(fund_df)} tickers from cache")
+
+    return score_value_quality(fund_df)
+
+
 def score_value_quality(fundamentals: pd.DataFrame) -> pd.Series:
     """Compute composite Value + Quality score.
 

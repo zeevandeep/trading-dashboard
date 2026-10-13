@@ -32,6 +32,35 @@ log = setup_logging("live_mark")
 LIVE_DIR = DATA_DIR / "live"
 
 
+# ── Capital events helpers ────────────────────────────────────────────────────
+
+def load_capital_events(strategy_dir: Path) -> "pd.DataFrame | None":
+    """Load capital_events.csv if present. Returns date-sorted DataFrame or None."""
+    path = strategy_dir / "capital_events.csv"
+    if not path.exists():
+        return None
+    df = pd.read_csv(path)
+    df["date"] = df["date"].astype(str)
+    return df.sort_values("date").reset_index(drop=True)
+
+
+def get_cumulative_invested(capital_events: "pd.DataFrame | None", date_str: str) -> "float | None":
+    """Total external capital deployed up to and including date_str.
+
+    Returns None when no capital_events file exists (caller falls back to cost_basis).
+    """
+    if capital_events is None:
+        return None
+    return float(capital_events.loc[capital_events["date"] <= date_str, "amount"].sum())
+
+
+def get_capital_flow(capital_events: "pd.DataFrame | None", date_str: str) -> float:
+    """Net external cash flow (deposit > 0, withdrawal < 0) on exactly date_str."""
+    if capital_events is None:
+        return 0.0
+    return float(capital_events.loc[capital_events["date"] == date_str, "amount"].sum())
+
+
 def find_live_strategies() -> list[str]:
     if not LIVE_DIR.exists():
         return []
@@ -42,12 +71,17 @@ def find_live_strategies() -> list[str]:
 
 
 def load_kite_snapshot(strategy_dir: Path) -> dict | None:
-    """Load Kite holdings snapshot if one exists."""
-    snap_path = strategy_dir / "kite_snapshot.json"
-    if not snap_path.exists():
-        return None
-    with open(snap_path) as f:
-        return json.load(f)
+    """Load broker holdings snapshot if one exists.
+
+    Checks for holdings_snapshot.json first (broker-agnostic), then falls
+    back to kite_snapshot.json for backward compatibility.
+    """
+    for name in ("holdings_snapshot.json", "kite_snapshot.json"):
+        snap_path = strategy_dir / name
+        if snap_path.exists():
+            with open(snap_path) as f:
+                return json.load(f)
+    return None
 
 
 def compute_holdings(
@@ -65,7 +99,8 @@ def compute_holdings(
     This handles messy rebalances (duplicate orders, retries) by anchoring to
     what Kite actually holds, as captured by kite_portfolio_sync.py.
     """
-    if kite_snapshot and as_of_date and as_of_date >= kite_snapshot["date"]:
+    epoch_start = kite_snapshot.get("epoch_start", kite_snapshot["date"]) if kite_snapshot else None
+    if kite_snapshot and as_of_date and epoch_start and as_of_date >= epoch_start:
         # Start from snapshot
         holdings: dict[str, dict] = {
             sym: {"quantity": h["quantity"], "cost_basis": h["cost_basis"]}
@@ -170,12 +205,15 @@ def mark_single_day(
     mark_date: str,
     equity_path: Path,
     positions_path: Path,
+    capital_events: "pd.DataFrame | None" = None,
 ) -> bool:
     """Write a single day's mark to equity.csv and positions.csv.
 
     Returns True if successful.
     """
-    total_cost = sum(h["cost_basis"] for h in holdings.values())
+    # Use capital_events as source of truth for invested; fallback to cost_basis sum
+    invested_override = get_cumulative_invested(capital_events, mark_date)
+    total_cost = invested_override if invested_override is not None else sum(h["cost_basis"] for h in holdings.values())
 
     current_value = 0.0
     position_details = []
@@ -211,8 +249,12 @@ def mark_single_day(
             prev_nav = prev_row.get("nav", 1.0)
             prev_mv = prev_row["market_value"]
             prev_inv = prev_row["invested"]
-            cash_flow = total_cost - prev_inv
-            if abs(cash_flow) > 1:  # capital added/removed (rebalance day)
+            # Use explicit capital event if available; fallback to cost_basis delta
+            if capital_events is not None:
+                cash_flow = get_capital_flow(capital_events, mark_date)
+            else:
+                cash_flow = total_cost - prev_inv
+            if abs(cash_flow) > 1:  # capital added/removed
                 adjusted_start = prev_mv + cash_flow
                 daily_ret = (current_value / adjusted_start) - 1 if adjusted_start > 0 else 0
             else:
@@ -259,7 +301,13 @@ def mark_live_strategy(strategy: str) -> None:
     # Load Kite snapshot if available (ground truth for messy rebalances)
     kite_snapshot = load_kite_snapshot(strategy_dir)
     if kite_snapshot:
-        log.info(f"{strategy}: using Kite snapshot from {kite_snapshot['date']} as holdings anchor")
+        epoch = kite_snapshot.get("epoch_start", kite_snapshot["date"])
+        log.info(f"{strategy}: using Kite snapshot (epoch_start={epoch}) as holdings anchor")
+
+    # Load capital events — source of truth for invested / NAV cash flows
+    capital_events = load_capital_events(strategy_dir)
+    if capital_events is not None:
+        log.info(f"{strategy}: loaded {len(capital_events)} capital event(s) from capital_events.csv")
 
     # Find earliest order date for backfill boundary
     first_order_date = orders_df["timestamp"].dropna().min()[:10]
@@ -312,7 +360,7 @@ def mark_live_strategy(strategy: str) -> None:
         if skip:
             continue
 
-        if mark_single_day(strategy, holdings, close_prices, date_str, equity_path, positions_path):
+        if mark_single_day(strategy, holdings, close_prices, date_str, equity_path, positions_path, capital_events=capital_events):
             marked += 1
 
     # Sort files by date after backfills
