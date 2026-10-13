@@ -5,6 +5,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Fix NAV chain-link from Jun 4 (2026-10-13)
+
+#### Fixed
+- **`data/live/smallcap_momentum_v2_live/equity.csv`** — NAV was incorrectly reset to 1.0 on Jul 8 when Rs 86,834 was added. This hid the Jun–Jul drawdown (~−9%) from the record, making the strategy look like it was break-even from Jul 8 when in reality it was already down. The NAV column has been recomputed with proper chain-linking from Jun 4: `NAV_today = NAV_prev × (mv_today / (mv_prev + cash_flow_today))`. On capital-addition days, the denominator is adjusted by the deposit so the NAV is not diluted. Result: Oct 13 NAV is now −14.9% (vs the misleading −7.1% before).
+- **`data/live/smallcap_momentum_v2_live/capital_events.csv`** — Third capital event date corrected from `2026-08-26` (deposit date) to `2026-09-18` (actual deployment date, when invested jumped from Rs 96,755 to Rs 169,212). Using the deposit date would have caused a false −41% NAV spike on Aug 26.
+- **`data/live/smallcap_momentum_v2_live/kite_snapshot.json`** — `epoch_start` corrected from `2026-08-26` to `2026-09-18`. The Sep 30 snapshot contains post-Sep 18 quantities (after new capital was deployed), so applying it to Aug 26 prices gave an inflated NAV. Moving epoch_start to Sep 18 ensures the snapshot is only used from the date its quantities are actually valid.
+
 ### Fix cost_basis=0 for IPCALAB/MOTHERSON/OFSS + NAV source of truth (2026-10-13)
 
 #### Fixed
