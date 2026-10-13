@@ -478,6 +478,7 @@ def place_orders_remote(
             "symbol": r["symbol"],
             "side": r["side"],
             "quantity": r["quantity"],
+            "estimated_value": r.get("estimated_value", 0),
             "order_id": r.get("order_id"),
             "status": r["status"],
             "limit_price": r.get("limit_price", 0),
@@ -490,12 +491,21 @@ def place_orders_remote(
     return results
 
 
+ORDERS_SCHEMA = ["symbol", "side", "quantity", "estimated_value", "order_id", "status", "limit_price", "timestamp"]
+
+
 def log_orders(results: list[dict], log_path: Path) -> None:
-    """Append order results to a CSV log."""
+    """Append order results to a CSV log.
+
+    Enforces a fixed 8-column schema so rows written from place_orders()
+    (with estimated_value) and place_orders_remote() (without, historically)
+    both land in the right columns.
+    """
     if not results:
         return
     df = pd.DataFrame(results)
     df["timestamp"] = datetime.now().isoformat()
+    df = df.reindex(columns=ORDERS_SCHEMA)
     log_path.parent.mkdir(parents=True, exist_ok=True)
     if log_path.exists():
         df.to_csv(log_path, mode="a", header=False, index=False)

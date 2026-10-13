@@ -5,6 +5,21 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Universe cleanup + proxy firewall + Bedrock capital + Ascent holdings fix (2026-10-13)
+
+#### Fixed
+- **`data/live/smallcap_momentum_v2_live/orders.csv`** — Repaired 66 corrupt rows from prior rebalances: orders placed via `place_orders_remote()` were written with 7 columns (missing `estimated_value`), causing a column shift that put the limit price in the `status` slot and the timestamp in `limit_price`. All rows corrected via column rotation.
+- **`data/live/smallcap_momentum_v2_live/kite_snapshot.json`** — Changed `date` from `2026-10-01` to `2026-09-30` so that Oct 1 rebalance orders (ADANIPOWER SELL 64, CUB SELL 58 + 3 new entries) are applied by `compute_holdings`. Previously, the strict `>` comparison excluded same-day orders from the snapshot, leaving stale pre-rebalance holdings (ADANIPOWER, CUB) in all Oct marks.
+- **`src/trading/execution/kite.py`** — `place_orders_remote()` now includes `estimated_value` in results dict (was missing, causing column-shift bug in `log_orders`). `log_orders()` now enforces a fixed 8-column schema via `reindex()` — same fix previously applied to `angel.py`.
+
+#### Added
+- **`data/live/value_quality_v1_live/capital_events.csv`** — Initial Rs 66,035.79 capital event on 2026-09-27. Required for NAV computation to correctly separate investment returns from capital additions.
+- **`data/universe/nse500_starter.csv`** — Removed 8 confirmed-dead yfinance tickers (CENTURYTEX, GUJGASLTD, IBULHSGFIN, KALPATPOWR, L&TFH, MINDTREE, PEL, ZOMATO — all return "possibly delisted, no data found"). Added KPIL (Kalpataru Projects International) as replacement for KALPATPOWR. Universe: 220 → 213 tickers.
+
+#### Infrastructure
+- **Port 8001 on 167.71.227.66** — Restricted to JD's IP (49.43.5.199) only. Previously open to the world; now only accessible from known-good address. API key auth (PROXY_API_KEY) remains as second factor.
+- **Ascent equity recomputed** — Oct 1–13 marks regenerated with correct 15-position post-rebalance holdings. Oct 1 NAV reset correctly shows the rebalance transition.
+
 ### BSE exchange support + daily mark price fill-forward + equity.csv guard (2026-10-13)
 
 #### Fixed
