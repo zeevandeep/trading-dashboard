@@ -5,6 +5,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Fix cost_basis=0 for IPCALAB/MOTHERSON/OFSS + NAV source of truth (2026-10-13)
+
+#### Fixed
+- **`data/live/smallcap_momentum_v2_live/orders.csv`** rows 120–122 — `estimated_value` was NaN for the 3 Oct 1 BUY orders (IPCALAB, MOTHERSON, OFSS) due to the column-shift bug that existed before kite.py was patched. Fixed to `quantity × limit_price`: IPCALAB 9,739 / MOTHERSON 11,154.5 / OFSS 10,458. NAV was unaffected (uses capital_events.csv, not cost_basis), but position-level P&L display showed 0% gain for all three.
+- **`data/live/smallcap_momentum_v2_live/positions.csv`** — Recomputed `cost_basis`, `pnl`, and `pnl_pct` for IPCALAB, MOTHERSON, OFSS across all Oct dates where they appeared with `cost_basis=0`.
+
+#### Added
+- **`data/live/smallcap_momentum_v2_live/capital_events.csv`** — Committed to git. Three entries: Rs 9,921.55 initial (Jun 4), Rs 86,834 build-up (Jul 8), Rs 72,456.47 add-on (Aug 26). This file is the source of truth for NAV calculation in Ascent. Without it, NAV recomputation from scratch is impossible.
+
 ### Trend filter paper portfolio + automated rebalances + fundamentals refresh (2026-10-13)
 
 #### Added
