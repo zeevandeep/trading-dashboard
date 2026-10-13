@@ -216,30 +216,32 @@ def angel_place_orders(
     import logging
     logger = logging.getLogger("angel_proxy")
 
-    # Build symbol → token cache upfront with rate-limit-safe delays (1s each)
+    # Build symbol → (token, tradingsymbol) cache upfront with rate-limit-safe delays
     all_symbols = list({o.symbol for o in req.orders})
-    token_cache: dict[str, str] = {}
+    token_cache: dict[str, tuple[str, str]] = {}  # sym → (token, tradingsymbol)
     for sym in all_symbols:
         try:
             search = obj.searchScrip(req.exchange, sym)
             logger.info(f"searchScrip({sym}): {search}")
             if search and search.get("data"):
-                # Prefer exact -EQ match (delivery), then exact, then first result
-                token = None
+                # NSE: prefer -EQ series (delivery). BSE: prefer exact match (no suffix).
+                best_item = None
                 for item in search["data"]:
                     if item.get("tradingsymbol") == f"{sym}-EQ":
-                        token = item["symboltoken"]
+                        best_item = item
                         break
-                if not token:
+                if not best_item:
                     for item in search["data"]:
                         if item.get("tradingsymbol") == sym:
-                            token = item["symboltoken"]
+                            best_item = item
                             break
-                if not token:
-                    token = search["data"][0].get("symboltoken")
+                if not best_item:
+                    best_item = search["data"][0]
+                token = best_item.get("symboltoken")
+                trading_sym = best_item.get("tradingsymbol", sym)
                 if token:
-                    token_cache[sym] = token
-                    logger.info(f"  → token {token}")
+                    token_cache[sym] = (token, trading_sym)
+                    logger.info(f"  → token {token} tradingsymbol={trading_sym}")
                 else:
                     logger.warning(f"  → no token found in results: {[x.get('tradingsymbol') for x in search['data'][:5]]}")
             else:
@@ -284,14 +286,15 @@ def angel_place_orders(
         else:
             limit_price = round(round(ltp * (1 - req.limit_buffer_pct / 100) / tick) * tick, 2)
 
-        token = token_cache.get(order.symbol)
-        if not token:
+        cached = token_cache.get(order.symbol)
+        if not cached:
             logger.error(f"No token for {order.symbol} — available tokens: {list(token_cache.keys())}")
             results.append(OrderResult(
                 symbol=order.symbol, side=order.side, quantity=order.quantity,
                 order_id=None, status="failed: no symbol token", limit_price=limit_price,
             ))
             continue
+        token, trading_sym = cached
 
         # ── Idempotency check: skip if already in today's order book ──────────
         existing = _find_in_book(today_orders, order.symbol, order.side, order.quantity)
@@ -304,9 +307,10 @@ def angel_place_orders(
             ))
             continue
 
+        variety = "AMO" if req.amo else "NORMAL"
         params = {
-            "variety": "NORMAL",  # AngelOne API only supports NORMAL/STOPLOSS/ROBO; NORMAL orders placed after hours are queued as AMO automatically
-            "tradingsymbol": f"{order.symbol}-EQ",
+            "variety": variety,
+            "tradingsymbol": trading_sym,  # exact symbol from searchScrip (NSE: IEX-EQ, BSE: IEX)
             "symboltoken": token,
             "transactiontype": order.side,
             "exchange": req.exchange,

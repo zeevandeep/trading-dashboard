@@ -348,16 +348,26 @@ def mark_live_strategy(strategy: str) -> None:
             continue
 
         close_prices = {}
-        skip = False
+        missing_syms = []
         for sym in holdings:
-            if sym in hist.columns and pd.notna(hist.loc[dt, sym]):
-                close_prices[sym] = float(hist.loc[dt, sym])
+            if sym in hist.columns:
+                if pd.notna(hist.loc[dt, sym]):
+                    close_prices[sym] = float(hist.loc[dt, sym])
+                else:
+                    # Fill forward: use last known price up to this date
+                    prior = hist[sym].loc[:dt].dropna()
+                    if not prior.empty:
+                        close_prices[sym] = float(prior.iloc[-1])
+                        log.warning(f"{strategy}: no price for {sym} on {date_str} — using last known {close_prices[sym]:.2f}")
+                    else:
+                        missing_syms.append(sym)
             else:
-                log.warning(f"{strategy}: no price for {sym} on {date_str}, skipping day")
-                skip = True
-                break
+                missing_syms.append(sym)
 
-        if skip:
+        if missing_syms:
+            if len(missing_syms) == len(holdings):
+                continue  # All missing = market holiday, skip silently
+            log.warning(f"{strategy}: no data for {missing_syms} on {date_str}, skipping day")
             continue
 
         if mark_single_day(strategy, holdings, close_prices, date_str, equity_path, positions_path, capital_events=capital_events):

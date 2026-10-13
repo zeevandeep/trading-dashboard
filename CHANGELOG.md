@@ -5,6 +5,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### BSE exchange support + daily mark price fill-forward + equity.csv guard (2026-10-13)
+
+#### Fixed
+- **`order_proxy.py`** — token_cache now stores the actual `tradingsymbol` from `searchScrip` results (not constructed as `SYM-EQ`). Fixes AB1019 "symbol/token mismatch" errors on BSE, where the trading symbol is plain `IEX` not `IEX-EQ`. Correct symbol is now used in order params for both NSE and BSE.
+- **`order_proxy.py`** — `amo` flag now correctly sets `variety: "AMO"` instead of always `"NORMAL"`.
+- **`scripts/daily_live_mark.py`** — Price availability check now fills forward (uses last known price) instead of skipping the whole day when one symbol has no data. If ALL symbols are missing → market holiday (silent skip). If only some symbols missing → warns and skips day. Prevents ADANIPOWER's missing data from silently blocking all subsequent marks.
+
+#### Added
+- **`.git/hooks/pre-commit`** — Guard that prevents `equity.csv` files from going backwards in a commit. Detects when the staged version's last date is older than HEAD, blocking the commit with a clear error message.
+
+#### Investigated (no fix available)
+- IEX (SELL 13) and BAJAJHLDNG (BUY 1) remain blocked by AB4036 on NSE, BSE, AMO, and browser automation (device fingerprint block CA-101). Exchange-level cautionary listing — no programmatic workaround.
+
 ### Fix double-Bearer JWT header + Oct 12 rebalance corrections complete (2026-10-13)
 
 #### Fixed
