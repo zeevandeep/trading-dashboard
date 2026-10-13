@@ -345,31 +345,28 @@ with vq_r:
     """, unsafe_allow_html=True)
 
     # Paper Trading
-    if bedrock_paper:
-        _eq_path = bedrock_paper_dir / "equity.csv"
-        if _eq_path.exists():
-            _eq_df = pd.read_csv(_eq_path)
-            dtrk = len(_eq_df)
-            peq = _eq_df["equity"].iloc[-1] if not _eq_df.empty else 1.0
-        else:
-            dtrk = 0
-            peq = bedrock_paper.get("equity", 1.0)
-        ppnl = (peq - 1.0) * 100
-        cls = "up" if ppnl >= 0 else "dn"
-        sgn = "+" if ppnl >= 0 else ""
-
-        st.markdown(f"""
-        <div class="card-v2">
-            <div class="card-header">
-                <div class="card-title">Paper Trading</div>
-                <div class="card-badge" style="background:var(--gold-dim);color:var(--gold);">Simulation</div>
+    _live_eq_path = DATA_DIR / "live" / "value_quality_v1_live" / "equity.csv"
+    if _live_eq_path.exists():
+        _live_eq = pd.read_csv(_live_eq_path)
+        if not _live_eq.empty:
+            _latest = _live_eq.iloc[-1]
+            _nav = float(_latest.get("nav", 1.0))
+            _nav_ret = (_nav - 1.0) * 100
+            _mv = float(_latest.get("market_value", 0))
+            _date = str(_latest.get("date", ""))[:10]
+            _cls = "up" if _nav_ret >= 0 else "dn"
+            _sgn = "+" if _nav_ret >= 0 else ""
+            st.markdown(f"""
+            <div class="card-v2">
+                <div class="card-header">
+                    <div class="card-title">Live P&L</div>
+                    <div class="card-badge" style="background:var(--gold-dim);color:var(--gold);">{_date}</div>
+                </div>
+                <div class="pnl">
+                    <div class="big {_cls}">{_sgn}{_nav_ret:.2f}%</div>
+                    <div class="sub">&#8377;{_mv:,.0f} market value</div>
+                </div>
             </div>
-            <div class="card-desc">Running since {bedrock_paper.get('created','')[:10]}. {dtrk} days tracked.</div>
-            <div class="pnl">
-                <div class="big {cls}">{sgn}{ppnl:.2f}%</div>
-                <div class="sub">Paper P&amp;L</div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
 
 render_disclaimer()
