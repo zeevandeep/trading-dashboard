@@ -52,7 +52,9 @@ htmlcov/
 .DS_Store
 
 # Project-specific
-data/cache/
+data/cache/**
+!data/cache/fundamentals/
+!data/cache/fundamentals/*.parquet
 data/raw/
 data/paper/.kite_session.json
 logs/
