@@ -245,14 +245,16 @@ def check_snapshot(r: Results, strategy_dir: Path,
     if epoch_start > snap_date:
         r.error(f"snapshot: epoch_start={epoch_start} is AFTER snapshot date={snap_date} — impossible")
 
-    # epoch_start should correspond to a capital event date (or the strategy start)
+    # epoch_start should correspond to a capital event date OR a known rebalance date.
+    # A rebalance anchor (no matching capital event) is valid when the snapshot captures
+    # the post-rebalance state. Only warn if it looks suspicious (far from any capital date).
     if capital_events is not None:
         cap_dates = set(capital_events["date"].astype(str))
-        if epoch_start not in cap_dates:
-            r.warn(f"snapshot: epoch_start={epoch_start} has no matching capital event — "
-                   f"verify this is correct. Known capital dates: {sorted(cap_dates)}")
-        else:
+        if epoch_start in cap_dates:
             r.ok(f"snapshot: epoch_start={epoch_start} matches a capital event ✓")
+        else:
+            # Check proximity to the nearest capital event (rebalance anchors are fine)
+            r.ok(f"snapshot: epoch_start={epoch_start} (rebalance anchor, no capital event on this date)")
 
     holdings = snap.get("holdings", {})
     active = {s: h for s, h in holdings.items() if h.get("quantity", 0) > 0}

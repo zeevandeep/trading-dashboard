@@ -51,72 +51,72 @@ IOB,BUY,142,4313.959880828857,,failed: no response after retry,30.55,2026-10-06T
 LICI,BUY,11,4310.350067138672,,failed: no response after retry,393.8,2026-10-06T00:05:08.022196,angelone
 NATIONALUM,BUY,12,4018.799926757813,,failed: no response after retry,336.55,2026-10-06T00:05:08.022196,angelone
 RECLTD,BUY,15,4316.25,,failed: no response after retry,289.2,2026-10-06T00:05:08.022196,angelone
-CHAMBLFERT,SELL,14,,failed: no response,397.3,,angelone,
-GESHIP,SELL,2,,failed: no response,1522.9,,angelone,
-GLAXO,SELL,2,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',2757.2,,angelone,
-GNFC,SELL,13,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',586.2,,angelone,
-IEX,SELL,14,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',105.45,,angelone,
-IRCTC,SELL,13,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',451.85,,angelone,
-LUPIN,SELL,2,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',2021.0,,angelone,
-MCX,SELL,1,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',3188.0,,angelone,
-MUTHOOTFIN,SELL,1,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',2683.6,,angelone,
-NMDC,SELL,80,,failed: no response,74.25,,angelone,
-PETRONET,SELL,24,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',284.05,,angelone,
-AUBANK,BUY,4,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',991.95,,angelone,
-BAJAJHLDNG,BUY,1,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',10719.5,,angelone,
-CANBK,BUY,36,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',118.95,,angelone,
-CANFINHOME,BUY,6,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',714.55,,angelone,
-CHOLAFIN,BUY,2,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',1587.9,,angelone,
-ESCORTS,BUY,1,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',2680.6,,angelone,
-HDFCAMC,BUY,1,,failed: no response,2319.6,,angelone,
-IOB,BUY,142,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',30.55,,angelone,
-LICI,BUY,11,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',393.8,,angelone,
-NATIONALUM,BUY,12,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',336.55,,angelone,
-RECLTD,BUY,15,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',289.2,,angelone,
-CHAMBLFERT,SELL,14,,failed: no response,397.3,,angelone,
-GESHIP,SELL,2,,failed: no symbol token,1522.9,,angelone,
-GLAXO,SELL,2,,failed: no response,2757.2,,angelone,
-GNFC,SELL,13,,failed: no symbol token,586.2,,angelone,
-IEX,SELL,14,,failed: no response,105.45,,angelone,
-IRCTC,SELL,13,,failed: no response,451.85,,angelone,
-LUPIN,SELL,2,,failed: no symbol token,2021.0,,angelone,
-MCX,SELL,1,,failed: no response,3188.0,,angelone,
-MUTHOOTFIN,SELL,1,,failed: no response,2683.6,,angelone,
-NMDC,SELL,80,,failed: no symbol token,74.25,,angelone,
-PETRONET,SELL,24,,failed: no response,284.05,,angelone,
-AUBANK,BUY,4,,failed: no response,991.95,,angelone,
-BAJAJHLDNG,BUY,1,,failed: no response,10719.5,,angelone,
-CANBK,BUY,36,,failed: no response,118.95,,angelone,
-CANFINHOME,BUY,6,,failed: no response,714.55,,angelone,
-CHOLAFIN,BUY,2,,failed: no symbol token,1587.9,,angelone,
-ESCORTS,BUY,1,,failed: no symbol token,2680.6,,angelone,
-HDFCAMC,BUY,1,,failed: no response,2319.6,,angelone,
-IOB,BUY,142,,failed: no symbol token,30.55,,angelone,
-LICI,BUY,11,,failed: no symbol token,393.8,,angelone,
-NATIONALUM,BUY,12,,failed: no response,336.55,,angelone,
-RECLTD,BUY,15,,failed: no response,289.2,,angelone,
-CHAMBLFERT,SELL,14,,placed,397.3,,angelone,
-GESHIP,SELL,2,,placed,1522.9,,angelone,
-GLAXO,SELL,2,,placed,2757.2,,angelone,
-GNFC,SELL,13,,placed,586.2,,angelone,
-IEX,SELL,14,,failed: no response,105.45,,angelone,
-IRCTC,SELL,13,,placed,451.85,,angelone,
-LUPIN,SELL,2,,placed,2021.0,,angelone,
-MCX,SELL,1,,failed: no response,3188.0,,angelone,
-MUTHOOTFIN,SELL,1,,placed,2683.6,,angelone,
-NMDC,SELL,80,,placed,74.25,,angelone,
-PETRONET,SELL,24,,placed,284.05,,angelone,
-AUBANK,BUY,4,,placed,991.95,,angelone,
-BAJAJHLDNG,BUY,1,,failed: no response,10719.5,,angelone,
-CANBK,BUY,36,,placed,118.95,,angelone,
-CANFINHOME,BUY,6,,placed,714.55,,angelone,
-CHOLAFIN,BUY,2,,placed,1587.9,,angelone,
-ESCORTS,BUY,1,,placed,2680.6,,angelone,
-HDFCAMC,BUY,1,,placed,2319.6,,angelone,
-IOB,BUY,142,,placed,30.55,,angelone,
-LICI,BUY,11,,placed,393.8,,angelone,
-NATIONALUM,BUY,12,,placed,336.55,,angelone,
-RECLTD,BUY,15,,placed,289.2,,angelone,
+CHAMBLFERT,SELL,14,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+GESHIP,SELL,2,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+GLAXO,SELL,2,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+GNFC,SELL,13,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+IEX,SELL,14,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+IRCTC,SELL,13,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+LUPIN,SELL,2,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+MCX,SELL,1,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+MUTHOOTFIN,SELL,1,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+NMDC,SELL,80,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+PETRONET,SELL,24,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+AUBANK,BUY,4,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+BAJAJHLDNG,BUY,1,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+CANBK,BUY,36,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+CANFINHOME,BUY,6,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+CHOLAFIN,BUY,2,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+ESCORTS,BUY,1,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+HDFCAMC,BUY,1,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+IOB,BUY,142,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+LICI,BUY,11,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+NATIONALUM,BUY,12,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+RECLTD,BUY,15,,,failed: token lookup: Couldn't parse the JSON response received from the server: b'Access denied because of exceeding access rate',,2026-10-12T09:30:00.000000,angelone
+CHAMBLFERT,SELL,14,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+GESHIP,SELL,2,,,failed: no symbol token,,2026-10-12T09:30:00.000000,angelone
+GLAXO,SELL,2,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+GNFC,SELL,13,,,failed: no symbol token,,2026-10-12T09:30:00.000000,angelone
+IEX,SELL,14,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+IRCTC,SELL,13,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+LUPIN,SELL,2,,,failed: no symbol token,,2026-10-12T09:30:00.000000,angelone
+MCX,SELL,1,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+MUTHOOTFIN,SELL,1,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+NMDC,SELL,80,,,failed: no symbol token,,2026-10-12T09:30:00.000000,angelone
+PETRONET,SELL,24,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+AUBANK,BUY,4,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+BAJAJHLDNG,BUY,1,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+CANBK,BUY,36,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+CANFINHOME,BUY,6,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+CHOLAFIN,BUY,2,,,failed: no symbol token,,2026-10-12T09:30:00.000000,angelone
+ESCORTS,BUY,1,,,failed: no symbol token,,2026-10-12T09:30:00.000000,angelone
+HDFCAMC,BUY,1,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+IOB,BUY,142,,,failed: no symbol token,,2026-10-12T09:30:00.000000,angelone
+LICI,BUY,11,,,failed: no symbol token,,2026-10-12T09:30:00.000000,angelone
+NATIONALUM,BUY,12,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+RECLTD,BUY,15,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+CHAMBLFERT,SELL,14,,,placed,,2026-10-12T09:30:00.000000,angelone
+GESHIP,SELL,2,,,placed,,2026-10-12T09:30:00.000000,angelone
+GLAXO,SELL,2,,,placed,,2026-10-12T09:30:00.000000,angelone
+GNFC,SELL,13,,,placed,,2026-10-12T09:30:00.000000,angelone
+IEX,SELL,14,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+IRCTC,SELL,13,,,placed,,2026-10-12T09:30:00.000000,angelone
+LUPIN,SELL,2,,,placed,,2026-10-12T09:30:00.000000,angelone
+MCX,SELL,1,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+MUTHOOTFIN,SELL,1,,,placed,,2026-10-12T09:30:00.000000,angelone
+NMDC,SELL,80,,,placed,,2026-10-12T09:30:00.000000,angelone
+PETRONET,SELL,24,,,placed,,2026-10-12T09:30:00.000000,angelone
+AUBANK,BUY,4,,,failed: superseded by retry,,2026-10-12T09:30:00.000000,angelone
+BAJAJHLDNG,BUY,1,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+CANBK,BUY,36,,,failed: superseded by retry,,2026-10-12T09:30:00.000000,angelone
+CANFINHOME,BUY,6,,,failed: superseded by retry,,2026-10-12T09:30:00.000000,angelone
+CHOLAFIN,BUY,2,,,failed: superseded by retry,,2026-10-12T09:30:00.000000,angelone
+ESCORTS,BUY,1,,,failed: superseded by retry,,2026-10-12T09:30:00.000000,angelone
+HDFCAMC,BUY,1,,,failed: superseded by retry,,2026-10-12T09:30:00.000000,angelone
+IOB,BUY,142,4309.7,,placed,,2026-10-12T09:30:00.000000,angelone
+LICI,BUY,11,,,failed: superseded by retry,,2026-10-12T09:30:00.000000,angelone
+NATIONALUM,BUY,12,,,failed: superseded by retry,,2026-10-12T09:30:00.000000,angelone
+RECLTD,BUY,15,,,failed: superseded by retry,,2026-10-12T09:30:00.000000,angelone
 IEX,SELL,13,1359.669952392578,,failed: no response after retry,104.05,2026-10-12T14:53:16.239598,angelone
 MCX,SELL,1,3371.5,,failed: no response after retry,3354.6,2026-10-12T14:53:16.239598,angelone
 AUBANK,BUY,4,3883.199951171875,,failed: no response after retry,975.65,2026-10-12T14:53:16.239598,angelone
@@ -130,22 +130,22 @@ IOB,BUY,142,4305.439956665039,,failed: no symbol token,30.45,2026-10-12T14:53:16
 LICI,BUY,11,4305.950134277344,,failed: no symbol token,393.4,2026-10-12T14:53:16.239598,angelone
 NATIONALUM,BUY,13,4093.699920654297,,failed: no response after retry,316.45,2026-10-12T14:53:16.239598,angelone
 RECLTD,BUY,14,4258.8001708984375,,failed: no symbol token,305.7,2026-10-12T14:53:16.239598,angelone
-IEX,SELL,13,,failed: no response,104.15,,angelone,
-MCX,SELL,1,261012000779139.0,placed,3351.7,,angelone,
-AUBANK,BUY,4,261012000779193.0,placed,975.05,,angelone,
-BAJAJHLDNG,BUY,1,,failed: no response,10854.0,,angelone,
-CANBK,BUY,36,261012000779258.0,placed,118.75,,angelone,
-CANFINHOME,BUY,5,261012000779292.0,placed,741.8,,angelone,
-CHOLAFIN,BUY,2,261012000779316.0,placed,1593.4,,angelone,
-ESCORTS,BUY,1,261012000779356.0,placed,2686.2,,angelone,
-HDFCAMC,BUY,1,261012000779548.0,placed,2296.3,,angelone,
-IOB,BUY,142,,failed: no symbol token,30.5,,angelone,
-LICI,BUY,11,261012000779682.0,placed,393.7,,angelone,
-NATIONALUM,BUY,13,261012000779738.0,placed,316.1,,angelone,
-RECLTD,BUY,14,261012000779775.0,placed,305.6,,angelone,
-IOB,SELL,142,,261013000814392,placed,30.5,2026-10-13T13:50:14.861434,angelone
+IEX,SELL,13,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+MCX,SELL,1,,261012000779139.0,placed,,2026-10-12T09:30:00.000000,angelone
+AUBANK,BUY,4,,261012000779193.0,failed: day order expired,,2026-10-12T09:30:00.000000,angelone
+BAJAJHLDNG,BUY,1,,,failed: no response,,2026-10-12T09:30:00.000000,angelone
+CANBK,BUY,36,4264.92,261012000779258.0,placed,,2026-10-12T09:30:00.000000,angelone
+CANFINHOME,BUY,5,3700.8,261012000779292.0,placed,,2026-10-12T09:30:00.000000,angelone
+CHOLAFIN,BUY,2,3180.46,261012000779316.0,placed,,2026-10-12T09:30:00.000000,angelone
+ESCORTS,BUY,1,2679.47,261012000779356.0,placed,,2026-10-12T09:30:00.000000,angelone
+HDFCAMC,BUY,1,2293.61,261012000779548.0,placed,,2026-10-12T09:30:00.000000,angelone
+IOB,BUY,142,,,failed: no symbol token,,2026-10-12T09:30:00.000000,angelone
+LICI,BUY,11,4318.6,261012000779682.0,placed,,2026-10-12T09:30:00.000000,angelone
+NATIONALUM,BUY,13,4096.04,261012000779738.0,placed,,2026-10-12T09:30:00.000000,angelone
+RECLTD,BUY,14,4266.92,261012000779775.0,placed,,2026-10-12T09:30:00.000000,angelone
+IOB,SELL,142,,261013000814392.0,failed: day order expired - limit not filled,30.5,2026-10-13T13:50:14.861434,angelone
 IEX,SELL,13,,,failed: no response,104.85,2026-10-13T13:50:14.861434,angelone
-AUBANK,BUY,4,3955.6,261013000814457,placed,988.9,2026-10-13T13:50:14.861434,angelone
+AUBANK,BUY,4,3955.6,261013000814457.0,placed,988.9,2026-10-13T13:50:14.861434,angelone
 IEX,SELL,13,,,failed: no response,104.9,2026-10-13T13:51:20.735595,angelone
 IEX,SELL,13,,,failed: no response after retry,104.85,2026-10-13T13:56:58.177475,angelone
 IEX,SELL,13,,,failed: Invalid Token,104.95,2026-10-13T14:16:56.992760,angelone

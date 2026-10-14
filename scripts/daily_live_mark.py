@@ -206,8 +206,13 @@ def mark_single_day(
     equity_path: Path,
     positions_path: Path,
     capital_events: "pd.DataFrame | None" = None,
+    cash_balance: float = 0.0,
 ) -> bool:
     """Write a single day's mark to equity.csv and positions.csv.
+
+    cash_balance: undeployed cash in the broker account (from holdings_snapshot).
+    This is added to market_value so NAV correctly reflects total account value,
+    not just the value of open positions.
 
     Returns True if successful.
     """
@@ -215,7 +220,7 @@ def mark_single_day(
     invested_override = get_cumulative_invested(capital_events, mark_date)
     total_cost = invested_override if invested_override is not None else sum(h["cost_basis"] for h in holdings.values())
 
-    current_value = 0.0
+    current_value = cash_balance  # Start with undeployed cash
     position_details = []
     for sym, info in holdings.items():
         qty = info["quantity"]
@@ -300,9 +305,12 @@ def mark_live_strategy(strategy: str) -> None:
 
     # Load Kite snapshot if available (ground truth for messy rebalances)
     kite_snapshot = load_kite_snapshot(strategy_dir)
+    cash_balance = 0.0
     if kite_snapshot:
         epoch = kite_snapshot.get("epoch_start", kite_snapshot["date"])
-        log.info(f"{strategy}: using Kite snapshot (epoch_start={epoch}) as holdings anchor")
+        cash_balance = float(kite_snapshot.get("cash_balance", 0.0))
+        log.info(f"{strategy}: using Kite snapshot (epoch_start={epoch}) as holdings anchor"
+                 + (f", cash_balance=Rs {cash_balance:,.0f}" if cash_balance else ""))
 
     # Load capital events — source of truth for invested / NAV cash flows
     capital_events = load_capital_events(strategy_dir)
@@ -370,7 +378,8 @@ def mark_live_strategy(strategy: str) -> None:
             log.warning(f"{strategy}: no data for {missing_syms} on {date_str}, skipping day")
             continue
 
-        if mark_single_day(strategy, holdings, close_prices, date_str, equity_path, positions_path, capital_events=capital_events):
+        if mark_single_day(strategy, holdings, close_prices, date_str, equity_path, positions_path,
+                           capital_events=capital_events, cash_balance=cash_balance):
             marked += 1
 
     # Sort files by date after backfills

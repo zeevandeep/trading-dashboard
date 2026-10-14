@@ -1,61 +1,78 @@
 {
-  "date": "2026-09-27",
-  "source": "angelone_manual",
+  "date": "2026-10-13",
+  "epoch_start": "2026-10-12",
+  "source": "angelone_holdings_api",
+  "cash_balance": 13887.05,
   "holdings": {
-    "CHAMBLFERT": {
-      "quantity": 14,
-      "average_price": 455.19,
-      "cost_basis": 6372.66
+    "AUBANK": {
+      "quantity": 4,
+      "average_price": 986.54,
+      "cost_basis": 3946.16
+    },
+    "CANBK": {
+      "quantity": 36,
+      "average_price": 118.47,
+      "cost_basis": 4264.92
+    },
+    "CANFINHOME": {
+      "quantity": 5,
+      "average_price": 740.16,
+      "cost_basis": 3700.8
+    },
+    "CHOLAFIN": {
+      "quantity": 2,
+      "average_price": 1590.23,
+      "cost_basis": 3180.46
+    },
+    "ESCORTS": {
+      "quantity": 1,
+      "average_price": 2679.47,
+      "cost_basis": 2679.47
     },
     "GESHIP": {
-      "quantity": 4,
-      "average_price": 1348.23,
-      "cost_basis": 5392.92
-    },
-    "GLAXO": {
       "quantity": 2,
-      "average_price": 2439.14,
-      "cost_basis": 4878.28
+      "average_price": 1348.23,
+      "cost_basis": 2696.46
     },
-    "GNFC": {
-      "quantity": 13,
-      "average_price": 504.64,
-      "cost_basis": 6560.32
+    "HDFCAMC": {
+      "quantity": 1,
+      "average_price": 2293.61,
+      "cost_basis": 2293.61
     },
     "IEX": {
       "quantity": 54,
       "average_price": 123.39,
       "cost_basis": 6663.06
     },
-    "IRCTC": {
-      "quantity": 13,
-      "average_price": 505.69,
-      "cost_basis": 6573.97
+    "IOB": {
+      "quantity": 142,
+      "average_price": 30.35,
+      "cost_basis": 4309.7
     },
-    "LUPIN": {
-      "quantity": 2,
-      "average_price": 2450.15,
-      "cost_basis": 4900.30
+    "LICI": {
+      "quantity": 11,
+      "average_price": 392.6,
+      "cost_basis": 4318.6
     },
     "MCX": {
-      "quantity": 2,
+      "quantity": 1,
       "average_price": 2754.51,
-      "cost_basis": 5509.02
+      "cost_basis": 2754.51
     },
     "MUTHOOTFIN": {
-      "quantity": 2,
+      "quantity": 1,
       "average_price": 2978.03,
-      "cost_basis": 5956.06
+      "cost_basis": 2978.03
     },
-    "NMDC": {
-      "quantity": 80,
-      "average_price": 83.24,
-      "cost_basis": 6659.20
+    "NATIONALUM": {
+      "quantity": 13,
+      "average_price": 315.08,
+      "cost_basis": 4096.04
     },
-    "PETRONET": {
-      "quantity": 24,
-      "average_price": 273.75,
-      "cost_basis": 6570.00
+    "RECLTD": {
+      "quantity": 14,
+      "average_price": 304.78,
+      "cost_basis": 4266.92
     }
   }
 }

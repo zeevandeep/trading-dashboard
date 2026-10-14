@@ -5,6 +5,22 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Fix Bedrock Oct 12 rebalance data corruption (2026-10-14)
+
+#### Fixed
+- **`data/live/value_quality_v1_live/orders.csv`** — Oct 12 rebalance produced 3 batches of orders due to API retries. Batch 3 BUYs (no order_id, column-shift artefact) were superseded by Batch 5 BUYs (real order_ids, slightly different quantities). Marked 9 Batch 3 BUY rows as `failed: superseded by retry`. Also marked Batch 5 AUBANK BUY (Oct 12 day order that expired unfilled) and IOB SELL 142 (Oct 13 limit order at 30.5 that expired unfilled) as `failed: day order expired`. Filled NaN `estimated_value` on 9 placed BUY rows using AngelOne avg_price × qty.
+- **`data/live/value_quality_v1_live/equity.csv`** — Oct 13 row was computed using a ghost portfolio (pre-rebalance 11 positions + AUBANK only), because the column-shift bug prevented `compute_holdings()` from detecting Oct 12 orders. Deleted and recomputed correctly from Oct 12 onwards using the new snapshot.
+- **`data/live/value_quality_v1_live/positions.csv`** — Same ghost portfolio issue. Oct 12–13 rows deleted and recomputed.
+- **`data/live/value_quality_v1_live/holdings_snapshot.json`** — Replaced stale Sep 27 pre-rebalance snapshot with the actual Oct 13 AngelOne holdings (14 positions: AUBANK×4, CANBK×36, CANFINHOME×5, CHOLAFIN×2, ESCORTS×1, GESHIP×2, HDFCAMC×1, IEX×54, IOB×142, LICI×11, MCX×1, MUTHOOTFIN×1, NATIONALUM×13, RECLTD×14). `epoch_start=2026-10-12` so Oct 12 (rebalance day) uses the correct portfolio. `cash_balance=Rs 13,887` (undeployed cash from failed BAJAJHLDNG buy).
+
+#### Added
+- **`scripts/daily_live_mark.py`** — Cash balance support. If `holdings_snapshot.json` has a `cash_balance` field, it is added to `market_value` in every mark. Without this, the Bedrock NAV would show −21% (positions only = Rs 52K vs invested Rs 66K) when Rs 14K of cash is sitting undeployed in AngelOne due to the BAJAJHLDNG order block. With cash, NAV is correctly ~−1.2%.
+- **`scripts/validate_live_data.py`** — Relaxed `epoch_start` check: rebalance anchors (epoch_start with no matching capital event) are now `OK` instead of `WARN`, since rebalances legitimately create new snapshot anchors.
+
+#### Pending manual action
+- IEX SELL 13 — blocked by NSE GSM cautionary listing (AB4036). Must be placed manually in AngelOne app.
+- BAJAJHLDNG BUY 1 — same block. Rs 10,685 of cash remains undeployed until placed manually.
+
 ### Monthly heatmap shows live returns, not paper (2026-10-14)
 
 #### Fixed
