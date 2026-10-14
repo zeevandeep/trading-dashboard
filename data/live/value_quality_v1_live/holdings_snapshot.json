@@ -1,8 +1,8 @@
 {
-  "date": "2026-10-13",
+  "date": "2026-10-14",
   "epoch_start": "2026-10-12",
   "source": "angelone_holdings_api",
-  "cash_balance": 13887.05,
+  "cash_balance": 4468.49,
   "holdings": {
     "AUBANK": {
       "quantity": 4,
@@ -40,9 +40,9 @@
       "cost_basis": 2293.61
     },
     "IEX": {
-      "quantity": 54,
+      "quantity": 41,
       "average_price": 123.39,
-      "cost_basis": 6663.06
+      "cost_basis": 5058.99
     },
     "IOB": {
       "quantity": 142,
@@ -73,6 +73,11 @@
       "quantity": 14,
       "average_price": 304.78,
       "cost_basis": 4266.92
+    },
+    "BAJAJHLDNG": {
+      "quantity": 1,
+      "average_price": 10821.0,
+      "cost_basis": 10821.0
     }
   }
 }

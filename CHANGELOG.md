@@ -5,6 +5,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Bedrock: log IEX SELL + BAJAJHLDNG BUY manual orders (2026-10-14)
+
+#### Fixed
+- **`data/live/value_quality_v1_live/orders.csv`** — Added 2 manual orders placed via AngelOne app (blocked by NSE GSM cautionary listing AB4036): SELL 13 × IEX @ Rs 107.88, BUY 1 × BAJAJHLDNG @ Rs 10,821. IEX position reduced 54 → 41; BAJAJHLDNG added as new position.
+- **`data/live/value_quality_v1_live/holdings_snapshot.json`** — Updated: IEX qty 54 → 41, BAJAJHLDNG added, `cash_balance` updated Rs 13,887 → Rs 4,468 (deployed into BAJAJHLDNG, recovered from IEX sell). 15 holdings total.
+- **`data/live/value_quality_v1_live/equity.csv` / `positions.csv`** — Oct 14 recomputed with correct 15-position portfolio. NAV: −1.3% | MV: Rs 66,157.
+
 ### Fix Bedrock Oct 12 rebalance data corruption (2026-10-14)
 
 #### Fixed
