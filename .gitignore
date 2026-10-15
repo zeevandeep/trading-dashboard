@@ -52,6 +52,8 @@ htmlcov/
 .DS_Store
 
 # Project-specific
+*.parquet
+*.feather
 data/cache/**
 !data/cache/fundamentals/
 !data/cache/fundamentals/*.parquet
@@ -59,8 +61,6 @@ data/raw/
 data/paper/.kite_session.json
 logs/
 notebooks/.ipynb_checkpoints/
-*.parquet
-*.feather
 backtest_results/
 
 # Jupyter
