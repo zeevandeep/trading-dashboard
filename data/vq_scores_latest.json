@@ -1,28 +1,28 @@
 {
-  "updated_at": "2026-10-14T17:30:43.296408",
+  "updated_at": "2026-10-15T17:17:15.600447",
   "n_scored": 10,
   "n_universe": 161,
   "top_15": [
     {
-      "ticker": "POLYCAB",
-      "score": 0.775,
-      "pe": 43.73,
-      "roe": 0.2555,
-      "de": 1.74,
-      "earnings_growth": 0.325
-    },
-    {
       "ticker": "INDIAMART",
       "score": 0.75,
-      "pe": 19.75,
+      "pe": 19.91,
       "roe": 0.2315,
       "de": 0.97,
       "earnings_growth": 0.119
     },
     {
+      "ticker": "POLYCAB",
+      "score": 0.75,
+      "pe": 43.06,
+      "roe": 0.2555,
+      "de": 1.74,
+      "earnings_growth": 0.325
+    },
+    {
       "ticker": "TATAELXSI",
       "score": 0.625,
-      "pe": 34.48,
+      "pe": 34.4,
       "roe": 0.2387,
       "de": 4.9,
       "earnings_growth": 0.1
@@ -30,31 +30,31 @@
     {
       "ticker": "PERSISTENT",
       "score": 0.575,
-      "pe": 48.28,
+      "pe": 47.81,
       "roe": 0.252,
       "de": 6.94,
       "earnings_growth": 0.121
     },
     {
+      "ticker": "ICICIPRULI",
+      "score": 0.5,
+      "pe": 37.08,
+      "roe": 0.1292,
+      "de": 17.73,
+      "earnings_growth": 0.266
+    },
+    {
       "ticker": "VBL",
-      "score": 0.475,
-      "pe": 44.27,
+      "score": 0.5,
+      "pe": 42.92,
       "roe": 0.1685,
       "de": 15.87,
       "earnings_growth": 0.157
     },
     {
-      "ticker": "ICICIPRULI",
-      "score": 0.475,
-      "pe": 36.75,
-      "roe": 0.1257,
-      "de": 18.05,
-      "earnings_growth": 0.285
-    },
-    {
       "ticker": "MPHASIS",
       "score": 0.475,
-      "pe": 24.36,
+      "pe": 24.54,
       "roe": 0.1774,
       "de": 24.68,
       "earnings_growth": 0.107
@@ -62,7 +62,7 @@
     {
       "ticker": "INDUSTOWER",
       "score": 0.425,
-      "pe": 13.7,
+      "pe": 14.07,
       "roe": 0.1891,
       "de": 51.79,
       "earnings_growth": 0.006
@@ -70,15 +70,15 @@
     {
       "ticker": "DLF",
       "score": 0.425,
-      "pe": 37.13,
+      "pe": 37.33,
       "roe": 0.101,
       "de": 0.67,
       "earnings_growth": 0.042
     },
     {
       "ticker": "DMART",
-      "score": 0.25,
-      "pe": 72.8,
+      "score": 0.225,
+      "pe": 70.65,
       "roe": 0.1272,
       "de": 16.34,
       "earnings_growth": 0.087
