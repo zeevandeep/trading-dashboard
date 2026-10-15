@@ -1,0 +1,67 @@
+name: Ascent Monthly Rebalance Plan
+
+on:
+  schedule:
+    # 13:30 UTC = 7:00 PM IST, 28th of every month
+    - cron: "30 13 28 * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v5
+        env:
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -e .
+
+      - name: Compute rebalance plan (no Kite auth)
+        run: |
+          python scripts/monthly_live_rebalance.py --dry-run --no-broker 2>&1 | tee /tmp/ascent_plan.txt
+          echo "PLAN_OUTPUT<<EOF" >> $GITHUB_ENV
+          head -80 /tmp/ascent_plan.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Send plan via Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          PLAN_OUTPUT: ${{ env.PLAN_OUTPUT }}
+        run: |
+          python - <<'PYEOF'
+          import os, urllib.request, urllib.parse
+          from datetime import date
+
+          token = os.environ["TELEGRAM_BOT_TOKEN"]
+          chat_id = os.environ["TELEGRAM_CHAT_ID"]
+          plan = os.environ.get("PLAN_OUTPUT", "(no output)")
+          today = date.today().strftime("%b %d, %Y")
+
+          msg = (
+              f"📊 *Ascent Monthly Rebalance Plan* ({today})\n\n"
+              f"```\n{plan[:2500]}\n```\n\n"
+              f"To execute (from your machine after Kite login):\n"
+              f"`python scripts/monthly_live_rebalance.py --remote --amo --yes`"
+          )
+
+          url = f"https://api.telegram.org/bot{token}/sendMessage"
+          data = urllib.parse.urlencode({
+              "chat_id": chat_id,
+              "text": msg,
+              "parse_mode": "Markdown",
+          }).encode()
+          urllib.request.urlopen(urllib.request.Request(url, data=data))
+          print("Plan sent via Telegram.")
+          PYEOF

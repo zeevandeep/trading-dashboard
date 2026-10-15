@@ -16,7 +16,10 @@ Usage:
     # Step 2: If orders look right, execute for real
     python scripts/monthly_live_rebalance.py
 
-    # Override capital (default Rs 10,000)
+    # CI / no-broker mode: compute plan using kite_snapshot + yfinance prices (no Kite auth)
+    python scripts/monthly_live_rebalance.py --dry-run --no-broker
+
+    # Override capital (default = auto from equity.csv, fallback Rs 10,000)
     python scripts/monthly_live_rebalance.py --capital 50000
 """
 
@@ -46,6 +49,35 @@ log = setup_logging("live_rebalance")
 
 CONFIG_PATH = ROOT / "configs" / "smallcap_momentum_v2_live.yaml"
 DEFAULT_CAPITAL = 10_000
+
+
+def _auto_capital(strategy_name: str) -> float | None:
+    """Read latest market_value from equity.csv as the rebalance capital.
+
+    Returns None if equity.csv doesn't exist or is empty.
+    """
+    equity_path = DATA_DIR / "live" / strategy_name / "equity.csv"
+    if not equity_path.exists():
+        return None
+    eq = pd.read_csv(equity_path)
+    if eq.empty:
+        return None
+    return float(eq.iloc[-1]["market_value"])
+
+
+def _holdings_from_snapshot(strategy_name: str) -> dict[str, dict]:
+    """Load current holdings from kite_snapshot.json without broker auth."""
+    import json
+    snap_path = DATA_DIR / "live" / strategy_name / "kite_snapshot.json"
+    if not snap_path.exists():
+        return {}
+    with open(snap_path) as f:
+        snap = json.load(f)
+    return {
+        sym: {"quantity": h["quantity"], "average_price": h.get("average_price", 0)}
+        for sym, h in snap.get("holdings", {}).items()
+        if h.get("quantity", 0) > 0
+    }
 
 
 def _post_rebalance_cleanup(
@@ -129,12 +161,17 @@ def _post_rebalance_cleanup(
 def main():
     parser = argparse.ArgumentParser(description="Monthly live rebalance (top-5)")
     parser.add_argument("--dry-run", action="store_true", help="Show orders without placing them")
-    parser.add_argument("--capital", type=float, default=DEFAULT_CAPITAL, help="Total capital in INR")
+    parser.add_argument("--no-broker", action="store_true",
+                        help="CI mode: use kite_snapshot for holdings + yfinance for prices (no Kite auth)")
+    parser.add_argument("--capital", type=float, default=None, help="Total capital in INR (default: auto from equity.csv)")
     parser.add_argument("--force-refresh", action="store_true", help="Re-download all price data")
-    parser.add_argument("--remote", action="store_true", help="Place orders via Render proxy (fixed IP)")
+    parser.add_argument("--remote", action="store_true", help="Place orders via DO proxy (fixed IP)")
     parser.add_argument("--amo", action="store_true", help="Place as After Market Orders (outside market hours, execute at next open)")
     parser.add_argument("--yes", action="store_true", help="Skip confirmation prompt (use carefully)")
     args = parser.parse_args()
+
+    if args.no_broker:
+        args.dry_run = True  # no-broker always implies dry-run
 
     ensure_dirs()
 
@@ -142,18 +179,27 @@ def main():
     strategy_name = cfg.get("name", "smallcap_momentum_v2_live")
     top_n = cfg.get("portfolio", {}).get("top_n", 5)
 
+    # Resolve capital: explicit arg > auto from equity.csv > hardcoded default
+    if args.capital is None:
+        auto_cap = _auto_capital(strategy_name)
+        args.capital = auto_cap if auto_cap else DEFAULT_CAPITAL
+        if auto_cap:
+            log.info(f"Capital auto-detected from equity.csv: Rs. {args.capital:,.0f}")
+
     print(f"\n{'='*60}")
     print(f"  MONTHLY LIVE REBALANCE")
     print(f"  Strategy: {strategy_name}")
     print(f"  Capital:  Rs. {args.capital:,.0f}")
     print(f"  Top N:    {top_n}")
-    mode_str = "DRY RUN" if args.dry_run else ("LIVE (AMO)" if args.amo else "LIVE")
+    mode_str = "DRY RUN (no-broker)" if args.no_broker else ("DRY RUN" if args.dry_run else ("LIVE (AMO)" if args.amo else "LIVE"))
     print(f"  Mode:     {mode_str}")
     print(f"{'='*60}\n")
 
-    # ── Kite login
-    log.info("Authenticating with Kite...")
-    kite = login()
+    # ── Kite login (skipped in no-broker mode)
+    kite = None
+    if not args.no_broker:
+        log.info("Authenticating with Kite...")
+        kite = login()
 
     # ── Universe & price data
     tickers = smallcap_universe()
@@ -194,8 +240,12 @@ def main():
     log.info(f"Target top-{top_n}: {list(picks.index)}")
 
     # ── Current broker state
-    current_holdings = get_holdings(kite)
-    log.info(f"Current broker holdings: {len(current_holdings)} positions")
+    if args.no_broker:
+        current_holdings = _holdings_from_snapshot(strategy_name)
+        log.info(f"Holdings from kite_snapshot: {len(current_holdings)} positions (no-broker mode)")
+    else:
+        current_holdings = get_holdings(kite)
+        log.info(f"Current broker holdings: {len(current_holdings)} positions")
 
     if current_holdings:
         print("Current holdings:")
@@ -205,7 +255,25 @@ def main():
 
     # ── Prices
     all_symbols = list(set(list(target_weights.keys()) + list(current_holdings.keys())))
-    live_prices = get_ltp(kite, all_symbols) if all_symbols else {}
+    if args.no_broker:
+        # Use yfinance last close as price proxy (no Kite auth)
+        import yfinance as yf
+        log.info(f"Fetching LTP via yfinance (no-broker mode) for {len(all_symbols)} symbols...")
+        live_prices = {}
+        yf_tickers = [f"{s}.NS" for s in all_symbols]
+        try:
+            raw = yf.download(yf_tickers, period="2d", progress=False)
+            if not raw.empty:
+                closes = raw["Close"] if isinstance(raw.columns, pd.MultiIndex) else raw[["Close"]]
+                if isinstance(raw.columns, pd.MultiIndex):
+                    latest = closes.ffill().iloc[-1]
+                    for sym, yf_t in zip(all_symbols, yf_tickers):
+                        if yf_t in latest.index and pd.notna(latest[yf_t]):
+                            live_prices[sym] = float(latest[yf_t])
+        except Exception as e:
+            log.warning(f"yfinance LTP fetch failed: {e}")
+    else:
+        live_prices = get_ltp(kite, all_symbols) if all_symbols else {}
 
     # ── Compute orders with min 1 share per target stock
     orders = []

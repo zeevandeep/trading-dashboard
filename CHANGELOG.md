@@ -5,6 +5,20 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Ascent monthly rebalance automation (2026-10-15)
+
+#### Added
+- **`.github/workflows/monthly-ascent-rebalance.yml`** — New workflow runs on the 28th of every month (7 PM IST). Computes the full momentum rebalance plan using yfinance + kite_snapshot (no Kite auth) and sends it via Telegram with exact SELLS/BUYS and the one-liner execute command. Replaces the old plain-text reminder.
+- **`scripts/monthly_live_rebalance.py`** — `--no-broker` flag: uses `kite_snapshot.json` for current holdings and yfinance for prices. Enables plan computation in CI without browser Kite login. Also added `--capital auto` (default): reads latest `market_value` from `equity.csv` so capital is always correct without manual input. Helper functions: `_auto_capital()`, `_holdings_from_snapshot()`.
+
+#### Removed
+- **`.github/workflows/rebalance-reminders.yml`** — Superseded by `monthly-ascent-rebalance.yml` which sends a full signal-based plan instead of a static reminder text.
+
+### Ascent Aug 26 duplicate orders (2026-10-15)
+
+#### Fixed
+- **`data/live/smallcap_momentum_v2_live/orders.csv`** — Aug 26 rebalance produced 2 batches (12:43 and 13:11). Confirmed batch 1 (12:43) did not execute: Sep 30 Kite snapshot quantities match exactly what batch 2 alone would produce (ADANIPOWER=64=30+34, BHEL=32=17+15, IDEA=885=479+406). Marked 17 batch 1 rows as `failed: superseded by retry batch`. Validator no longer warns about duplicate placed orders.
+
 ### Bedrock: log IEX SELL + BAJAJHLDNG BUY manual orders (2026-10-14)
 
 #### Fixed
