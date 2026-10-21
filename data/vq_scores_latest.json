@@ -1,12 +1,12 @@
 {
-  "updated_at": "2026-10-20T17:26:55.773246",
+  "updated_at": "2026-10-21T17:35:04.116589",
   "n_scored": 16,
   "n_universe": 161,
   "top_15": [
     {
       "ticker": "INDIAMART",
       "score": 0.75,
-      "pe": 19.5,
+      "pe": 19.46,
       "roe": 0.2315,
       "de": 0.97,
       "earnings_growth": 0.119
@@ -14,7 +14,7 @@
     {
       "ticker": "POLYCAB",
       "score": 0.7344,
-      "pe": 38.24,
+      "pe": 37.03,
       "roe": 0.2677,
       "de": 2.05,
       "earnings_growth": 0.425
@@ -22,7 +22,7 @@
     {
       "ticker": "MUTHOOTFIN",
       "score": 0.6875,
-      "pe": 9.06,
+      "pe": 8.79,
       "roe": 0.3174,
       "de": 393.56,
       "earnings_growth": 0.388
@@ -30,15 +30,15 @@
     {
       "ticker": "ICICIGI",
       "score": 0.6562,
-      "pe": 32.41,
+      "pe": 32.21,
       "roe": 0.1363,
       "de": 0.16,
       "earnings_growth": 0.153
     },
     {
       "ticker": "TATAELXSI",
-      "score": 0.625,
-      "pe": 35.23,
+      "score": 0.6094,
+      "pe": 35.78,
       "roe": 0.2387,
       "de": 4.9,
       "earnings_growth": 0.1
@@ -46,15 +46,23 @@
     {
       "ticker": "TATACOMM",
       "score": 0.5781,
-      "pe": 44.45,
+      "pe": 43.76,
       "roe": 0.3376,
       "de": 371.5,
       "earnings_growth": 0.86
     },
     {
+      "ticker": "ICICIPRULI",
+      "score": 0.5156,
+      "pe": 35.63,
+      "roe": 0.1292,
+      "de": 17.73,
+      "earnings_growth": 0.266
+    },
+    {
       "ticker": "MPHASIS",
       "score": 0.5156,
-      "pe": 25.01,
+      "pe": 25.76,
       "roe": 0.1774,
       "de": 24.68,
       "earnings_growth": 0.107
@@ -62,23 +70,15 @@
     {
       "ticker": "VBL",
       "score": 0.5156,
-      "pe": 42.05,
+      "pe": 40.84,
       "roe": 0.1685,
       "de": 15.87,
       "earnings_growth": 0.157
     },
     {
-      "ticker": "ICICIPRULI",
-      "score": 0.5,
-      "pe": 36.17,
-      "roe": 0.1292,
-      "de": 17.73,
-      "earnings_growth": 0.266
-    },
-    {
       "ticker": "OBEROIRLTY",
       "score": 0.5,
-      "pe": 23.17,
+      "pe": 22.77,
       "roe": 0.1469,
       "de": 13.82,
       "earnings_growth": 0.002
@@ -86,7 +86,7 @@
     {
       "ticker": "INDUSTOWER",
       "score": 0.5,
-      "pe": 14.1,
+      "pe": 13.97,
       "roe": 0.1891,
       "de": 51.79,
       "earnings_growth": 0.006
@@ -94,31 +94,31 @@
     {
       "ticker": "DLF",
       "score": 0.4844,
-      "pe": 36.49,
+      "pe": 36.01,
       "roe": 0.1031,
       "de": 0.69,
       "earnings_growth": 0.101
     },
     {
-      "ticker": "BHEL",
-      "score": 0.4219,
-      "pe": 51.67,
-      "roe": 0.1125,
-      "de": 22.5,
-      "earnings_growth": 1.185
-    },
-    {
       "ticker": "PERSISTENT",
       "score": 0.4062,
-      "pe": 49.77,
+      "pe": 51.25,
       "roe": 0.2292,
       "de": 6.7,
       "earnings_growth": -0.263
     },
     {
+      "ticker": "BHEL",
+      "score": 0.4062,
+      "pe": 58.68,
+      "roe": 0.1125,
+      "de": 22.5,
+      "earnings_growth": 1.185
+    },
+    {
       "ticker": "DMART",
       "score": 0.2656,
-      "pe": 69.09,
+      "pe": 67.98,
       "roe": 0.1272,
       "de": 16.34,
       "earnings_growth": 0.087
