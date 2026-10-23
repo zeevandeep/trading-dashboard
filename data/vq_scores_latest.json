@@ -1,127 +1,127 @@
 {
-  "updated_at": "2026-10-22T17:31:34.802824",
-  "n_scored": 19,
+  "updated_at": "2026-10-23T17:22:54.778105",
+  "n_scored": 23,
   "n_universe": 161,
   "top_15": [
     {
-      "ticker": "INDIAMART",
-      "score": 0.75,
-      "pe": 19.31,
-      "roe": 0.2315,
-      "de": 0.97,
-      "earnings_growth": 0.119
-    },
-    {
       "ticker": "POLYCAB",
-      "score": 0.7368,
-      "pe": 36.55,
+      "score": 0.7935,
+      "pe": 35.45,
       "roe": 0.2677,
       "de": 2.05,
       "earnings_growth": 0.425
     },
     {
+      "ticker": "INDIAMART",
+      "score": 0.7826,
+      "pe": 19.22,
+      "roe": 0.2315,
+      "de": 0.97,
+      "earnings_growth": 0.119
+    },
+    {
       "ticker": "MUTHOOTFIN",
-      "score": 0.6974,
-      "pe": 8.53,
+      "score": 0.7065,
+      "pe": 8.64,
       "roe": 0.3174,
       "de": 393.56,
       "earnings_growth": 0.388
     },
     {
-      "ticker": "ICICIGI",
-      "score": 0.6316,
-      "pe": 32.08,
-      "roe": 0.1363,
-      "de": 0.16,
-      "earnings_growth": 0.153
-    },
-    {
       "ticker": "TATAELXSI",
-      "score": 0.6184,
-      "pe": 35.76,
+      "score": 0.663,
+      "pe": 34.4,
       "roe": 0.2387,
       "de": 4.9,
       "earnings_growth": 0.1
     },
     {
+      "ticker": "ICICIGI",
+      "score": 0.6522,
+      "pe": 31.27,
+      "roe": 0.1363,
+      "de": 0.16,
+      "earnings_growth": 0.153
+    },
+    {
       "ticker": "TATACOMM",
-      "score": 0.6053,
-      "pe": 43.52,
+      "score": 0.6087,
+      "pe": 42.79,
       "roe": 0.3376,
       "de": 371.5,
       "earnings_growth": 0.86
     },
     {
+      "ticker": "SRF",
+      "score": 0.5761,
+      "pe": 29.66,
+      "roe": 0.1598,
+      "de": 35.12,
+      "earnings_growth": 0.311
+    },
+    {
+      "ticker": "HAVELLS",
+      "score": 0.5652,
+      "pe": 38.91,
+      "roe": 0.18,
+      "de": 2.44,
+      "earnings_growth": 0.096
+    },
+    {
       "ticker": "M&MFIN",
-      "score": 0.5526,
-      "pe": 11.11,
+      "score": 0.5652,
+      "pe": 10.7,
       "roe": 0.1377,
       "de": 490.01,
       "earnings_growth": 0.595
     },
     {
-      "ticker": "VBL",
-      "score": 0.5263,
-      "pe": 40.08,
-      "roe": 0.1685,
-      "de": 15.87,
-      "earnings_growth": 0.157
-    },
-    {
       "ticker": "MPHASIS",
-      "score": 0.5132,
-      "pe": 25.01,
+      "score": 0.5652,
+      "pe": 24.81,
       "roe": 0.1774,
       "de": 24.68,
       "earnings_growth": 0.107
     },
     {
+      "ticker": "VBL",
+      "score": 0.5543,
+      "pe": 39.51,
+      "roe": 0.1685,
+      "de": 15.87,
+      "earnings_growth": 0.157
+    },
+    {
+      "ticker": "OBEROIRLTY",
+      "score": 0.5109,
+      "pe": 22.29,
+      "roe": 0.1469,
+      "de": 13.82,
+      "earnings_growth": 0.002
+    },
+    {
+      "ticker": "DLF",
+      "score": 0.5109,
+      "pe": 35.63,
+      "roe": 0.1031,
+      "de": 0.69,
+      "earnings_growth": 0.101
+    },
+    {
       "ticker": "ICICIPRULI",
-      "score": 0.5132,
+      "score": 0.5109,
       "pe": 35.59,
       "roe": 0.1292,
       "de": 17.73,
       "earnings_growth": 0.266
     },
     {
-      "ticker": "OBEROIRLTY",
-      "score": 0.4868,
-      "pe": 22.47,
-      "roe": 0.1469,
-      "de": 13.82,
-      "earnings_growth": 0.002
-    },
-    {
       "ticker": "INDUSTOWER",
-      "score": 0.4868,
-      "pe": 14.08,
+      "score": 0.5109,
+      "pe": 14.01,
       "roe": 0.1891,
       "de": 51.79,
       "earnings_growth": 0.006
-    },
-    {
-      "ticker": "DLF",
-      "score": 0.4868,
-      "pe": 35.97,
-      "roe": 0.1031,
-      "de": 0.69,
-      "earnings_growth": 0.101
-    },
-    {
-      "ticker": "ABB",
-      "score": 0.4474,
-      "pe": 88.06,
-      "roe": 0.1913,
-      "de": 1.55,
-      "earnings_growth": 0.03
-    },
-    {
-      "ticker": "BHEL",
-      "score": 0.4474,
-      "pe": 48.23,
-      "roe": 0.1125,
-      "de": 22.5,
-      "earnings_growth": 1.185
     }
   ]
 }
