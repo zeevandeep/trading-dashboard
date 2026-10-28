@@ -1,124 +1,124 @@
 {
-  "updated_at": "2026-10-27T18:11:05.253317",
-  "n_scored": 37,
+  "updated_at": "2026-10-28T18:27:36.345010",
+  "n_scored": 39,
   "n_universe": 161,
   "top_15": [
     {
       "ticker": "OFSS",
-      "score": 0.8562,
-      "pe": 24.31,
+      "score": 0.8573,
+      "pe": 25.52,
       "roe": 0.4741,
       "de": 0.47,
       "earnings_growth": 0.285
     },
     {
       "ticker": "POLYCAB",
-      "score": 0.7622,
-      "pe": 36.78,
+      "score": 0.7616,
+      "pe": 36.6,
       "roe": 0.2677,
       "de": 2.05,
       "earnings_growth": 0.425
     },
     {
-      "ticker": "INDIAMART",
-      "score": 0.7601,
-      "pe": 19.89,
-      "roe": 0.2315,
-      "de": 0.97,
-      "earnings_growth": 0.119
-    },
-    {
       "ticker": "SUPREMEIND",
-      "score": 0.7357,
-      "pe": 37.08,
+      "score": 0.7493,
+      "pe": 36.3,
       "roe": 0.1866,
       "de": 1.25,
       "earnings_growth": 0.593
     },
     {
+      "ticker": "INDIAMART",
+      "score": 0.7397,
+      "pe": 18.44,
+      "roe": 0.2252,
+      "de": 0.87,
+      "earnings_growth": 0.098
+    },
+    {
       "ticker": "MUTHOOTFIN",
-      "score": 0.6877,
-      "pe": 8.42,
+      "score": 0.691,
+      "pe": 8.45,
       "roe": 0.3174,
       "de": 393.56,
       "earnings_growth": 0.388
     },
     {
       "ticker": "TATAELXSI",
-      "score": 0.6513,
-      "pe": 34.61,
+      "score": 0.663,
+      "pe": 34.91,
       "roe": 0.2387,
       "de": 4.9,
       "earnings_growth": 0.1
     },
     {
       "ticker": "ICICIGI",
-      "score": 0.6252,
-      "pe": 30.96,
+      "score": 0.6382,
+      "pe": 31.18,
       "roe": 0.1363,
       "de": 0.16,
       "earnings_growth": 0.153
     },
     {
-      "ticker": "TATACOMM",
-      "score": 0.6214,
-      "pe": 44.32,
-      "roe": 0.3376,
-      "de": 371.5,
-      "earnings_growth": 0.86
-    },
-    {
-      "ticker": "APLAPOLLO",
-      "score": 0.6194,
-      "pe": 50.01,
-      "roe": 0.2532,
-      "de": 16.77,
-      "earnings_growth": 0.253
-    },
-    {
       "ticker": "AEGISLOG",
-      "score": 0.6139,
-      "pe": 32.52,
+      "score": 0.6338,
+      "pe": 31.16,
       "roe": 0.1727,
       "de": 51.01,
       "earnings_growth": 0.449
     },
     {
+      "ticker": "APLAPOLLO",
+      "score": 0.6326,
+      "pe": 45.91,
+      "roe": 0.2532,
+      "de": 16.77,
+      "earnings_growth": 0.253
+    },
+    {
+      "ticker": "TATACOMM",
+      "score": 0.6216,
+      "pe": 42.66,
+      "roe": 0.3376,
+      "de": 371.5,
+      "earnings_growth": 0.86
+    },
+    {
       "ticker": "SBICARD",
-      "score": 0.601,
-      "pe": 19.27,
+      "score": 0.6022,
+      "pe": 19.25,
       "roe": 0.1632,
       "de": 278.65,
       "earnings_growth": 0.749
     },
     {
       "ticker": "SRF",
-      "score": 0.5794,
-      "pe": 29.99,
+      "score": 0.5946,
+      "pe": 30.52,
       "roe": 0.1598,
       "de": 35.12,
       "earnings_growth": 0.311
     },
     {
       "ticker": "JSL",
-      "score": 0.5775,
-      "pe": 17.56,
+      "score": 0.5929,
+      "pe": 16.37,
       "roe": 0.169,
       "de": 35.93,
       "earnings_growth": 0.108
     },
     {
       "ticker": "MPHASIS",
-      "score": 0.5638,
-      "pe": 26.19,
+      "score": 0.5864,
+      "pe": 25.19,
       "roe": 0.1774,
       "de": 24.68,
       "earnings_growth": 0.107
     },
     {
       "ticker": "M&MFIN",
-      "score": 0.5602,
-      "pe": 10.08,
+      "score": 0.57,
+      "pe": 10.16,
       "roe": 0.1377,
       "de": 490.01,
       "earnings_growth": 0.595
