@@ -5,6 +5,23 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Ascent: regime-driven exit signal (2026-11-02)
+
+#### Added
+- **`scripts/monthly_live_rebalance.py`** — `--sell-all` flag: sells all current Ascent holdings without running momentum scoring. Bypasses the trend filter gate (it IS the exit from RISK_OFF). Follows the same dry-run/confirm flow as regular rebalances. RISK_OFF message now also shows `--sell-all` as the exit option.
+- **`scripts/telegram_summary.py`** — Detects RISK_ON → RISK_OFF regime transitions in the daily summary. When the flip happens, prepends a 🚨 REGIME ALERT with the exact `--sell-all` command. NIFTY vs SMA value is now computed live (not read from stale stored CSV).
+
+### Ascent: switch trend filter to 10-month SMA (Faber 2007) (2026-11-02)
+
+#### Changed
+- **`scripts/monthly_live_rebalance.py`** — Trend filter now uses 10-month SMA (average of last 10 month-end closes) instead of point-to-point comparison. RISK_ON if NIFTY today > SMA, RISK_OFF otherwise. SMA is more robust — a single outlier day 10 months ago can't distort the signal. Output now shows "price vs 10-month SMA: X%" instead of "10m return".
+- **`scripts/trend_filter_paper_mark.py`** — Same SMA logic applied to `nifty_regime()`. `nifty_10m_ret` column in the paper CSV now stores % above/below SMA (positive = RISK_ON) going forward. Updated docstring to reflect Faber 2007 methodology.
+
+### Ascent: wire NIFTY trend filter into live rebalance (2026-11-02)
+
+#### Changed
+- **`scripts/monthly_live_rebalance.py`** — NIFTY 10-month momentum regime check now runs before every rebalance. If NIFTY is below its 10-month SMA (RISK_OFF), the script exits with a clear message and places no orders — portfolio stays in cash for the month. Uses existing `fetch_benchmark()` from `trading.data.loader`. Added `--ignore-trend-filter` flag to override manually when needed. Filter was previously tracked paper-only; 105/105 days RISK_OFF since Jun 4 inception confirmed it works and the decision was made to wire it in live.
+
 ### Ascent monthly rebalance automation (2026-10-15)
 
 #### Added

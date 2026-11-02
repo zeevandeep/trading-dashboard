@@ -1,15 +1,18 @@
 """Daily mark for the trend-filtered Ascent paper portfolio.
 
-Tracks what Ascent would look like with a NIFTY 10-month momentum filter:
-  - RISK-ON  (NIFTY today > NIFTY 10 months ago): copy Ascent's daily NAV return
-  - RISK-OFF (NIFTY today <= NIFTY 10 months ago): stay flat (cash, 0% return)
+Tracks what Ascent would look like with a NIFTY 10-month SMA filter (Faber 2007):
+  - RISK-ON  (NIFTY today > 10-month SMA of monthly closes): copy Ascent's daily NAV return
+  - RISK-OFF (NIFTY today <= 10-month SMA): stay flat (cash, 0% return)
+
+The SMA uses the last 10 month-end closes of NIFTY, averaged. This is smoother than
+point-to-point and avoids whipsaws from a single outlier day 10 months ago.
 
 This gives a live apples-to-apples comparison vs the unfiltered live Ascent.
-After 12-18 months of track record, decide whether to wire the filter in live.
 
 Output: data/paper/ascent_trend_filtered/equity.csv
 
 Columns: date, nav, regime (RISK_ON / RISK_OFF), ascent_nav, nifty_10m_ret
+         nifty_10m_ret = % above/below the 10-month SMA (positive = RISK_ON)
 
 Usage:
     python scripts/trend_filter_paper_mark.py
@@ -56,17 +59,27 @@ def fetch_nifty(start: str) -> pd.Series:
 
 
 def nifty_regime(nifty: pd.Series, date: pd.Timestamp) -> tuple[str, float]:
-    """Return (RISK_ON|RISK_OFF, 10m_return_pct) for a given date."""
-    # Find price 10 months ago (approx 210 trading days)
-    lookback_date = date - pd.DateOffset(months=LOOKBACK_MONTHS)
-    prior = nifty[nifty.index <= lookback_date]
-    if prior.empty or date not in nifty.index:
+    """Return (RISK_ON|RISK_OFF, pct_vs_sma) for a given date using 10-month SMA (Faber 2007).
+
+    SMA = average of last 10 month-end closes up to and including the most recent
+    complete month before `date`. Compares today's price to that average.
+    pct_vs_sma = % above/below SMA (positive means RISK_ON).
+    """
+    if date not in nifty.index:
         return "UNKNOWN", 0.0
-    current = nifty[date]
-    past = prior.iloc[-1]
-    ret = (current / past - 1) * 100
-    regime = "RISK_ON" if ret > 0 else "RISK_OFF"
-    return regime, round(ret, 2)
+
+    # Month-end closes up to `date`
+    nifty_to_date = nifty[nifty.index <= date]
+    monthly = nifty_to_date.resample("ME").last().dropna()
+
+    if len(monthly) < LOOKBACK_MONTHS:
+        return "UNKNOWN", 0.0
+
+    sma = monthly.iloc[-LOOKBACK_MONTHS:].mean()
+    current = float(nifty[date])
+    pct_vs_sma = (current / sma - 1) * 100
+    regime = "RISK_ON" if current > sma else "RISK_OFF"
+    return regime, round(pct_vs_sma, 2)
 
 
 def find_missing_dates(ascent_df: pd.DataFrame) -> list[str]:

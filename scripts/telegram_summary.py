@@ -6,7 +6,32 @@ import urllib.request
 import urllib.parse
 from pathlib import Path
 
+import pandas as pd
+import yfinance as yf
+
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def compute_nifty_sma_regime(lookback_months: int = 10) -> tuple[str, float]:
+    """Return (RISK_ON|RISK_OFF, pct_vs_sma) using live NIFTY data."""
+    try:
+        start = (pd.Timestamp.now() - pd.DateOffset(months=lookback_months + 2)).strftime("%Y-%m-%d")
+        raw = yf.download("^NSEI", start=start, progress=False)
+        if raw.empty:
+            return "UNKNOWN", 0.0
+        close = raw["Close"]
+        if isinstance(close, pd.DataFrame):
+            close = close.iloc[:, 0]
+        close.index = pd.to_datetime(close.index).normalize()
+        monthly = close.resample("ME").last().dropna()
+        if len(monthly) < lookback_months:
+            return "UNKNOWN", 0.0
+        sma = monthly.iloc[-lookback_months:].mean()
+        current = float(close.iloc[-1])
+        pct = (current / sma - 1) * 100
+        return ("RISK_ON" if current > sma else "RISK_OFF"), round(pct, 2)
+    except Exception:
+        return "UNKNOWN", 0.0
 
 
 def read_last_two(path):
@@ -71,23 +96,37 @@ def build_message():
 
     # ── Trend filter comparison (Ascent vs Ascent+filter) ────────────────────
     tf_path = ROOT / "data/paper/ascent_trend_filtered/equity.csv"
+    regime_alert = None
     if tf_path.exists():
-        _, tf_last = read_last_two(str(tf_path))
+        tf_prev, tf_last = read_last_two(str(tf_path))
         if tf_last:
             tf_nav = float(tf_last.get("nav", 1.0))
             tf_ret = nav_return_pct(tf_nav)
-            regime = tf_last.get("regime", "UNKNOWN")
-            nifty_10m = float(tf_last.get("nifty_10m_ret", 0))
+            # Compute live SMA regime (don't rely on stale stored nifty_10m_ret)
+            regime, nifty_vs_sma = compute_nifty_sma_regime()
+            prev_regime = tf_prev.get("regime", "UNKNOWN") if tf_prev else "UNKNOWN"
             regime_icon = "🟢" if regime == "RISK_ON" else "🔴"
             lines.append(
                 f"\n*Trend Filter* (paper): NAV {fmt_pct(tf_ret)}"
-                f"\n  {regime_icon} {regime} · NIFTY 10m {fmt_pct(nifty_10m)}"
+                f"\n  {regime_icon} {regime} · NIFTY vs SMA {fmt_pct(nifty_vs_sma)}"
             )
+            # Detect RISK_ON → RISK_OFF transition
+            if prev_regime == "RISK_ON" and regime == "RISK_OFF":
+                regime_alert = (
+                    "🚨 *REGIME ALERT — NIFTY CROSSED BELOW 10-MONTH SMA*\n"
+                    "Ascent trend filter just flipped RISK\\_OFF.\n"
+                    "Consider exiting all Ascent positions:\n"
+                    "`python scripts/monthly_live_rebalance.py --sell-all --dry-run`\n"
+                    "Then run without `--dry-run` to execute."
+                )
 
     if mark_date:
         lines.append(f"\n_{mark_date}_")
 
-    return "\n".join(lines)
+    message = "\n".join(lines)
+    if regime_alert:
+        message = regime_alert + "\n\n" + message
+    return message
 
 
 def send(message):

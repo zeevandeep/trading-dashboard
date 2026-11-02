@@ -168,6 +168,10 @@ def main():
     parser.add_argument("--remote", action="store_true", help="Place orders via DO proxy (fixed IP)")
     parser.add_argument("--amo", action="store_true", help="Place as After Market Orders (outside market hours, execute at next open)")
     parser.add_argument("--yes", action="store_true", help="Skip confirmation prompt (use carefully)")
+    parser.add_argument("--ignore-trend-filter", action="store_true",
+                        help="Override RISK_OFF regime check and rebalance anyway")
+    parser.add_argument("--sell-all", action="store_true",
+                        help="Sell all current holdings (regime exit). Skips momentum scoring and trend filter check.")
     args = parser.parse_args()
 
     if args.no_broker:
@@ -213,6 +217,130 @@ def main():
     price_dict = fetch_many(tickers, start=start, force_refresh=args.force_refresh)
     prices = to_price_panel(price_dict, field="adj_close")
     log.info(f"Price panel: {prices.shape[0]} days x {prices.shape[1]} tickers")
+
+    # ── NIFTY trend filter: 10-month SMA (Faber 2007)
+    # SMA = average of last 10 month-end closes. RISK_ON if today > SMA, else RISK_OFF.
+    TREND_LOOKBACK_MONTHS = 10
+    nifty_start = (pd.Timestamp.now() - pd.DateOffset(months=TREND_LOOKBACK_MONTHS + 2)).strftime("%Y-%m-%d")
+    log.info("Checking NIFTY trend filter regime (10-month SMA)...")
+    nifty_df = fetch_benchmark("^NSEI", start=nifty_start)
+    regime = "UNKNOWN"
+    pct_vs_sma = None
+    if nifty_df.empty:
+        log.warning("Could not fetch NIFTY data — skipping trend filter check")
+    else:
+        nifty_close = nifty_df["close"].dropna()
+        monthly = nifty_close.resample("ME").last().dropna()
+        if len(monthly) >= TREND_LOOKBACK_MONTHS:
+            sma = monthly.iloc[-TREND_LOOKBACK_MONTHS:].mean()
+            current = float(nifty_close.iloc[-1])
+            pct_vs_sma = (current / sma - 1) * 100
+            regime = "RISK_ON" if current > sma else "RISK_OFF"
+
+    if pct_vs_sma is not None:
+        log.info(f"NIFTY regime: {regime} (vs 10m SMA: {pct_vs_sma:+.2f}%)")
+        print(f"\nNIFTY Trend Filter: {regime}  (price vs 10-month SMA: {pct_vs_sma:+.2f}%)")
+    else:
+        print(f"\nNIFTY Trend Filter: {regime}  (could not compute SMA)")
+
+    if regime == "RISK_OFF" and not args.ignore_trend_filter and not args.sell_all:
+        print(f"\n{'='*60}")
+        print(f"  RISK_OFF — STAYING IN CASH THIS MONTH")
+        print(f"  NIFTY is below its 10-month SMA.")
+        print(f"  No rebalance will be executed.")
+        print(f"  To exit all positions: run with --sell-all")
+        print(f"  To override and rebalance anyway: run with --ignore-trend-filter")
+        print(f"{'='*60}")
+        return
+
+    if regime == "RISK_OFF" and args.ignore_trend_filter:
+        print("  WARNING: Overriding RISK_OFF signal via --ignore-trend-filter")
+
+    # ── Sell-all: regime exit — skip momentum scoring, sell everything
+    if args.sell_all:
+        if args.no_broker:
+            current_holdings = _holdings_from_snapshot(strategy_name)
+        else:
+            current_holdings = get_holdings(kite)
+
+        if not current_holdings:
+            print("No holdings to sell.")
+            return
+
+        live_prices = get_ltp(kite, list(current_holdings.keys())) if not args.no_broker else {}
+        if args.no_broker:
+            import yfinance as yf
+            yf_tickers = [f"{s}.NS" for s in current_holdings]
+            raw = yf.download(yf_tickers, period="2d", progress=False)
+            if not raw.empty:
+                closes = raw["Close"] if isinstance(raw.columns, pd.MultiIndex) else raw[["Close"]]
+                latest = closes.ffill().iloc[-1]
+                for sym, yf_t in zip(current_holdings.keys(), yf_tickers):
+                    if yf_t in latest.index and pd.notna(latest[yf_t]):
+                        live_prices[sym] = float(latest[yf_t])
+
+        orders = [
+            {
+                "symbol": sym,
+                "side": "SELL",
+                "quantity": info["quantity"],
+                "estimated_value": info["quantity"] * live_prices.get(sym, 0),
+            }
+            for sym, info in current_holdings.items()
+        ]
+
+        total_sell = sum(o["estimated_value"] for o in orders)
+        print(f"\nSELL-ALL — {len(orders)} orders (~Rs. {total_sell:,.0f}):")
+        for o in orders:
+            p = live_prices.get(o["symbol"], 0)
+            print(f"  SELL {o['quantity']:>4d} x {o['symbol']:<15s} @ Rs.{p:>10,.2f} = Rs.{o['estimated_value']:>10,.0f}")
+
+        if args.dry_run:
+            print(f"\n{'='*60}")
+            print("DRY RUN — no orders placed.")
+            print("Run without --dry-run to execute.")
+            return
+
+        print(f"\n{'!'*60}")
+        print(f"  THIS WILL SELL ALL {len(orders)} POSITIONS ON NSE")
+        print(f"  Total value: Rs. {total_sell:,.0f}")
+        print(f"{'!'*60}")
+        if not args.yes:
+            confirm = input("\nType 'yes' to confirm: ")
+            if confirm.strip().lower() != "yes":
+                print("Aborted.")
+                return
+
+        if args.remote:
+            secrets = __import__("trading.config", fromlist=["Secrets"]).Secrets.from_env()
+            proxy_url = os.environ.get("PROXY_URL", "https://jdquant-proxy.onrender.com")
+            proxy_api_key = os.environ.get("PROXY_API_KEY", "")
+            results = place_orders_remote(
+                access_token=kite.access_token,
+                api_key=secrets.kite_api_key,
+                orders=orders,
+                prices=live_prices,
+                proxy_url=proxy_url,
+                proxy_api_key=proxy_api_key,
+                exchange="NSE",
+                amo=args.amo,
+            )
+        else:
+            results = place_orders(kite, orders, prices=live_prices, exchange="NSE", dry_run=False, amo=args.amo)
+
+        log_path = DATA_DIR / "live" / strategy_name / "orders.csv"
+        log_orders(results, log_path)
+        placed = [r for r in results if r["status"] == "placed"]
+        failed = [r for r in results if r["status"].startswith("failed")]
+        print(f"\nDone: {len(placed)} placed, {len(failed)} failed")
+        if placed:
+            _post_rebalance_cleanup(
+                strategy_name=strategy_name,
+                broker_holdings=current_holdings,
+                log_path=log_path,
+                broker_source="kite",
+            )
+        return
 
     # ── Momentum signal
     skip = sig_cfg.get("skip_months", 1)
@@ -275,12 +403,12 @@ def main():
     else:
         live_prices = get_ltp(kite, all_symbols) if all_symbols else {}
 
-    # ── Compute orders with min 1 share per target stock
+    # ── Compute orders
     orders = []
     current_qty = {s: h["quantity"] for s, h in current_holdings.items()}
     per_stock = args.capital / top_n
 
-    # Target quantities
+    # Target quantities — equal weight
     target_qty = {}
     for symbol, weight in target_weights.items():
         if symbol not in live_prices or live_prices[symbol] <= 0:
