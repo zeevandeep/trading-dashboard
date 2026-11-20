@@ -17,6 +17,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 #### Fixed
 - **`deploy/setup_droplet.sh`** — switched to snap certbot. apt certbot crashed on the droplet (`OpenSSL.crypto has no attribute X509Req`) because pip-installed `cryptography`/`pyOpenSSL` in `/usr/local/lib/python3.12` shadow the apt versions. This had also silently broken renewals: the klassi.in cert expired 2026-10-24.
 
+#### Changed
+- **Port 8001 (order proxy) on 167.71.227.66** — ufw rule widened from the single IP 49.43.5.199 to the Jio range `49.43.0.0/16`. JD's home IP is dynamic (it had changed to 49.43.5.28, blocking the proxy). `PROXY_API_KEY` is still required.
+
 ### Ascent: regime-driven exit signal (2026-11-02)
 
 #### Added

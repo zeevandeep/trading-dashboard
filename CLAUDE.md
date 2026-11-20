@@ -57,7 +57,7 @@ data/
 ## Infrastructure
 
 - **Order Proxy**: `http://167.71.227.66:8001` (DigitalOcean droplet, klassi.in)
-  - Port 8001 restricted to JD's IP (49.43.5.199) + PROXY_API_KEY header
+  - Port 8001 restricted (ufw) to Jio range 49.43.0.0/16 (JD's home IP is dynamic) + PROXY_API_KEY header
   - Routes Kite orders (Kite requires whitelisted IP, DO IP is whitelisted)
 - **Dashboard**: https://jdquant.in on the DO droplet (nginx + snap certbot → Streamlit on 127.0.0.1:8501, systemd `jdquant-dashboard`). `jdquant-update.timer` git-pulls main every 5 min. Setup: `deploy/setup_droplet.sh`. (Moved off Render free tier 2026-11-20.)
 - **CI**: GitHub Actions (`zeevandeep/trading-dashboard`)
