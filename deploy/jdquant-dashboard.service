@@ -1,0 +1,14 @@
+[Unit]
+Description=JD Quant Streamlit dashboard (jdquant.in)
+After=network-online.target
+
+[Service]
+WorkingDirectory=/opt/jdquant
+Environment=STREAMLIT_SERVER_HEADLESS=true
+ExecStart=/opt/jdquant/.venv/bin/streamlit run dashboard.py --server.port=8501 --server.address=127.0.0.1 --server.headless=true --browser.gatherUsageStats=false --server.runOnSave=false --server.fileWatcherType=none --server.enableCORS=false --server.enableXsrfProtection=true
+Restart=always
+RestartSec=3
+MemoryMax=700M
+
+[Install]
+WantedBy=multi-user.target

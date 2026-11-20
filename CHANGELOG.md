@@ -5,6 +5,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Dashboard: move jdquant.in from Render free tier to DO droplet (2026-11-20)
+
+#### Added
+- **`deploy/`** — self-hosting kit for the Streamlit dashboard on the DigitalOcean droplet (167.71.227.66), replacing Render's free tier (which sleeps after 15 min idle → 30–60s cold starts).
+  - `setup_droplet.sh` — idempotent one-shot setup: clones repo to `/opt/jdquant`, venv + `requirements-dashboard.txt`, adds 1 GB swap, installs systemd units, and fronts Streamlit with HTTPS (reuses nginx + certbot if nginx already runs on the box, else Caddy auto-HTTPS). Opens 80/443 in ufw; port 8001 proxy rules untouched.
+  - `jdquant-dashboard.service` — Streamlit on `127.0.0.1:8501`, `Restart=always`.
+  - `jdquant-update.timer` / `update.sh` — every 5 min `git fetch`; on new commits hard-resets to `origin/main` and restarts (replaces Render auto-deploy, picks up GH Actions data commits).
+  - `Caddyfile`, `nginx-jdquant.conf` — reverse proxy configs with websocket support.
+
 ### Ascent: regime-driven exit signal (2026-11-02)
 
 #### Added

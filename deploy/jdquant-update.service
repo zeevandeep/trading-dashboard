@@ -1,0 +1,6 @@
+[Unit]
+Description=Pull latest JD Quant dashboard from GitHub
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/jdquant-update
