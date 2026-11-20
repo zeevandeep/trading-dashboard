@@ -52,7 +52,14 @@ if systemctl is-active --quiet nginx; then
   cp "$APP_DIR/deploy/nginx-jdquant.conf" /etc/nginx/sites-available/jdquant
   ln -sf /etc/nginx/sites-available/jdquant /etc/nginx/sites-enabled/jdquant
   nginx -t && systemctl reload nginx
-  apt-get install -y -qq certbot python3-certbot-nginx >/dev/null
+  # Use snap certbot: apt's certbot crashes on this box because pip-installed
+  # cryptography/pyOpenSSL in /usr/local/lib/python3.12 shadow the apt versions.
+  if [ "$(readlink -f "$(command -v certbot 2>/dev/null)")" != "/snap/bin/certbot" ]; then
+    apt-get remove -y -qq certbot python3-certbot-nginx >/dev/null 2>&1 || true
+    snap install --classic certbot
+    ln -sf /snap/bin/certbot /usr/bin/certbot
+  fi
+  certbot renew --quiet || true   # also renews other sites on this box (klassi.in)
   EMAIL_ARGS=(--register-unsafely-without-email); [ -n "$CERT_EMAIL" ] && EMAIL_ARGS=(-m "$CERT_EMAIL")
   # Only succeeds once DNS points here; safe to re-run later
   certbot --nginx --non-interactive --agree-tos "${EMAIL_ARGS[@]}" --redirect \

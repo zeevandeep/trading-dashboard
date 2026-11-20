@@ -14,6 +14,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
   - `jdquant-update.timer` / `update.sh` — every 5 min `git fetch`; on new commits hard-resets to `origin/main` and restarts (replaces Render auto-deploy, picks up GH Actions data commits).
   - `Caddyfile`, `nginx-jdquant.conf` — reverse proxy configs with websocket support.
 
+#### Fixed
+- **`deploy/setup_droplet.sh`** — switched to snap certbot. apt certbot crashed on the droplet (`OpenSSL.crypto has no attribute X509Req`) because pip-installed `cryptography`/`pyOpenSSL` in `/usr/local/lib/python3.12` shadow the apt versions. This had also silently broken renewals: the klassi.in cert expired 2026-10-24.
+
 ### Ascent: regime-driven exit signal (2026-11-02)
 
 #### Added
