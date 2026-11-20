@@ -59,7 +59,7 @@ data/
 - **Order Proxy**: `http://167.71.227.66:8001` (DigitalOcean droplet, klassi.in)
   - Port 8001 restricted to JD's IP (49.43.5.199) + PROXY_API_KEY header
   - Routes Kite orders (Kite requires whitelisted IP, DO IP is whitelisted)
-- **Dashboard**: Render.com (auto-deploy from GitHub main)
+- **Dashboard**: https://jdquant.in on the DO droplet (nginx + snap certbot → Streamlit on 127.0.0.1:8501, systemd `jdquant-dashboard`). `jdquant-update.timer` git-pulls main every 5 min. Setup: `deploy/setup_droplet.sh`. (Moved off Render free tier 2026-11-20.)
 - **CI**: GitHub Actions (`zeevandeep/trading-dashboard`)
 - **Telegram**: Bot alerts for daily marks, fill checks, rebalance previews
 - **Secrets needed in GH Actions**: `ANGEL_API_KEY`, `ANGEL_CLIENT_ID`, `ANGEL_PASSWORD`, `ANGEL_TOTP_SECRET`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, `SCREENER_CSRFTOKEN`, `SCREENER_SESSIONID`, `PROXY_API_KEY`
